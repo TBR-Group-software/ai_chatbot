@@ -9,18 +9,32 @@ class NavigationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AutoTabsScaffold(
-      routes: const <PageRouteInfo<dynamic>>[
-        HomeRoute(),
-        ExploreRoute(),
-        HistoryRoute(),
-      ],
-      bottomNavigationBuilder: (_, tabsRouter) {
-        return CustomBottomNavBar(
-          selectedIndex: tabsRouter.activeIndex,
-          onItemSelected: tabsRouter.setActiveIndex,
-        );
-      },
+    return Scaffold(
+      extendBody: true,
+      body: AutoTabsRouter(
+        routes: const <PageRouteInfo<dynamic>>[
+          HomeRoute(),
+          ExploreRoute(),
+          HistoryRoute(),
+        ],
+        builder: (context, child) {
+          final tabsRouter = AutoTabsRouter.of(context);
+          return Stack(
+            children: <Widget>[
+              child,
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 32,
+                child: CustomBottomNavBar(
+                  selectedIndex: tabsRouter.activeIndex,
+                  onItemSelected: tabsRouter.setActiveIndex,
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

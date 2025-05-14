@@ -31,32 +31,30 @@ class CustomBottomNavBar extends StatelessWidget {
           ),
         ],
       ),
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _NavBarItem(
-                icon: Icons.home_rounded,
-                label: 'Home',
-                isSelected: selectedIndex == 0,
-                onTap: () => onItemSelected(0),
-              ),
-              _NavBarItem(
-                icon: Icons.explore_outlined,
-                label: 'Explore',
-                isSelected: selectedIndex == 1,
-                onTap: () => onItemSelected(1),
-              ),
-              _NavBarItem(
-                icon: Icons.history,
-                label: 'History',
-                isSelected: selectedIndex == 2,
-                onTap: () => onItemSelected(2),
-              ),
-            ],
-          ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _NavBarItem(
+              icon: Icons.home_rounded,
+              label: 'Home',
+              isSelected: selectedIndex == 0,
+              onTap: () => onItemSelected(0),
+            ),
+            _NavBarItem(
+              icon: Icons.explore_outlined,
+              label: 'Explore',
+              isSelected: selectedIndex == 1,
+              onTap: () => onItemSelected(1),
+            ),
+            _NavBarItem(
+              icon: Icons.history,
+              label: 'History',
+              isSelected: selectedIndex == 2,
+              onTap: () => onItemSelected(2),
+            ),
+          ],
         ),
       ),
     );
