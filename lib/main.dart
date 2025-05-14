@@ -1,20 +1,22 @@
+import 'package:ai_chat_bot/core/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'core/theme/app_theme.dart';
-import 'presentation/pages/main_page.dart';
 
 void main() {
-  runApp(const ChatBotApp());
+  runApp(ChatBotApp());
 }
 
 class ChatBotApp extends StatelessWidget {
-  const ChatBotApp({super.key});
+  ChatBotApp({super.key});
+
+  final appRouter = AppRouter();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: appRouter.config(),
       title: 'AI Chat Bot',
       theme: AppTheme.darkTheme,
-      home: const MainPage(),
     );
   }
 }
