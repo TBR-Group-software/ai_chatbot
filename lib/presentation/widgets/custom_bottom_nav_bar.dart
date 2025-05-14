@@ -83,24 +83,35 @@ class _NavBarItem extends StatelessWidget {
     final unselectedColor = theme.colorScheme.onSurface;
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            color: isSelected ? selectedColor : unselectedColor,
-            size: 24,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              color: isSelected ? selectedColor : unselectedColor,
-              fontSize: 12,
+      child: SizedBox(
+        height: 56,
+        width: 80,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: Icon(
+                icon,
+                key: ValueKey(isSelected),
+                color: isSelected ? selectedColor : unselectedColor,
+                size: 24,
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 4),
+            AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 300),
+              style: TextStyle(
+                color: isSelected ? selectedColor : unselectedColor,
+                fontSize: 12,
+              ),
+              child: Text(label),
+            ),
+          ],
+        ),
       ),
     );
   }
