@@ -6,7 +6,7 @@ class AppTheme {
       scaffoldBackgroundColor: const Color(0xFF131313),
       colorScheme: const ColorScheme.dark().copyWith(
         surface: Color(0xFF1C1C1E),
-        primary: Color(0xFFE8D8B9),
+        primary: Color(0xFFEFD9B0),
         onSurface: Color(0xFF8F8F8F),
         surfaceContainerHighest: Color(0xFF242424), // for bottom navigation bar
       ),
@@ -42,6 +42,7 @@ class AppTheme {
           lightPink: Color(0xFFFFE7E5),
           darkGreen: Color(0xFF79B79F),
           lightGray: Color(0xFFE0E0E0),
+          almond2: Color(0xFFE9CA91),
         ),
       ],
     );
@@ -61,6 +62,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
     required this.lightPink,
     required this.darkGreen,
     required this.lightGray,
+    required this.almond2,
   });
 
   final Color cardBackground;
@@ -73,6 +75,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
   final Color lightPink;
   final Color darkGreen;
   final Color lightGray;
+  final Color almond2;
 
   @override
   CustomColors copyWith({
@@ -86,6 +89,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
     Color? lightPink,
     Color? darkGreen,
     Color? lightGray,
+    Color? almond2,
   }) {
     return CustomColors(
       cardBackground: cardBackground ?? this.cardBackground,
@@ -98,6 +102,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
       lightPink: lightPink ?? this.lightPink,
       darkGreen: darkGreen ?? this.darkGreen,
       lightGray: lightGray ?? this.lightGray,
+      almond2: almond2 ?? this.almond2,
     );
   }
 
@@ -117,6 +122,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
       lightPink: Color.lerp(lightPink, other.lightPink, t)!,
       darkGreen: Color.lerp(darkGreen, other.darkGreen, t)!,
       lightGray: Color.lerp(lightGray, other.lightGray, t)!,
+      almond2: Color.lerp(almond2, other.almond2, t)!,
     );
   }
 } 

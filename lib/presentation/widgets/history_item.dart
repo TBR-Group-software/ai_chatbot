@@ -26,7 +26,7 @@ class HistoryItem extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: customColors?.cardBackground,
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(

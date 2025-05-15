@@ -24,21 +24,21 @@ class ChatHeader extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withOpacity(0.2),
+              color: theme.colorScheme.primary,
               borderRadius: BorderRadius.circular(100),
             ),
             child: Row(
               children: [
                 Icon(
                   Icons.star,
-                  color: theme.colorScheme.primary,
+                  color: theme.colorScheme.surface,
                   size: 16,
                 ),
                 const SizedBox(width: 4),
                 Text(
                   points.toString(),
                   style: theme.textTheme.titleLarge?.copyWith(
-                    color: theme.colorScheme.primary,
+                    color: theme.colorScheme.surface,
                   ),
                 ),
               ],

@@ -30,7 +30,7 @@ class HistorySection extends StatelessWidget {
                 onPressed: onSeeAll,
                 child: Text(
                   'See All',
-                  style: theme.textTheme.bodyLarge?.copyWith(
+                  style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.primary,
                   ),
                 ),
