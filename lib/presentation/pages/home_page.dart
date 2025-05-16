@@ -5,6 +5,7 @@ import 'package:ai_chat_bot/presentation/widgets/chat_input_card.dart';
 import 'package:ai_chat_bot/presentation/widgets/history_section.dart';
 import 'package:ai_chat_bot/presentation/widgets/category_section.dart';
 import 'package:ai_chat_bot/core/theme/app_theme.dart';
+import 'package:ai_chat_bot/core/router/app_router.gr.dart';
 
 @RoutePage()
 class HomePage extends StatelessWidget {
@@ -26,7 +27,7 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 24),
               ChatInputCard(
                 onTap: () {
-                  // TODO: Implement chat input tap
+                  context.router.push(const ChatRoute());
                 },
               ),
               const SizedBox(height: 24),
