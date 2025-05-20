@@ -1,33 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ChatInputWidget extends StatelessWidget {
   final TextEditingController controller;
   final VoidCallback onSend;
+  final FocusNode focusNode;
 
   const ChatInputWidget({
     super.key,
     required this.controller,
     required this.onSend,
+    required this.focusNode,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        border: Border(
-          top: BorderSide(
-            color: theme.colorScheme.outline,
-            width: 0.5,
-          ),
-        ),
-      ),
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 16,right: 16, top: 32, bottom: 32),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
+        children: <Widget>[
           Expanded(
             child: ConstrainedBox(
               constraints: BoxConstraints(
@@ -35,15 +29,22 @@ class ChatInputWidget extends StatelessWidget {
               ),
               child: SingleChildScrollView(
                 child: TextField(
+                  onTapOutside: (event) {
+                    focusNode.unfocus();
+                  },
+                  focusNode: focusNode,
                   controller: controller,
                   decoration: InputDecoration(
                     hintText: 'Message',
+                    hintStyle: theme.textTheme.bodyLarge?.copyWith(
+                      color: theme.colorScheme.onSurface,
+                    ),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: BorderRadius.circular(16),
                       borderSide: BorderSide.none,
                     ),
                     filled: true,
-                    fillColor: theme.scaffoldBackgroundColor,
+                    fillColor: theme.colorScheme.surface,
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 10,
@@ -60,7 +61,11 @@ class ChatInputWidget extends StatelessWidget {
           const SizedBox(width: 8),
           IconButton(
             onPressed: onSend,
-            icon: const Icon(Icons.send_rounded),
+            icon: SvgPicture.asset(
+              'assets/images/send_icon.svg',
+              width: 32,
+              height: 32,
+            ),
             style: IconButton.styleFrom(
               backgroundColor: theme.colorScheme.primary,
               foregroundColor: theme.colorScheme.onPrimary,
@@ -70,4 +75,4 @@ class ChatInputWidget extends StatelessWidget {
       ),
     );
   }
-} 
+}

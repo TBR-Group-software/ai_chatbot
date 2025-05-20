@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ai_chat_bot/core/theme/app_theme.dart';
 
 class HistoryItem extends StatelessWidget {
   const HistoryItem({
@@ -18,7 +17,6 @@ class HistoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final customColors = theme.extension<CustomColors>();
 
     return InkWell(
       onTap: onTap,
