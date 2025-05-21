@@ -14,10 +14,15 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: const Icon(Icons.arrow_back),
         onPressed: () => context.router.pop(),
       ),
-      title: const Text('Chat'),
-      actions: <Widget>[
-        IconButton(icon: const Icon(Icons.delete_outline), onPressed: () {}),
-      ],
+      title: Text(
+        'Chat',
+        style: theme.textTheme.headlineSmall?.copyWith(
+          color: theme.colorScheme.primary,
+        ),
+      ),
+      // actions: <Widget>[
+      //   IconButton(icon: const Icon(Icons.delete_outline), onPressed: () {}),
+      // ],
     );
   }
 
