@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:ai_chat_bot/presentation/widgets/chat_header.dart';
+import 'package:ai_chat_bot/presentation/widgets/home_app_bar.dart';
 import 'package:ai_chat_bot/presentation/widgets/chat_input_card.dart';
 import 'package:ai_chat_bot/presentation/widgets/history_section.dart';
 import 'package:ai_chat_bot/presentation/widgets/category_section.dart';
@@ -21,10 +21,11 @@ class HomePage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16),
-              const ChatHeader(points: 20),
-              const SizedBox(height: 24),
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 16, bottom: 24),
+                child: const HomeAppBar(points: 20),
+              ),
               ChatInputCard(
                 onTap: () {
                   context.router.push(const ChatRoute());

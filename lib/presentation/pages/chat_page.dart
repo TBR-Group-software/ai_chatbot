@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import '../widgets/chat_header_widget.dart';
+import '../widgets/chat_app_bar.dart';
 import '../widgets/chat_input_widget.dart';
 import '../widgets/chat_message_widget.dart';
 import 'package:ai_chat_bot/core/dependency_injection/dependency_injection.dart'
@@ -103,7 +103,7 @@ class _ChatPageState extends State<ChatPage> {
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: const ChatHeaderWidget(),
+      appBar: const ChatAppBar(),
       body: SafeArea(
         child: Column(
           children: <Widget>[

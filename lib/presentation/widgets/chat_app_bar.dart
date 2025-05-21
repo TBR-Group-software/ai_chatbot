@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 
-class ChatHeaderWidget extends StatelessWidget implements PreferredSizeWidget {
-  const ChatHeaderWidget({super.key});
+class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const ChatAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {

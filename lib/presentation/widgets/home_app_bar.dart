@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ChatHeader extends StatelessWidget {
-  const ChatHeader({
+class HomeAppBar extends StatelessWidget {
+  const HomeAppBar({
     super.key,
     required this.points,
   });
@@ -28,7 +28,7 @@ class ChatHeader extends StatelessWidget {
               borderRadius: BorderRadius.circular(100),
             ),
             child: Row(
-              children: [
+              children: <Widget>[
                 Icon(
                   Icons.star,
                   color: theme.colorScheme.surface,

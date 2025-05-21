@@ -1,3 +1,4 @@
+import 'package:ai_chat_bot/presentation/widgets/chat_thinking_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_svg/svg.dart';
@@ -111,9 +112,11 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget>
                           !widget.isUser &&
                                   widget.isLoading &&
                                   !widget.isCompleted &&
-                              widget.message.status == types.Status.sending
-                              ?  CircularProgressIndicator(
-                                color: theme.colorScheme.primary,
+                                  widget.message.status == types.Status.sending
+                              ? ChatThinkingWidget(
+                                animationDuration: const Duration(
+                                  milliseconds: 500,
+                                ),
                               )
                               : Text(
                                 messageText,
