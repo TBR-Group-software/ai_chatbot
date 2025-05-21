@@ -2,6 +2,7 @@ import 'package:ai_chat_bot/presentation/widgets/chat_thinking_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_svg/svg.dart';
+import 'package:gpt_markdown/gpt_markdown.dart';
 
 class ChatMessageWidget extends StatefulWidget {
   final types.Message message;
@@ -118,7 +119,7 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget>
                                   milliseconds: 500,
                                 ),
                               )
-                              : Text(
+                              : GptMarkdown(
                                 messageText,
                                 style:
                                     widget.isUser

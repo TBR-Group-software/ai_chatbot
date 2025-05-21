@@ -26,6 +26,7 @@ dependencies:
   freezed: ^3.0.6
   flutter_bloc: ^9.1.1
   freezed_annotation: ^3.0.0
+  gpt_markdown: ^1.0.19
 
 dev_dependencies:
   flutter_test:
