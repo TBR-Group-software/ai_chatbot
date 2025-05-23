@@ -27,7 +27,7 @@ class _ChatPageState extends State<ChatPage> {
     types.TextMessage(
       author: const types.User(id: 'bot'),
       id: '1',
-      text: 'Hi, can i help you?',
+      text: 'Hi, can I help you?',
       status: types.Status.delivered,
     ),
   ];

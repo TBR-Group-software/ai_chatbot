@@ -8,8 +8,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   ChatBloc(this._generateTextUseCase) : super(ChatState.initial()) {
     on<GenerateTextEvent>((event, emit) async {
-      if (event.prompt.isNotEmpty) {
-        emit(ChatState(isLoading: true));
+      emit(ChatState(isLoading: true));
+      try {
         await emit.forEach(
           _generateTextUseCase.call(event.prompt),
           onData:
@@ -20,12 +20,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           onError:
               (error, stackTrace) => state.copyWith(error: error.toString()),
         );
-      } else {
+      } catch (error) {
         emit(
           ChatState(
             isLoading: false,
             generatedContent: null,
-            error: 'Prompt is empty',
+            error: error.toString(),
           ),
         );
       }

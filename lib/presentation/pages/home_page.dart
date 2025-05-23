@@ -38,22 +38,16 @@ class HomePage extends StatelessWidget {
                     date: 'Saturday, 16 Dec 2023',
                     time: '12:16',
                     title: 'What is a programming...',
-                    onTap: () {
-                      // TODO: Implement history item tap
-                    },
+                    onTap: () {},
                   ),
                   HistoryItemData(
                     date: 'Friday, 15 Dec 2023',
                     time: '20:48',
                     title: 'How long will it take me to lean...',
-                    onTap: () {
-                      // TODO: Implement history item tap
-                    },
+                    onTap: () {},
                   ),
                 ],
-                onSeeAll: () {
-                  // TODO: Implement see all history
-                },
+                onSeeAll: () {},
               ),
               const SizedBox(height: 24),
               CategorySection(
@@ -63,9 +57,7 @@ class HomePage extends StatelessWidget {
                     description: 'Generate a story from a given subject.',
                     icon: Icons.book,
                     iconColor: customColors?.aquamarine ?? Colors.white,
-                    onTap: () {
-                      // TODO: Implement category tap
-                    },
+                    onTap: () {},
                   ),
                   CategoryItemData(
                     title: 'Lyrics',
@@ -73,9 +65,7 @@ class HomePage extends StatelessWidget {
                         'Generate lyrics of a song for any music genre.',
                     icon: Icons.music_note,
                     iconColor: customColors?.lightBlue ?? Colors.white,
-                    onTap: () {
-                      // TODO: Implement category tap
-                    },
+                    onTap: () {},
                   ),
                   CategoryItemData(
                     title: 'Write code',
@@ -83,23 +73,17 @@ class HomePage extends StatelessWidget {
                         'Write applications in various programming languages.',
                     icon: Icons.code,
                     iconColor: customColors?.lightGray ?? Colors.white,
-                    onTap: () {
-                      // TODO: Implement category tap
-                    },
+                    onTap: () {},
                   ),
                   CategoryItemData(
                     title: 'Recipe',
                     description: 'Get recipes for any food dishes.',
                     icon: Icons.restaurant_menu,
                     iconColor: customColors?.orange ?? Colors.white,
-                    onTap: () {
-                      // TODO: Implement category tap
-                    },
+                    onTap: () {},
                   ),
                 ],
-                onSeeAll: () {
-                  // TODO: Implement see all categories
-                },
+                onSeeAll: () {},
               ),
               const SizedBox(height: 128),
             ],
