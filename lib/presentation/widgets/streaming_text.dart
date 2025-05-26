@@ -21,12 +21,14 @@ class _StreamingTextState extends State<StreamingText>
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   String _previousText = '';
+  String _displayedText = '';
   bool _isDisposed = false;
 
   @override
   void initState() {
     super.initState();
     _previousText = widget.text;
+    _displayedText = widget.text;
     _initializeController();
   }
 
@@ -52,7 +54,15 @@ class _StreamingTextState extends State<StreamingText>
   void didUpdateWidget(final StreamingText oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.text != oldWidget.text) {
-      _previousText = oldWidget.text;
+      if (!widget.text.startsWith(_previousText) ||
+          widget.text.length < _previousText.length) {
+        _previousText = '';
+        _displayedText = widget.text;
+      } else {
+        _previousText = oldWidget.text;
+        _displayedText = widget.text;
+      }
+
       if (_controller.isAnimating) {
         _controller.stop();
       }
@@ -86,17 +96,13 @@ class _StreamingTextState extends State<StreamingText>
 
   @override
   Widget build(final BuildContext context) {
-    if (widget.animate) {
+    if (!widget.animate) {
       return GptMarkdown(widget.text, style: widget.style);
     } else {
       try {
         return AnimatedBuilder(
           animation: _controller,
           builder: (final context, final child) {
-            final newText =
-                widget.text.length > _previousText.length
-                    ? widget.text
-                    : widget.text.substring(_previousText.length);
             final textAlign = TextAlign.left;
             final textDirection = TextDirection.ltr;
 
@@ -108,6 +114,14 @@ class _StreamingTextState extends State<StreamingText>
                 textAlign: textAlign,
                 textDirection: textDirection,
               );
+            }
+
+            String newText = '';
+            if (_displayedText.length > _previousText.length &&
+                _displayedText.startsWith(_previousText)) {
+              newText = _displayedText.substring(_previousText.length);
+            } else if (_previousText.isEmpty) {
+              newText = _displayedText;
             }
 
             return Column(
@@ -140,15 +154,27 @@ class _StreamingTextState extends State<StreamingText>
                       textDirection: textDirection,
                     ),
                   ),
+                if (newText.isEmpty && _previousText.isEmpty)
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    width: double.infinity,
+                    child: GptMarkdown(
+                      _displayedText,
+                      style: widget.style?.copyWith(
+                        color: widget.style?.color?.withAlpha(
+                          (_fadeAnimation.value * 255).toInt(),
+                        ),
+                      ),
+                      textAlign: textAlign,
+                      textDirection: textDirection,
+                    ),
+                  ),
               ],
             );
           },
         );
       } catch (e) {
-        // Fallback if the animation approach fails
         debugPrint('Error in StreamingText build: $e');
-
-        // Render text without animation as fallback
 
         final textAlign = TextAlign.left;
         final textDirection = TextDirection.ltr;
