@@ -4,10 +4,18 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'core/theme/app_theme.dart';
 import 'core/dependency_injection/dependency_injection.dart' as di;
+import 'data/services/hive_storage_service.dart';
 
 void main() async {
-  di.init();
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Hive storage first
+  final hiveService = HiveStorageService();
+  await hiveService.init();
+  
+  // Initialize dependency injection
+  di.init();
+  
   await dotenv.load(fileName: ".env");
   Gemini.init(
     apiKey: dotenv.env['GEMINI_API_KEY'] ?? '',
