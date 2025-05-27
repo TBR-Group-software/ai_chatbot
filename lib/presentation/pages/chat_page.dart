@@ -22,16 +22,6 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final ChatBloc _chatBloc = di.sl.get<ChatBloc>();
   final TextEditingController _messageController = TextEditingController();
-
-  final List<types.Message> _messages = [
-    types.TextMessage(
-      author: const types.User(id: 'bot'),
-      id: '1',
-      text: 'Hi, can I help you?',
-      status: types.Status.delivered,
-    ),
-  ];
-
   late FocusNode _inputFieldFocusNode;
 
   @override
@@ -45,6 +35,7 @@ class _ChatPageState extends State<ChatPage> {
   void dispose() {
     _messageController.dispose();
     _inputFieldFocusNode.dispose();
+    _chatBloc.close();
     super.dispose();
   }
 
@@ -54,46 +45,7 @@ class _ChatPageState extends State<ChatPage> {
     final messageText = _messageController.text.trim();
     if (messageText.isEmpty) return;
 
-    final userMessage = types.TextMessage(
-      author: const types.User(id: 'user'),
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      text: messageText,
-    );
-
-    final botMessage = types.TextMessage(
-      author: const types.User(id: 'bot'),
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      text: '',
-      status: types.Status.sending,
-    );
-
-    setState(() {
-      _messages.insert(0, userMessage);
-      _messages.insert(0, botMessage);
-    });
-
-    String currentResponse = '';
-
-    _chatBloc.add(GenerateTextEvent(messageText));
-
-    _chatBloc.stream.listen((state) {
-      if (state.generatedContent != null &&
-          state.generatedContent?.text != null) {
-        currentResponse += state.generatedContent!.text;
-        setState(() {
-          _messages[0] = types.TextMessage(
-            author: const types.User(id: 'bot'),
-            id: botMessage.id,
-            text: currentResponse,
-            status:
-                state.generatedContent!.isComplete
-                    ? types.Status.delivered
-                    : types.Status.sending,
-          );
-        });
-      }
-    });
-
+    _chatBloc.add(SendMessageEvent(messageText));
     _messageController.clear();
   }
 
@@ -114,9 +66,9 @@ class _ChatPageState extends State<ChatPage> {
                   return ListView.builder(
                     reverse: true,
                     padding: const EdgeInsets.only(bottom: 8),
-                    itemCount: _messages.length,
+                    itemCount: state.messages.length,
                     itemBuilder: (context, index) {
-                      final message = _messages[index];
+                      final message = state.messages[index];
                       return ChatMessageWidget(
                         message: message,
                         isUser: message.author.id != 'bot',
