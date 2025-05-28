@@ -72,104 +72,84 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   padding: const EdgeInsets.only(top: 16, bottom: 24),
                   child: const HomeAppBar(points: 20),
                 ),
-                ChatInputCard(
-                  onTap: () {
-                    context.router.push(ChatRoute()).then((_) {
-                      // Refresh history when returning from chat
-                      _refreshHistory();
-                    });
-                  },
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: ChatInputCard(
+                    onTap: () {
+                      context.router.push(ChatRoute()).then((_) {
+                        // Refresh history when returning from chat
+                        _refreshHistory();
+                      });
+                    },
+                  ),
                 ),
-                const SizedBox(height: 24),
-                BlocBuilder<HomeBloc, HomeState>(
-                  bloc: _homeBloc,
-                  builder: (context, state) {
-                    if (state.error != null) {
-                      return Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.error_outline,
-                              size: 48,
-                              color: theme.colorScheme.error,
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Error loading recent chats',
-                              style: theme.textTheme.titleMedium,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              state.error!,
-                              style: theme.textTheme.bodySmall,
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 16),
-                            ElevatedButton(
-                              onPressed: _refreshHistory,
-                              child: const Text('Retry'),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-
-                    return HistorySection(
-                      sessions: state.recentSessions,
-                      isLoading: state.isLoading,
-                      onSeeAll: () {
-                        context.router.navigate(
-                          const NavigationRoute(children: [HistoryRoute()]),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: BlocBuilder<HomeBloc, HomeState>(
+                    bloc: _homeBloc,
+                    builder: (context, state) {
+                      if (state.recentSessions.isNotEmpty) {
+                        return HistorySection(
+                          sessions: state.recentSessions,
+                          isLoading: state.isLoading,
+                          onSeeAll: () {
+                            context.router.navigate(
+                              const NavigationRoute(children: [HistoryRoute()]),
+                            );
+                          },
+                          onSessionTap: (sessionId) {
+                            // Navigate to chat page with session loaded
+                            context.router
+                                .push(ChatRoute(sessionId: sessionId))
+                                .then((_) {
+                                  // Refresh history when returning from chat
+                                  _refreshHistory();
+                                });
+                          },
                         );
-                      },
-                      onSessionTap: (sessionId) {
-                        // Navigate to chat page with session loaded
-                        context.router
-                            .push(ChatRoute(sessionId: sessionId))
-                            .then((_) {
-                              // Refresh history when returning from chat
-                              _refreshHistory();
-                            });
-                      },
-                    );
-                  },
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
                 ),
-                const SizedBox(height: 24),
-                CategorySection(
-                  items: [
-                    CategoryItemData(
-                      title: 'Story',
-                      description: 'Generate a story from a given subject.',
-                      icon: Icons.book,
-                      iconColor: customColors?.aquamarine ?? Colors.white,
-                      onTap: () {},
-                    ),
-                    CategoryItemData(
-                      title: 'Lyrics',
-                      description:
-                          'Generate lyrics of a song for any music genre.',
-                      icon: Icons.music_note,
-                      iconColor: customColors?.lightBlue ?? Colors.white,
-                      onTap: () {},
-                    ),
-                    CategoryItemData(
-                      title: 'Write code',
-                      description:
-                          'Write applications in various programming languages.',
-                      icon: Icons.code,
-                      iconColor: customColors?.lightGray ?? Colors.white,
-                      onTap: () {},
-                    ),
-                    CategoryItemData(
-                      title: 'Recipe',
-                      description: 'Get recipes for any food dishes.',
-                      icon: Icons.restaurant_menu,
-                      iconColor: customColors?.orange ?? Colors.white,
-                      onTap: () {},
-                    ),
-                  ],
-                  onSeeAll: () {},
+
+                Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: CategorySection(
+                    items: [
+                      CategoryItemData(
+                        title: 'Story',
+                        description: 'Generate a story from a given subject.',
+                        icon: Icons.book,
+                        iconColor: customColors?.aquamarine ?? Colors.white,
+                        onTap: () {},
+                      ),
+                      CategoryItemData(
+                        title: 'Lyrics',
+                        description:
+                            'Generate lyrics of a song for any music genre.',
+                        icon: Icons.music_note,
+                        iconColor: customColors?.lightBlue ?? Colors.white,
+                        onTap: () {},
+                      ),
+                      CategoryItemData(
+                        title: 'Write code',
+                        description:
+                            'Write applications in various programming languages.',
+                        icon: Icons.code,
+                        iconColor: customColors?.lightGray ?? Colors.white,
+                        onTap: () {},
+                      ),
+                      CategoryItemData(
+                        title: 'Recipe',
+                        description: 'Get recipes for any food dishes.',
+                        icon: Icons.restaurant_menu,
+                        iconColor: customColors?.orange ?? Colors.white,
+                        onTap: () {},
+                      ),
+                    ],
+                    onSeeAll: () {},
+                  ),
                 ),
                 const SizedBox(height: 128),
               ],
