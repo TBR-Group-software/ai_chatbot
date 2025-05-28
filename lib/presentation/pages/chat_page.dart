@@ -4,7 +4,6 @@ import 'package:ai_chat_bot/presentation/bloc/chat_state.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import '../widgets/chat_app_bar.dart';
 import '../widgets/chat_input_widget.dart';
 import '../widgets/chat_message_widget.dart';
@@ -13,7 +12,9 @@ import 'package:ai_chat_bot/core/dependency_injection/dependency_injection.dart'
 
 @RoutePage()
 class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
+  const ChatPage({super.key, this.sessionId});
+
+  final String? sessionId;
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -29,6 +30,11 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
     _inputFieldFocusNode = FocusNode();
     _inputFieldFocusNode.requestFocus();
+    
+    // Load session if sessionId is provided
+    if (widget.sessionId != null) {
+      _chatBloc.add(LoadChatSessionEvent(widget.sessionId!));
+    }
   }
 
   @override

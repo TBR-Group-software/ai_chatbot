@@ -15,21 +15,45 @@ import 'package:ai_chat_bot/presentation/pages/history_page.dart' as _i3;
 import 'package:ai_chat_bot/presentation/pages/home_page.dart' as _i4;
 import 'package:ai_chat_bot/presentation/pages/navigation_page.dart' as _i5;
 import 'package:auto_route/auto_route.dart' as _i6;
+import 'package:flutter/material.dart' as _i7;
 
 /// generated route for
 /// [_i1.ChatPage]
-class ChatRoute extends _i6.PageRouteInfo<void> {
-  const ChatRoute({List<_i6.PageRouteInfo>? children})
-    : super(ChatRoute.name, initialChildren: children);
+class ChatRoute extends _i6.PageRouteInfo<ChatRouteArgs> {
+  ChatRoute({
+    _i7.Key? key,
+    String? sessionId,
+    List<_i6.PageRouteInfo>? children,
+  }) : super(
+         ChatRoute.name,
+         args: ChatRouteArgs(key: key, sessionId: sessionId),
+         initialChildren: children,
+       );
 
   static const String name = 'ChatRoute';
 
   static _i6.PageInfo page = _i6.PageInfo(
     name,
     builder: (data) {
-      return const _i1.ChatPage();
+      final args = data.argsAs<ChatRouteArgs>(
+        orElse: () => const ChatRouteArgs(),
+      );
+      return _i1.ChatPage(key: args.key, sessionId: args.sessionId);
     },
   );
+}
+
+class ChatRouteArgs {
+  const ChatRouteArgs({this.key, this.sessionId});
+
+  final _i7.Key? key;
+
+  final String? sessionId;
+
+  @override
+  String toString() {
+    return 'ChatRouteArgs{key: $key, sessionId: $sessionId}';
+  }
 }
 
 /// generated route for

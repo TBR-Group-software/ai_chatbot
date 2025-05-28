@@ -26,6 +26,7 @@ class AppRouter extends RootStackRouter {
         ),
         AutoRoute(
           page: ChatRoute.page,
+          path: '/chat',
         ),
       ];
 } 

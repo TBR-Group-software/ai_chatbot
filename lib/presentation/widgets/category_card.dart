@@ -26,7 +26,7 @@ class CategoryCard extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: customColors?.categoryCardBackground,
           borderRadius: BorderRadius.circular(16),
@@ -45,12 +45,12 @@ class CategoryCard extends StatelessWidget {
                 color: iconColor,
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             Text(
               title,
               style: theme.textTheme.titleLarge,
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 2),
             Text(
               description,
               style: theme.textTheme.bodyMedium,
