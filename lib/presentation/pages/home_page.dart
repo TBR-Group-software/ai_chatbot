@@ -21,8 +21,9 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver, AutoRouteAware {
   final HomeBloc _homeBloc = di.sl.get<HomeBloc>();
+  AutoRouteObserver? _routeObserver;
 
   @override
   void initState() {
@@ -32,7 +33,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _routeObserver = RouterScope.of(context).firstObserverOfType<AutoRouteObserver>();
+    if (_routeObserver != null) {
+      _routeObserver!.subscribe(this, context.routeData);
+    }
+  }
+
+  @override
   void dispose() {
+    _routeObserver?.unsubscribe(this);
     WidgetsBinding.instance.removeObserver(this);
     _homeBloc.close();
     super.dispose();
@@ -45,6 +56,24 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       // Refresh history when app comes back to foreground
       _refreshHistory();
     }
+  }
+
+  @override
+  void didInitTabRoute(TabPageRoute? previousRoute) {
+    // Called when this tab route is initialized for the first time
+    _refreshHistory();
+  }
+
+  @override
+  void didChangeTabRoute(TabPageRoute previousRoute) {
+    // Called when switching to this tab from another tab
+    _refreshHistory();
+  }
+
+  @override
+  void didPopNext() {
+    // Called when returning to this route from another route
+    _refreshHistory();
   }
 
   void _refreshHistory() {

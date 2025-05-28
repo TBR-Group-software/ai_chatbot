@@ -15,21 +15,49 @@ class HistoryPage extends StatefulWidget {
   State<HistoryPage> createState() => _HistoryPageState();
 }
 
-class _HistoryPageState extends State<HistoryPage> {
+class _HistoryPageState extends State<HistoryPage>
+    with WidgetsBindingObserver, AutoRouteAware {
   final HistoryBloc _historyBloc = di.sl.get<HistoryBloc>();
   final TextEditingController _searchController = TextEditingController();
+  AutoRouteObserver? _routeObserver;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _historyBloc.add(LoadHistoryEvent());
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _routeObserver =
+        RouterScope.of(context).firstObserverOfType<AutoRouteObserver>();
+    if (_routeObserver != null) {
+      _routeObserver!.subscribe(this, context.routeData);
+    }
+  }
+
+  @override
   void dispose() {
+    _routeObserver?.unsubscribe(this);
+    WidgetsBinding.instance.removeObserver(this);
     _searchController.dispose();
     _historyBloc.close();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      // Refresh history when app comes back to foreground
+      _refreshHistory();
+    }
+  }
+
+  void _refreshHistory() {
+    _historyBloc.add(LoadHistoryEvent());
   }
 
   @override
@@ -144,7 +172,8 @@ class _HistoryPageState extends State<HistoryPage> {
 
                     return RefreshIndicator(
                       onRefresh: () async {
-                        _historyBloc.add(LoadHistoryEvent());
+                        _refreshHistory();
+                        await Future.delayed(const Duration(milliseconds: 500));
                       },
                       child: ListView.builder(
                         padding: const EdgeInsets.symmetric(horizontal: 16),

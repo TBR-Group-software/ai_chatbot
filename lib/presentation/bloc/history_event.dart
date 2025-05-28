@@ -12,4 +12,11 @@ class DeleteSessionEvent extends HistoryEvent {
 class SearchSessionsEvent extends HistoryEvent {
   final String query;
   SearchSessionsEvent(this.query);
-} 
+}
+
+class DataUpdatedEvent extends HistoryEvent {
+  // Using dynamic to match the domain entity type
+  final List<dynamic> sessions;
+
+  DataUpdatedEvent(this.sessions);
+}

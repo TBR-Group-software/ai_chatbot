@@ -18,19 +18,13 @@ final GetIt sl = GetIt.instance;
 
 void init() {
   // Storage Services
-  sl.registerLazySingleton<HiveStorageService>(
-    () => HiveStorageService(),
-  );
+  sl.registerLazySingleton<HiveStorageService>(() => HiveStorageService());
 
   // API Services
-  sl.registerLazySingleton<GeminiService>(
-    () => GeminiService(),
-  );
+  sl.registerLazySingleton<GeminiService>(() => GeminiService());
 
   // Repositories
-  sl.registerLazySingleton<LLMRepository>(
-    () => ImplLLMRepository(sl.get()),
-  );
+  sl.registerLazySingleton<LLMRepository>(() => ImplLLMRepository(sl.get()));
 
   sl.registerLazySingleton<ChatHistoryRepository>(
     () => ImplChatHistoryRepository(sl.get()),
@@ -57,16 +51,12 @@ void init() {
     () => DeleteChatSessionUseCase(sl.get()),
   );
 
-  // Blocs
-  sl.registerFactory<ChatBloc>(
-    () => ChatBloc(sl.get(), sl.get(), sl.get()),
-  );
+  // BLoCs
+  sl.registerFactory<ChatBloc>(() => ChatBloc(sl.get(), sl.get(), sl.get()));
 
   sl.registerFactory<HistoryBloc>(
-    () => HistoryBloc(sl.get(), sl.get()),
+    () => HistoryBloc(sl.get(), sl.get(), sl.get()),
   );
 
-  sl.registerFactory<HomeBloc>(
-    () => HomeBloc(sl.get()),
-  );
+  sl.registerFactory<HomeBloc>(() => HomeBloc(sl.get(), sl.get()));
 }

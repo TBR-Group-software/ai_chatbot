@@ -6,4 +6,6 @@ abstract class ChatHistoryRepository {
   Future<void> saveSession(ChatSession session);
   Future<void> deleteSession(String sessionId);
   Future<void> updateSession(ChatSession session);
-} 
+
+  Stream<List<ChatSession>> watchAllSessions();
+}

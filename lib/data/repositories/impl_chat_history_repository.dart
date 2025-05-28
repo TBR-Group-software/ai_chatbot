@@ -1,3 +1,4 @@
+import 'dart:async';
 import '../../domain/entities/chat_session.dart';
 import '../../domain/repositories/chat_history_repository.dart';
 import '../services/hive_storage_service.dart';
@@ -5,6 +6,11 @@ import '../models/hive_chat_session.dart';
 
 class ImplChatHistoryRepository implements ChatHistoryRepository {
   final HiveStorageService _storageService;
+
+  // This enables real-time data synchronization between BLoCs
+  // When data changes, all listening BLoCs will be notified automatically
+  final StreamController<List<ChatSession>> _sessionsController = 
+      StreamController<List<ChatSession>>.broadcast();
 
   ImplChatHistoryRepository(this._storageService);
 
@@ -24,16 +30,51 @@ class ImplChatHistoryRepository implements ChatHistoryRepository {
   Future<void> saveSession(ChatSession session) async {
     final hiveSession = HiveChatSession.fromDomain(session);
     await _storageService.saveSession(hiveSession);
+    
+    // After saving a session, emit updated data to all listening BLoCs
+    // This ensures HomeBloc shows new sessions immediately after creation
+    _notifyDataChanged();
   }
 
   @override
   Future<void> deleteSession(String sessionId) async {
     await _storageService.deleteSession(sessionId);
+    
+    // After deleting a session, emit updated data to all listening BLoCs
+    // This ensures HomeBloc removes deleted sessions immediately
+    _notifyDataChanged();
   }
 
   @override
   Future<void> updateSession(ChatSession session) async {
     final hiveSession = HiveChatSession.fromDomain(session);
     await _storageService.updateSession(hiveSession);
+    
+    // After updating a session, emit updated data to all listening BLoCs
+    // This ensures all BLoCs show the latest session information
+    _notifyDataChanged();
+  }
+
+  @override
+  Stream<List<ChatSession>> watchAllSessions() {
+    // BLoCs can listen to this stream to get real-time data updates
+    return _sessionsController.stream;
+  }
+
+  // This method fetches fresh data and emits it to all listeners
+  // It's called after any data modification operation
+  Future<void> _notifyDataChanged() async {
+    try {
+      final sessions = await getAllSessions();
+      _sessionsController.add(sessions);
+    } catch (e) {
+      _sessionsController.addError(e);
+    }
+  }
+
+  // This prevents memory leaks by closing the StreamController
+  // Should be called when the repository is no longer needed
+  void dispose() {
+    _sessionsController.close();
   }
 } 
