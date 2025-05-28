@@ -3,7 +3,6 @@ import 'package:ai_chat_bot/presentation/widgets/streaming_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_svg/svg.dart';
-import 'package:gpt_markdown/gpt_markdown.dart';
 
 class ChatMessageWidget extends StatefulWidget {
   final types.Message message;

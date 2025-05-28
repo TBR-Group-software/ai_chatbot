@@ -14,7 +14,6 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   flutter_native_splash: ^2.4.6
-  flutter_gemini: ^3.0.0
   flutter_chat_types: ^3.6.2
   introduction_screen: ^3.1.17
   auto_route: ^10.0.1
@@ -25,6 +24,7 @@ dependencies:
   gpt_markdown: ^1.0.19
   hive_ce: ^2.11.3
   path_provider: ^2.1.1
+  http: ^1.4.0
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,6 @@
 import 'package:ai_chat_bot/core/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:auto_route/auto_route.dart';
 import 'core/theme/app_theme.dart';
 import 'core/dependency_injection/dependency_injection.dart' as di;
@@ -9,19 +8,17 @@ import 'data/services/hive_storage_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize Hive storage
   final hiveService = HiveStorageService();
   await hiveService.init();
-  
+
   // Initialize dependency injection
   di.init();
-  
+
+  // Initialize environment variables
   await dotenv.load(fileName: ".env");
-  Gemini.init(
-    apiKey: dotenv.env['GEMINI_API_KEY'] ?? '',
-    disableAutoUpdateModelName: true,
-  );
+
   runApp(ChatBotApp());
 }
 
