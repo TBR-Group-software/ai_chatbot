@@ -29,47 +29,52 @@ class HistoryItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Row(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Icon(
-                  Icons.calendar_today,
-                  size: 12,
-                  color: theme.colorScheme.onSurface,
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.calendar_today,
+                      size: 12,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        date,
+                        style: theme.textTheme.bodySmall,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: Text(
-                    date,
-                    style: theme.textTheme.bodySmall,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                const SizedBox(height: 2),
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.access_time,
+                      size: 12,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(time, style: theme.textTheme.bodySmall),
+                  ],
                 ),
+                const SizedBox(height: 4),
+                Text(
+                  title,
+                  style: theme.textTheme.titleSmall,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 2),
               ],
             ),
-            const SizedBox(height: 2),
-            Row(
-              children: <Widget>[
-                Icon(
-                  Icons.access_time,
-                  size: 12,
-                  color: theme.colorScheme.onSurface,
-                ),
-                const SizedBox(width: 4),
-                Text(time, style: theme.textTheme.bodySmall),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Text(
-              title,
-              style: theme.textTheme.titleSmall,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 2),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
