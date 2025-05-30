@@ -1,13 +1,13 @@
-import 'chat_message.dart';
+import 'chat_message_entity.dart';
 
-class ChatSession {
+class ChatSessionEntity {
   final String id;
   final String title;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final List<ChatMessage> messages;
+  final List<ChatMessageEntity> messages;
 
-  const ChatSession({
+  const ChatSessionEntity({
     required this.id,
     required this.title,
     required this.createdAt,
@@ -15,14 +15,14 @@ class ChatSession {
     required this.messages,
   });
 
-  ChatSession copyWith({
+  ChatSessionEntity copyWith({
     String? id,
     String? title,
     DateTime? createdAt,
     DateTime? updatedAt,
-    List<ChatMessage>? messages,
+    List<ChatMessageEntity>? messages,
   }) {
-    return ChatSession(
+    return ChatSessionEntity(
       id: id ?? this.id,
       title: title ?? this.title,
       createdAt: createdAt ?? this.createdAt,

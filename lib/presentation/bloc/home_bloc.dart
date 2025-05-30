@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/get_chat_sessions_usecase.dart';
 import '../../domain/repositories/chat_history_repository.dart';
-import '../../domain/entities/chat_session.dart';
+import '../../domain/entities/chat_session_entity.dart';
 import 'home_event.dart';
 import 'home_state.dart';
 
@@ -42,7 +42,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   void _onDataUpdated(DataUpdatedEvent event, Emitter<HomeState> emit) {
     try {
       // Cast to proper type and process the sessions
-      final sessions = event.sessions.cast<ChatSession>();
+      final sessions = event.sessions.cast<ChatSessionEntity>();
 
       // Sort by updated date and take only the first 5 for home page
       sessions.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));

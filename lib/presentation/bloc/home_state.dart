@@ -1,7 +1,7 @@
-import '../../domain/entities/chat_session.dart';
+import '../../domain/entities/chat_session_entity.dart';
 
 class HomeState {
-  final List<ChatSession> recentSessions;
+  final List<ChatSessionEntity> recentSessions;
   final bool isLoading;
   final String? error;
 
@@ -17,7 +17,7 @@ class HomeState {
       );
 
   HomeState copyWith({
-    List<ChatSession>? recentSessions,
+    List<ChatSessionEntity>? recentSessions,
     bool? isLoading,
     String? error,
   }) {

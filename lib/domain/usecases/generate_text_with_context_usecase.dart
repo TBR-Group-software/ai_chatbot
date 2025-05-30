@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import '../entities/llm_text_response.dart';
-import '../entities/chat_message.dart';
+import '../entities/llm_text_response_entity.dart';
+import '../entities/chat_message_entity.dart';
 import '../repositories/llm_repository.dart';
 
 class GenerateTextWithContextUseCase {
@@ -9,12 +9,12 @@ class GenerateTextWithContextUseCase {
 
   GenerateTextWithContextUseCase(this._llmRepository);
 
-  Stream<LLMTextResponse?> call(String prompt, List<ChatMessage> context) {
+  Stream<LLMTextResponseEntity?> call(String prompt, List<ChatMessageEntity> context) {
     final contextualPrompt = _buildContextualPrompt(prompt, context);
     return _llmRepository.generateResponse(contextualPrompt);
   }
 
-  String _buildContextualPrompt(String prompt, List<ChatMessage> context) {
+  String _buildContextualPrompt(String prompt, List<ChatMessageEntity> context) {
     if (context.isEmpty) {
       return prompt;
     }

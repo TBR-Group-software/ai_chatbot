@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:ai_chat_bot/domain/entities/llm_text_response.dart';
+import 'package:ai_chat_bot/domain/entities/llm_text_response_entity.dart';
 import 'package:ai_chat_bot/domain/repositories/llm_repository.dart';
 
 class GenerateTextUseCase {
@@ -8,7 +8,7 @@ class GenerateTextUseCase {
 
   GenerateTextUseCase(this._repository);
 
-  Stream<LLMTextResponse?> call(String prompt) {
+  Stream<LLMTextResponseEntity?> call(String prompt) {
     return _repository.generateResponse(prompt);
   }
 }

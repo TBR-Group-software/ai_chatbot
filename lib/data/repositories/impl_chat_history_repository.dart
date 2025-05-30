@@ -1,5 +1,5 @@
 import 'dart:async';
-import '../../domain/entities/chat_session.dart';
+import '../../domain/entities/chat_session_entity.dart';
 import '../../domain/repositories/chat_history_repository.dart';
 import '../services/hive_storage_service.dart';
 import '../models/hive_chat_session.dart';
@@ -9,25 +9,25 @@ class ImplChatHistoryRepository implements ChatHistoryRepository {
 
   // This enables real-time data synchronization between BLoCs
   // When data changes, all listening BLoCs will be notified automatically
-  final StreamController<List<ChatSession>> _sessionsController = 
-      StreamController<List<ChatSession>>.broadcast();
+  final StreamController<List<ChatSessionEntity>> _sessionsController = 
+      StreamController<List<ChatSessionEntity>>.broadcast();
 
   ImplChatHistoryRepository(this._storageService);
 
   @override
-  Future<List<ChatSession>> getAllSessions() async {
+  Future<List<ChatSessionEntity>> getAllSessions() async {
     final hiveSessions = await _storageService.getAllSessions();
     return hiveSessions.map((hiveSession) => hiveSession.toDomain()).toList();
   }
 
   @override
-  Future<ChatSession?> getSession(String sessionId) async {
+  Future<ChatSessionEntity?> getSession(String sessionId) async {
     final hiveSession = await _storageService.getSession(sessionId);
     return hiveSession?.toDomain();
   }
 
   @override
-  Future<void> saveSession(ChatSession session) async {
+  Future<void> saveSession(ChatSessionEntity session) async {
     final hiveSession = HiveChatSession.fromDomain(session);
     await _storageService.saveSession(hiveSession);
     
@@ -46,7 +46,7 @@ class ImplChatHistoryRepository implements ChatHistoryRepository {
   }
 
   @override
-  Future<void> updateSession(ChatSession session) async {
+  Future<void> updateSession(ChatSessionEntity session) async {
     final hiveSession = HiveChatSession.fromDomain(session);
     await _storageService.updateSession(hiveSession);
     
@@ -56,7 +56,7 @@ class ImplChatHistoryRepository implements ChatHistoryRepository {
   }
 
   @override
-  Stream<List<ChatSession>> watchAllSessions() {
+  Stream<List<ChatSessionEntity>> watchAllSessions() {
     // BLoCs can listen to this stream to get real-time data updates
     return _sessionsController.stream;
   }

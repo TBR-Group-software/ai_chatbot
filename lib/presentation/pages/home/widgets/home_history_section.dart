@@ -1,4 +1,4 @@
-import 'package:ai_chat_bot/domain/entities/chat_session.dart';
+import 'package:ai_chat_bot/domain/entities/chat_session_entity.dart';
 import 'package:ai_chat_bot/presentation/pages/home/widgets/home_history_card.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +11,7 @@ class HomeHistorySection extends StatelessWidget {
     this.isLoading = false,
   });
 
-  final List<ChatSession> sessions;
+  final List<ChatSessionEntity> sessions;
   final VoidCallback onSeeAll;
   final Function(String sessionId) onSessionTap;
   final bool isLoading;

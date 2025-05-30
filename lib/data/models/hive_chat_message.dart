@@ -1,5 +1,5 @@
 import 'package:hive_ce/hive.dart';
-import '../../domain/entities/chat_message.dart';
+import '../../domain/entities/chat_message_entity.dart';
 
 part 'hive_chat_message.g.dart';
 
@@ -29,7 +29,7 @@ class HiveChatMessage extends HiveObject {
   });
 
   // Convert from domain entity
-  factory HiveChatMessage.fromDomain(ChatMessage message) {
+  factory HiveChatMessage.fromDomain(ChatMessageEntity message) {
     return HiveChatMessage(
       id: message.id,
       content: message.content,
@@ -40,8 +40,8 @@ class HiveChatMessage extends HiveObject {
   }
 
   // Convert to domain entity
-  ChatMessage toDomain() {
-    return ChatMessage(
+  ChatMessageEntity toDomain() {
+    return ChatMessageEntity(
       id: id,
       content: content,
       isUser: isUser,

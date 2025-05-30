@@ -1,9 +1,10 @@
-import 'package:ai_chat_bot/data/repositories/impl_llm_repository.dart';
+import 'package:ai_chat_bot/data/repositories/impl_gemini_repository.dart';
+import 'package:ai_chat_bot/data/datasources/remote/gemini/gemini_remote_data_source.dart';
 import 'package:ai_chat_bot/presentation/bloc/chat_bloc.dart';
 import 'package:ai_chat_bot/presentation/bloc/history_bloc.dart';
 import 'package:ai_chat_bot/presentation/bloc/home_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:ai_chat_bot/data/services/gemini_service.dart';
+import 'package:ai_chat_bot/data/datasources/remote/gemini/impl_gemini_remote_data_source.dart';
 import 'package:ai_chat_bot/data/services/hive_storage_service.dart';
 import 'package:ai_chat_bot/data/repositories/impl_chat_history_repository.dart';
 import 'package:ai_chat_bot/domain/repositories/llm_repository.dart';
@@ -17,14 +18,19 @@ import 'package:ai_chat_bot/domain/usecases/delete_chat_session_usecase.dart';
 final GetIt sl = GetIt.instance;
 
 void init() {
-  // Storage Services
+  // Storage Data Sources
   sl.registerLazySingleton<HiveStorageService>(() => HiveStorageService());
 
-  // API Services
-  sl.registerLazySingleton<GeminiService>(() => GeminiService());
+  // Remote Data Sources
+
+  sl.registerLazySingleton<GeminiRemoteDataSource>(
+    () => ImplGeminiRemoteDataSource(),
+  );
 
   // Repositories
-  sl.registerLazySingleton<LLMRepository>(() => ImplLLMRepository(sl.get()));
+  sl.registerLazySingleton<LLMRepository>(
+    () => ImplGeminiRepository(sl.get<GeminiRemoteDataSource>()),
+  );
 
   sl.registerLazySingleton<ChatHistoryRepository>(
     () => ImplChatHistoryRepository(sl.get()),

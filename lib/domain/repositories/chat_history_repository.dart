@@ -1,11 +1,11 @@
-import '../entities/chat_session.dart';
+import '../entities/chat_session_entity.dart';
 
 abstract class ChatHistoryRepository {
-  Future<List<ChatSession>> getAllSessions();
-  Future<ChatSession?> getSession(String sessionId);
-  Future<void> saveSession(ChatSession session);
+  Future<List<ChatSessionEntity>> getAllSessions();
+  Future<ChatSessionEntity?> getSession(String sessionId);
+  Future<void> saveSession(ChatSessionEntity session);
   Future<void> deleteSession(String sessionId);
-  Future<void> updateSession(ChatSession session);
+  Future<void> updateSession(ChatSessionEntity session);
 
-  Stream<List<ChatSession>> watchAllSessions();
+  Stream<List<ChatSessionEntity>> watchAllSessions();
 }

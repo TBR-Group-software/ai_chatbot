@@ -1,9 +1,9 @@
 
-import 'package:ai_chat_bot/domain/entities/chat_session.dart';
+import 'package:ai_chat_bot/domain/entities/chat_session_entity.dart';
 
 class HistoryState {
-  final List<ChatSession> sessions;
-  final List<ChatSession> filteredSessions;
+  final List<ChatSessionEntity> sessions;
+  final List<ChatSessionEntity> filteredSessions;
   final bool isLoading;
   final String? error;
   final String searchQuery;
@@ -24,8 +24,8 @@ class HistoryState {
   );
 
   HistoryState copyWith({
-    List<ChatSession>? sessions,
-    List<ChatSession>? filteredSessions,
+    List<ChatSessionEntity>? sessions,
+    List<ChatSessionEntity>? filteredSessions,
     bool? isLoading,
     String? error,
     String? searchQuery,

@@ -1,4 +1,4 @@
-import '../entities/chat_session.dart';
+import '../entities/chat_session_entity.dart';
 import '../repositories/chat_history_repository.dart';
 
 class GetChatSessionsUseCase {
@@ -6,7 +6,7 @@ class GetChatSessionsUseCase {
 
   GetChatSessionsUseCase(this._repository);
 
-  Future<List<ChatSession>> call() {
+  Future<List<ChatSessionEntity>> call() {
     return _repository.getAllSessions();
   }
 } 

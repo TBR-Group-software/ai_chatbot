@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'package:ai_chat_bot/domain/entities/chat_session_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/get_chat_sessions_usecase.dart';
 import '../../domain/usecases/delete_chat_session_usecase.dart';
 import '../../domain/repositories/chat_history_repository.dart';
-import '../../domain/entities/chat_session.dart';
 import 'history_event.dart';
 import 'history_state.dart';
 
@@ -106,12 +106,12 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
 
   void _onDataUpdated(DataUpdatedEvent event, Emitter<HistoryState> emit) {
     try {
-      final sessions = event.sessions.cast<ChatSession>();
+      final sessions = event.sessions.cast<ChatSessionEntity>();
 
       // Sort by updated date (most recent first)
       sessions.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
 
-      List<ChatSession> filteredSessions;
+      List<ChatSessionEntity> filteredSessions;
       if (state.searchQuery.isNotEmpty) {
         final query = state.searchQuery.toLowerCase();
         filteredSessions =

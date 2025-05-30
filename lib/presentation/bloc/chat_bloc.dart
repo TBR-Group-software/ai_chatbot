@@ -1,8 +1,8 @@
 import 'package:ai_chat_bot/domain/usecases/generate_text_with_context_usecase.dart';
 import 'package:ai_chat_bot/domain/usecases/save_chat_session_usecase.dart';
 import 'package:ai_chat_bot/domain/usecases/get_chat_session_usecase.dart';
-import 'package:ai_chat_bot/domain/entities/chat_session.dart';
-import 'package:ai_chat_bot/domain/entities/chat_message.dart';
+import 'package:ai_chat_bot/domain/entities/chat_session_entity.dart';
+import 'package:ai_chat_bot/domain/entities/chat_message_entity.dart';
 import 'package:ai_chat_bot/presentation/bloc/chat_event.dart';
 import 'package:ai_chat_bot/presentation/bloc/chat_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,7 +44,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     final updatedMessages = [botMessage, userMessage, ...state.messages];
     
     // Add user message to context
-    final userChatMessage = ChatMessage(
+    final userChatMessage = ChatMessageEntity(
       id: userMessage.id,
       content: event.messageText,
       isUser: true,
@@ -85,7 +85,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
             // If response is complete, add bot message to context and save session
             if (textResponse.isComplete) {
-              final botChatMessage = ChatMessage(
+              final botChatMessage = ChatMessageEntity(
                 id: currentBotMessage.id,
                 content: updatedText,
                 isUser: false,
@@ -156,7 +156,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         final sessionId = state.currentSessionId ?? DateTime.now().millisecondsSinceEpoch.toString();
         final title = state.sessionTitle ?? _generateSessionTitle(state.contextMessages);
         
-        final session = ChatSession(
+        final session = ChatSessionEntity(
           id: sessionId,
           title: title,
           createdAt: state.isNewSession ? DateTime.now() : DateTime.now(),
@@ -181,10 +181,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     emit(ChatState.initial());
   }
 
-  String _generateSessionTitle(List<ChatMessage> messages) {
+  String _generateSessionTitle(List<ChatMessageEntity> messages) {
     final firstUserMessage = messages.firstWhere(
       (msg) => msg.isUser,
-      orElse: () => ChatMessage(
+      orElse: () => ChatMessageEntity(
         id: '',
         content: 'New Chat',
         isUser: true,

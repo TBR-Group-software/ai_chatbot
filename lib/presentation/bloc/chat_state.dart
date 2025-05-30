@@ -1,16 +1,16 @@
-import 'package:ai_chat_bot/domain/entities/llm_text_response.dart';
-import 'package:ai_chat_bot/domain/entities/chat_message.dart';
+import 'package:ai_chat_bot/domain/entities/llm_text_response_entity.dart';
+import 'package:ai_chat_bot/domain/entities/chat_message_entity.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class ChatState {
-  final LLMTextResponse? generatedContent;
+  final LLMTextResponseEntity? generatedContent;
   final bool isLoading;
   final String? error;
   final List<types.Message> messages;
   final String? currentSessionId;
   final String? sessionTitle;
   final bool isNewSession;
-  final List<ChatMessage> contextMessages;
+  final List<ChatMessageEntity> contextMessages;
 
   ChatState({
     required this.isLoading,
@@ -38,14 +38,14 @@ class ChatState {
       );
 
   ChatState copyWith({
-    LLMTextResponse? generatedContent,
+    LLMTextResponseEntity? generatedContent,
     bool? isLoading,
     String? error,
     List<types.Message>? messages,
     String? currentSessionId,
     String? sessionTitle,
     bool? isNewSession,
-    List<ChatMessage>? contextMessages,
+    List<ChatMessageEntity>? contextMessages,
   }) {
     return ChatState(
       generatedContent: generatedContent ?? this.generatedContent,
