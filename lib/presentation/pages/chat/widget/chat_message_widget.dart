@@ -1,5 +1,5 @@
-import 'package:ai_chat_bot/presentation/widgets/chat_thinking_widget.dart';
-import 'package:ai_chat_bot/presentation/widgets/streaming_text.dart';
+import 'package:ai_chat_bot/presentation/pages/chat/widget/chat_thinking_widget.dart';
+import 'package:ai_chat_bot/presentation/pages/chat/widget/chat_streaming_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_svg/svg.dart';
@@ -78,7 +78,7 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget>
                       ? ChatThinkingWidget(
                         animationDuration: const Duration(milliseconds: 500),
                       )
-                      : StreamingText(
+                      : ChatStreamingText(
                         text: messageText,
                         animate: !widget.isUser && !widget.isCompleted,
                         style:

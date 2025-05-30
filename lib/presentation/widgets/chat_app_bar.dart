@@ -20,9 +20,6 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
           color: theme.colorScheme.primary,
         ),
       ),
-      // actions: <Widget>[
-      //   IconButton(icon: const Icon(Icons.delete_outline), onPressed: () {}),
-      // ],
     );
   }
 

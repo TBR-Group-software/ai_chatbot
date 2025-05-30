@@ -12,7 +12,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.8
   flutter_native_splash: ^2.4.6
   flutter_chat_types: ^3.6.2
   introduction_screen: ^3.1.17

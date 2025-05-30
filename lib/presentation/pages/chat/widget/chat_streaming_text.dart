@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
 
-class StreamingText extends StatefulWidget {
-  const StreamingText({
+class ChatStreamingText extends StatefulWidget {
+  const ChatStreamingText({
     super.key,
     required this.text,
     required this.animate,
@@ -13,10 +13,10 @@ class StreamingText extends StatefulWidget {
   final bool animate;
 
   @override
-  State<StreamingText> createState() => _StreamingTextState();
+  State<ChatStreamingText> createState() => _ChatStreamingTextState();
 }
 
-class _StreamingTextState extends State<StreamingText>
+class _ChatStreamingTextState extends State<ChatStreamingText>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
@@ -46,12 +46,12 @@ class _StreamingTextState extends State<StreamingText>
         _controller.forward();
       }
     } catch (e) {
-      debugPrint('Error initializing StreamingText controller: $e');
+      debugPrint('Error initializing ChatStreamingText controller: $e');
     }
   }
 
   @override
-  void didUpdateWidget(final StreamingText oldWidget) {
+  void didUpdateWidget(final ChatStreamingText oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.text != oldWidget.text) {
       if (!widget.text.startsWith(_previousText) ||
@@ -69,7 +69,7 @@ class _StreamingTextState extends State<StreamingText>
       try {
         _controller.forward(from: 0);
       } catch (e) {
-        debugPrint('Error during StreamingText update: $e');
+        debugPrint('Error during ChatStreamingText update: $e');
         _disposeController();
         _initializeController();
       }
@@ -83,7 +83,7 @@ class _StreamingTextState extends State<StreamingText>
       }
       _controller.dispose();
     } catch (e) {
-      debugPrint('Error disposing StreamingText controller: $e');
+      debugPrint('Error disposing ChatStreamingText controller: $e');
     }
   }
 
@@ -174,7 +174,7 @@ class _StreamingTextState extends State<StreamingText>
           },
         );
       } catch (e) {
-        debugPrint('Error in StreamingText build: $e');
+        debugPrint('Error in ChatStreamingText build: $e');
 
         final textAlign = TextAlign.left;
         final textDirection = TextDirection.ltr;

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ai_chat_bot/core/theme/app_theme.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class ChatInputCard extends StatelessWidget {
-  const ChatInputCard({super.key, required this.onTap});
+class HomeTapToChatCard extends StatelessWidget {
+  const HomeTapToChatCard({super.key, required this.onTap});
 
   final VoidCallback onTap;
 

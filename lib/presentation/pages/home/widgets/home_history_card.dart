@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class HistoryItem extends StatelessWidget {
-  const HistoryItem({
+class HomeHistoryCard extends StatelessWidget {
+  const HomeHistoryCard({
     super.key,
     required this.date,
     required this.time,

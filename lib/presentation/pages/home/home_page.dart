@@ -1,9 +1,9 @@
+import 'package:ai_chat_bot/presentation/pages/home/widgets/home_tap_to_chat_card.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ai_chat_bot/presentation/widgets/home_app_bar.dart';
-import 'package:ai_chat_bot/presentation/widgets/chat_input_card.dart';
-import 'package:ai_chat_bot/presentation/widgets/history_section.dart';
+import 'package:ai_chat_bot/presentation/pages/home/widgets/home_history_section.dart';
 import 'package:ai_chat_bot/presentation/widgets/category_section.dart';
 import 'package:ai_chat_bot/presentation/bloc/home_bloc.dart';
 import 'package:ai_chat_bot/presentation/bloc/home_event.dart';
@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, AutoRo
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: ChatInputCard(
+                  child: HomeTapToChatCard(
                     onTap: () {
                       context.router.push(ChatRoute()).then((_) {
                         // Refresh history when returning from chat
@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, AutoRo
                     bloc: _homeBloc,
                     builder: (context, state) {
                       if (state.recentSessions.isNotEmpty) {
-                        return HistorySection(
+                        return HomeHistorySection(
                           sessions: state.recentSessions,
                           isLoading: state.isLoading,
                           onSeeAll: () {

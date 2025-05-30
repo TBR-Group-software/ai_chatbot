@@ -1,9 +1,9 @@
+import 'package:ai_chat_bot/domain/entities/chat_session.dart';
+import 'package:ai_chat_bot/presentation/pages/home/widgets/home_history_card.dart';
 import 'package:flutter/material.dart';
-import 'package:ai_chat_bot/presentation/widgets/history_item.dart';
-import '../../domain/entities/chat_session.dart';
 
-class HistorySection extends StatelessWidget {
-  const HistorySection({
+class HomeHistorySection extends StatelessWidget {
+  const HomeHistorySection({
     super.key,
     required this.sessions,
     required this.onSeeAll,
@@ -78,7 +78,7 @@ class HistorySection extends StatelessWidget {
                 separatorBuilder: (context, index) => const SizedBox(width: 12),
                 itemBuilder: (context, index) {
                   final session = sessions[index];
-                  return HistoryItem(
+                  return HomeHistoryCard(
                     date: _formatDate(session.updatedAt),
                     time: _formatTime(session.updatedAt),
                     title: session.title,

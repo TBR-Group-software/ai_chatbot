@@ -1,4 +1,5 @@
-import '../../domain/entities/chat_session.dart';
+
+import 'package:ai_chat_bot/domain/entities/chat_session.dart';
 
 class HistoryState {
   final List<ChatSession> sessions;
@@ -16,11 +17,11 @@ class HistoryState {
   });
 
   factory HistoryState.initial() => HistoryState(
-        sessions: [],
-        filteredSessions: [],
-        isLoading: false,
-        searchQuery: '',
-      );
+    sessions: [],
+    filteredSessions: [],
+    isLoading: false,
+    searchQuery: '',
+  );
 
   HistoryState copyWith({
     List<ChatSession>? sessions,
@@ -37,4 +38,4 @@ class HistoryState {
       searchQuery: searchQuery ?? this.searchQuery,
     );
   }
-} 
+}

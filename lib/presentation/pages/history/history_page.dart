@@ -1,11 +1,13 @@
+import 'package:ai_chat_bot/core/dependency_injection/dependency_injection.dart'
+    as di;
+import 'package:ai_chat_bot/presentation/bloc/history_bloc.dart';
+import 'package:ai_chat_bot/presentation/bloc/history_event.dart';
+import 'package:ai_chat_bot/presentation/bloc/history_state.dart';
+import 'package:ai_chat_bot/presentation/popups/chatbot_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/history_bloc.dart';
-import '../bloc/history_event.dart';
-import '../bloc/history_state.dart';
-import '../../core/dependency_injection/dependency_injection.dart' as di;
-import '../../core/router/app_router.gr.dart';
+import 'widgets/history_chat_session_card.dart';
 
 @RoutePage()
 class HistoryPage extends StatefulWidget {
@@ -139,7 +141,7 @@ class _HistoryPageState extends State<HistoryPage>
                       return Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                          children: <Widget>[
                             Icon(
                               Icons.chat_bubble_outline,
                               size: 64,
@@ -176,82 +178,26 @@ class _HistoryPageState extends State<HistoryPage>
                         await Future.delayed(const Duration(milliseconds: 500));
                       },
                       child: ListView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.only(
+                          left: 16,
+                          right: 16,
+                          bottom: 128,
+                        ),
                         itemCount: state.filteredSessions.length,
                         itemBuilder: (context, index) {
                           final session = state.filteredSessions[index];
-                          return Card(
-                            margin: const EdgeInsets.only(bottom: 8),
-                            child: ListTile(
-                              title: Text(
-                                session.title,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: theme.textTheme.titleMedium,
-                              ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    _getLastMessage(session),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: theme.colorScheme.onSurface
-                                          .withOpacity(0.7),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    _formatDate(session.updatedAt),
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: theme.colorScheme.onSurface
-                                          .withOpacity(0.5),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              leading: CircleAvatar(
-                                backgroundColor: theme.colorScheme.primary
-                                    .withOpacity(0.1),
-                                child: Icon(
-                                  Icons.chat,
-                                  color: theme.colorScheme.primary,
-                                ),
-                              ),
-                              trailing: PopupMenuButton(
-                                itemBuilder:
-                                    (context) => [
-                                      PopupMenuItem(
-                                        value: 'delete',
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.delete,
-                                              color: theme.colorScheme.error,
-                                            ),
-                                            const SizedBox(width: 8),
-                                            const Text('Delete'),
-                                          ],
-                                        ),
+                          return HistoryChatSessionCard(
+                            session: session,
+                            onDelete:
+                                () => ChatbotAlert.showDeleteConfirmation(
+                                  context: context,
+                                  title: 'Delete Conversation',
+                                  itemName: session.title,
+                                  onConfirm:
+                                      () => _historyBloc.add(
+                                        DeleteSessionEvent(session.id),
                                       ),
-                                    ],
-                                onSelected: (value) {
-                                  if (value == 'delete') {
-                                    _showDeleteConfirmation(
-                                      context,
-                                      session.id,
-                                      session.title,
-                                    );
-                                  }
-                                },
-                              ),
-                              onTap:
-                                  () => context.router.push(
-                                    ChatRoute(sessionId: session.id),
-                                  ),
-                            ),
+                                ),
                           );
                         },
                       ),
@@ -263,60 +209,6 @@ class _HistoryPageState extends State<HistoryPage>
           );
         },
       ),
-    );
-  }
-
-  String _getLastMessage(session) {
-    if (session.messages.isEmpty) return 'No messages';
-    final lastMessage = session.messages.last;
-    return lastMessage.content;
-  }
-
-  String _formatDate(DateTime date) {
-    final now = DateTime.now();
-    final difference = now.difference(date);
-
-    if (difference.inDays == 0) {
-      return 'Today ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
-    } else if (difference.inDays == 1) {
-      return 'Yesterday';
-    } else if (difference.inDays < 7) {
-      return '${difference.inDays} days ago';
-    } else {
-      return '${date.day}/${date.month}/${date.year}';
-    }
-  }
-
-  void _showDeleteConfirmation(
-    BuildContext context,
-    String sessionId,
-    String title,
-  ) {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Delete Conversation'),
-            content: Text(
-              'Are you sure you want to delete "$title"? This action cannot be undone.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  _historyBloc.add(DeleteSessionEvent(sessionId));
-                },
-                style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(context).colorScheme.error,
-                ),
-                child: const Text('Delete'),
-              ),
-            ],
-          ),
     );
   }
 }

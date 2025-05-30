@@ -1,7 +1,7 @@
-import 'package:ai_chat_bot/hive_registrar.g.dart';
+import 'package:ai_chat_bot/core/adapters/hive_registrar.g.dart';
+import 'package:ai_chat_bot/data/models/hive_chat_session.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:path_provider/path_provider.dart';
-import '../models/hive_chat_session.dart';
 
 class HiveStorageService {
   static const String chatSessionsBox = 'chat_sessions';

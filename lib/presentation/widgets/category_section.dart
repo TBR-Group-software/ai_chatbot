@@ -16,7 +16,7 @@ class CategorySection extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Column(
-      children: [
+      children: <Widget>[
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(

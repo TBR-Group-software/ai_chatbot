@@ -9,11 +9,11 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:ai_chat_bot/presentation/pages/chat_page.dart' as _i1;
-import 'package:ai_chat_bot/presentation/pages/explore_page.dart' as _i2;
-import 'package:ai_chat_bot/presentation/pages/history_page.dart' as _i3;
-import 'package:ai_chat_bot/presentation/pages/home_page.dart' as _i4;
-import 'package:ai_chat_bot/presentation/pages/navigation_page.dart' as _i5;
+import 'package:ai_chat_bot/presentation/pages/chat/chat_page.dart' as _i1;
+import 'package:ai_chat_bot/presentation/pages/explore/explore_page.dart' as _i2;
+import 'package:ai_chat_bot/presentation/pages/history/history_page.dart' as _i3;
+import 'package:ai_chat_bot/presentation/pages/home/home_page.dart' as _i4;
+import 'package:ai_chat_bot/presentation/pages/navigation/navigation_page.dart' as _i5;
 import 'package:auto_route/auto_route.dart' as _i6;
 import 'package:flutter/material.dart' as _i7;
 
