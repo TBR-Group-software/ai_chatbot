@@ -1,19 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:ai_chat_bot/data/datasources/remote/gemini/gemini_remote_data_source.dart';
+import 'package:ai_chat_bot/data/datasources/remote/gemini/gemini_remote_datasource.dart';
+import 'package:ai_chat_bot/data/models/gemini_text_response.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
-/// Service responsible for communicating with Gemini API
-/// Follows Single Responsibility Principle - only handles HTTP communication
+/// Implementation of Gemini remote data source
+/// Returns typed data models following Clean Architecture principles
 class ImplGeminiRemoteDataSource implements GeminiRemoteDataSource {
   static const String _baseUrl = 'https://generativelanguage.googleapis.com';
   static const String _apiVersion = 'v1beta';
 
-  /// Streams raw API responses from Gemini API
-  /// Returns raw JSON data without any parsing or transformation
+  /// Streams Gemini API responses as typed data models
+  /// Handles HTTP communication and converts raw JSON to GeminiTextResponse models
   @override
-  Stream<Map<String, dynamic>?> streamGenerateContent(String prompt) async* {
+  Stream<GeminiTextResponse?> streamGenerateContent(String prompt) async* {
     final apiKey = dotenv.env['GEMINI_API_KEY'];
     final modelName = dotenv.env['MODEL_NAME'] ?? 'gemini-2.0-flash';
     
@@ -72,8 +73,9 @@ class ImplGeminiRemoteDataSource implements GeminiRemoteDataSource {
     return request;
   }
 
-  /// Processes the SSE stream and yields raw JSON responses
-  Stream<Map<String, dynamic>?> _processStreamResponse(
+  /// Processes the SSE stream and yields typed GeminiTextResponse models
+  /// Converts raw JSON to data models at the datasource level
+  Stream<GeminiTextResponse?> _processStreamResponse(
     http.StreamedResponse response,
     http.Client client,
   ) async* {
@@ -95,13 +97,19 @@ class ImplGeminiRemoteDataSource implements GeminiRemoteDataSource {
             final data = line.substring(6).trim();
             
             if (data == '[DONE]') {
-              yield {'isDone': true};
+              yield GeminiTextResponse.completed();
               return;
             }
             
             try {
               final jsonData = jsonDecode(data) as Map<String, dynamic>;
-              yield jsonData;
+              // Convert raw JSON to typed data model at datasource level
+              final geminiResponse = GeminiTextResponse.fromJson(jsonData);
+              
+              // Only yield responses with actual content
+              if (geminiResponse.output != null && geminiResponse.output!.isNotEmpty) {
+                yield geminiResponse;
+              }
             } catch (e) {
               // Skip malformed JSON chunks
               continue;
@@ -115,12 +123,12 @@ class ImplGeminiRemoteDataSource implements GeminiRemoteDataSource {
   }
 }
 
-/// Custom exception for Gemini service errors
+/// Custom exception for Gemini remote data source errors
 class GeminiRemoteDataSourceException implements Exception {
   final String message;
   
   const GeminiRemoteDataSourceException(this.message);
   
   @override
-  String toString() => 'ImplException: $message';
+  String toString() => 'GeminiRemoteDataSourceException: $message';
 } 
