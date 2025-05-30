@@ -1,5 +1,5 @@
 import '../entities/chat_session_entity.dart';
-import '../repositories/chat_history_repository.dart';
+import '../repositories/chat_history/chat_history_repository.dart';
 
 class SaveChatSessionUseCase {
   final ChatHistoryRepository _repository;

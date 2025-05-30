@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:ai_chat_bot/data/datasources/remote/gemini/gemini_remote_datasource.dart';
-import 'package:ai_chat_bot/data/models/gemini_text_response.dart';
+import 'package:ai_chat_bot/data/models/gemini/gemini_text_response.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 /// Implementation of Gemini remote data source
-/// Returns typed data models following Clean Architecture principles
 class ImplGeminiRemoteDataSource implements GeminiRemoteDataSource {
   static const String _baseUrl = 'https://generativelanguage.googleapis.com';
   static const String _apiVersion = 'v1beta';

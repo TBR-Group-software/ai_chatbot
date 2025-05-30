@@ -1,35 +1,35 @@
 import 'dart:async';
+import 'package:ai_chat_bot/data/datasources/local/hive_storage/hive_storage_local_datasource.dart';
 import '../../domain/entities/chat_session_entity.dart';
-import '../../domain/repositories/chat_history_repository.dart';
-import '../services/hive_storage_service.dart';
-import '../models/hive_chat_session.dart';
+import '../../domain/repositories/chat_history/chat_history_repository.dart';
+import '../models/hive_storage/hive_chat_session.dart';
 
 class ImplChatHistoryRepository implements ChatHistoryRepository {
-  final HiveStorageService _storageService;
+  final HiveStorageLocalDataSource _hiveStorageLocalDataSource;
 
   // This enables real-time data synchronization between BLoCs
   // When data changes, all listening BLoCs will be notified automatically
   final StreamController<List<ChatSessionEntity>> _sessionsController = 
       StreamController<List<ChatSessionEntity>>.broadcast();
 
-  ImplChatHistoryRepository(this._storageService);
+  ImplChatHistoryRepository(this._hiveStorageLocalDataSource);
 
   @override
   Future<List<ChatSessionEntity>> getAllSessions() async {
-    final hiveSessions = await _storageService.getAllSessions();
+    final hiveSessions = await _hiveStorageLocalDataSource.getAllSessions();
     return hiveSessions.map((hiveSession) => hiveSession.toDomain()).toList();
   }
 
   @override
   Future<ChatSessionEntity?> getSession(String sessionId) async {
-    final hiveSession = await _storageService.getSession(sessionId);
+    final hiveSession = await _hiveStorageLocalDataSource.getSession(sessionId);
     return hiveSession?.toDomain();
   }
 
   @override
   Future<void> saveSession(ChatSessionEntity session) async {
     final hiveSession = HiveChatSession.fromDomain(session);
-    await _storageService.saveSession(hiveSession);
+    await _hiveStorageLocalDataSource.saveSession(hiveSession);
     
     // After saving a session, emit updated data to all listening BLoCs
     // This ensures HomeBloc shows new sessions immediately after creation
@@ -38,7 +38,7 @@ class ImplChatHistoryRepository implements ChatHistoryRepository {
 
   @override
   Future<void> deleteSession(String sessionId) async {
-    await _storageService.deleteSession(sessionId);
+    await _hiveStorageLocalDataSource.deleteSession(sessionId);
     
     // After deleting a session, emit updated data to all listening BLoCs
     // This ensures HomeBloc removes deleted sessions immediately
@@ -48,7 +48,7 @@ class ImplChatHistoryRepository implements ChatHistoryRepository {
   @override
   Future<void> updateSession(ChatSessionEntity session) async {
     final hiveSession = HiveChatSession.fromDomain(session);
-    await _storageService.updateSession(hiveSession);
+    await _hiveStorageLocalDataSource.updateSession(hiveSession);
     
     // After updating a session, emit updated data to all listening BLoCs
     // This ensures all BLoCs show the latest session information

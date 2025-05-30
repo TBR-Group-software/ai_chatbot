@@ -1,3 +1,4 @@
+import 'package:ai_chat_bot/data/datasources/local/hive_storage/hive_storage_local_datasource.dart';
 import 'package:ai_chat_bot/data/repositories/impl_gemini_repository.dart';
 import 'package:ai_chat_bot/data/datasources/remote/gemini/gemini_remote_datasource.dart';
 import 'package:ai_chat_bot/presentation/bloc/chat_bloc.dart';
@@ -5,10 +6,10 @@ import 'package:ai_chat_bot/presentation/bloc/history_bloc.dart';
 import 'package:ai_chat_bot/presentation/bloc/home_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ai_chat_bot/data/datasources/remote/gemini/impl_gemini_remote_datasource.dart';
-import 'package:ai_chat_bot/data/services/hive_storage_service.dart';
+import 'package:ai_chat_bot/data/datasources/local/hive_storage/imlp_hive_storage_local_datasource.dart';
 import 'package:ai_chat_bot/data/repositories/impl_chat_history_repository.dart';
-import 'package:ai_chat_bot/domain/repositories/llm_repository.dart';
-import 'package:ai_chat_bot/domain/repositories/chat_history_repository.dart';
+import 'package:ai_chat_bot/domain/repositories/llm/llm_repository.dart';
+import 'package:ai_chat_bot/domain/repositories/chat_history/chat_history_repository.dart';
 import 'package:ai_chat_bot/domain/usecases/generate_text_with_context_usecase.dart';
 import 'package:ai_chat_bot/domain/usecases/save_chat_session_usecase.dart';
 import 'package:ai_chat_bot/domain/usecases/get_chat_sessions_usecase.dart';
@@ -18,11 +19,10 @@ import 'package:ai_chat_bot/domain/usecases/delete_chat_session_usecase.dart';
 final GetIt sl = GetIt.instance;
 
 void init() {
-  // Storage Data Sources
-  sl.registerLazySingleton<HiveStorageService>(() => HiveStorageService());
+  // Local Data Sources
+  sl.registerLazySingleton<HiveStorageLocalDataSource>(() => ImplHiveStorageLocalDataSource());
 
   // Remote Data Sources
-
   sl.registerLazySingleton<GeminiRemoteDataSource>(
     () => ImplGeminiRemoteDataSource(),
   );

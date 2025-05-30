@@ -1,6 +1,6 @@
 import 'package:hive_ce/hive.dart';
 import 'hive_chat_message.dart';
-import '../../domain/entities/chat_session_entity.dart';
+import '../../../domain/entities/chat_session_entity.dart';
 
 part 'hive_chat_session.g.dart';
 

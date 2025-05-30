@@ -1,5 +1,5 @@
 import 'package:hive_ce/hive.dart';
-import '../../domain/entities/chat_message_entity.dart';
+import '../../../domain/entities/chat_message_entity.dart';
 
 part 'hive_chat_message.g.dart';
 

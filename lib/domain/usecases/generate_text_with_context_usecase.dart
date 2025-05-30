@@ -2,7 +2,7 @@ import 'dart:async';
 
 import '../entities/llm_text_response_entity.dart';
 import '../entities/chat_message_entity.dart';
-import '../repositories/llm_repository.dart';
+import '../repositories/llm/llm_repository.dart';
 
 class GenerateTextWithContextUseCase {
   final LLMRepository _llmRepository;

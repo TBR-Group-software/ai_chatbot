@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/get_chat_sessions_usecase.dart';
-import '../../domain/repositories/chat_history_repository.dart';
+import '../../domain/repositories/chat_history/chat_history_repository.dart';
 import '../../domain/entities/chat_session_entity.dart';
 import 'home_event.dart';
 import 'home_state.dart';

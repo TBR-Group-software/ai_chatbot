@@ -1,5 +1,5 @@
 import 'dart:async';
-import '../../../models/gemini_text_response.dart';
+import '../../../models/gemini/gemini_text_response.dart';
 
 /// Abstract data source for Gemini remote operations
 /// Returns typed data models instead of raw JSON

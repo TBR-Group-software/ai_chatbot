@@ -1,4 +1,4 @@
-import 'package:ai_chat_bot/data/models/gemini_text_response.dart';
+import 'package:ai_chat_bot/data/models/gemini/gemini_text_response.dart';
 
 /// Domain entity for LLM text response
 /// Represents the business logic view of text generation responses

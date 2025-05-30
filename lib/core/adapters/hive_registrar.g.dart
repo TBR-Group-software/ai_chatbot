@@ -3,8 +3,8 @@
 // Check in to version control
 
 import 'package:hive_ce/hive.dart';
-import 'package:ai_chat_bot/data/models/hive_chat_message.dart';
-import 'package:ai_chat_bot/data/models/hive_chat_session.dart';
+import 'package:ai_chat_bot/data/models/hive_storage/hive_chat_message.dart';
+import 'package:ai_chat_bot/data/models/hive_storage/hive_chat_session.dart';
 
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
