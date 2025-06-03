@@ -1,5 +1,4 @@
-
-import 'package:ai_chat_bot/domain/entities/chat_session_entity.dart';
+part of 'history_bloc.dart';
 
 class HistoryState {
   final List<ChatSessionEntity> sessions;

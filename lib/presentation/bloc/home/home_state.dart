@@ -1,5 +1,4 @@
-import '../../domain/entities/chat_session_entity.dart';
-
+part of 'home_bloc.dart';
 class HomeState {
   final List<ChatSessionEntity> recentSessions;
   final bool isLoading;

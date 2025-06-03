@@ -1,8 +1,6 @@
 import 'package:ai_chat_bot/core/dependency_injection/dependency_injection.dart'
     as di;
-import 'package:ai_chat_bot/presentation/bloc/history_bloc.dart';
-import 'package:ai_chat_bot/presentation/bloc/history_event.dart';
-import 'package:ai_chat_bot/presentation/bloc/history_state.dart';
+import 'package:ai_chat_bot/presentation/bloc/history/history_bloc.dart';
 import 'package:ai_chat_bot/presentation/popups/chatbot_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';

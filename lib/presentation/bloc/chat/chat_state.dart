@@ -1,6 +1,4 @@
-import 'package:ai_chat_bot/domain/entities/llm_text_response_entity.dart';
-import 'package:ai_chat_bot/domain/entities/chat_message_entity.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+part of 'chat_bloc.dart';
 
 class ChatState {
   final LLMTextResponseEntity? generatedContent;
@@ -24,18 +22,18 @@ class ChatState {
   });
 
   factory ChatState.initial() => ChatState(
-        isLoading: false,
-        messages: [
-          types.TextMessage(
-            author: const types.User(id: 'bot'),
-            id: '1',
-            text: 'Hi, can I help you?',
-            status: types.Status.delivered,
-          ),
-        ],
-        isNewSession: true,
-        contextMessages: [],
-      );
+    isLoading: false,
+    messages: [
+      types.TextMessage(
+        author: const types.User(id: 'bot'),
+        id: '1',
+        text: 'Hi, can I help you?',
+        status: types.Status.delivered,
+      ),
+    ],
+    isNewSession: true,
+    contextMessages: [],
+  );
 
   ChatState copyWith({
     LLMTextResponseEntity? generatedContent,

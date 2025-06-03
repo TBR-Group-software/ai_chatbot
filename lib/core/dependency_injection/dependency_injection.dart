@@ -1,9 +1,9 @@
 import 'package:ai_chat_bot/data/datasources/local/hive_storage/hive_storage_local_datasource.dart';
 import 'package:ai_chat_bot/data/repositories/impl_gemini_repository.dart';
 import 'package:ai_chat_bot/data/datasources/remote/gemini/gemini_remote_datasource.dart';
-import 'package:ai_chat_bot/presentation/bloc/chat_bloc.dart';
-import 'package:ai_chat_bot/presentation/bloc/history_bloc.dart';
-import 'package:ai_chat_bot/presentation/bloc/home_bloc.dart';
+import 'package:ai_chat_bot/presentation/bloc/chat/chat_bloc.dart';
+import 'package:ai_chat_bot/presentation/bloc/history/history_bloc.dart';
+import 'package:ai_chat_bot/presentation/bloc/home/home_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ai_chat_bot/data/datasources/remote/gemini/impl_gemini_remote_datasource.dart';
 import 'package:ai_chat_bot/data/datasources/local/hive_storage/imlp_hive_storage_local_datasource.dart';

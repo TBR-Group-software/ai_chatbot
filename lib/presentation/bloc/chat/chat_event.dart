@@ -1,3 +1,5 @@
+part of 'chat_bloc.dart';
+
 abstract class ChatEvent {}
 
 class GenerateTextEvent extends ChatEvent {

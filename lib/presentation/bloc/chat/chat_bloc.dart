@@ -1,12 +1,14 @@
+import 'package:ai_chat_bot/domain/entities/llm_text_response_entity.dart';
 import 'package:ai_chat_bot/domain/usecases/generate_text_with_context_usecase.dart';
 import 'package:ai_chat_bot/domain/usecases/save_chat_session_usecase.dart';
 import 'package:ai_chat_bot/domain/usecases/get_chat_session_usecase.dart';
 import 'package:ai_chat_bot/domain/entities/chat_session_entity.dart';
 import 'package:ai_chat_bot/domain/entities/chat_message_entity.dart';
-import 'package:ai_chat_bot/presentation/bloc/chat_event.dart';
-import 'package:ai_chat_bot/presentation/bloc/chat_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+
+part 'chat_event.dart';
+part 'chat_state.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final GenerateTextWithContextUseCase _generateTextWithContextUseCase;

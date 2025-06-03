@@ -73,7 +73,6 @@ class ImplChatHistoryRepository implements ChatHistoryRepository {
   }
 
   // This prevents memory leaks by closing the StreamController
-  // Should be called when the repository is no longer needed
   void dispose() {
     _sessionsController.close();
   }

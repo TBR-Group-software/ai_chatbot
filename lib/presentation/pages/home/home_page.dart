@@ -5,9 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ai_chat_bot/presentation/widgets/home_app_bar.dart';
 import 'package:ai_chat_bot/presentation/pages/home/widgets/home_history_section.dart';
 import 'package:ai_chat_bot/presentation/widgets/category_section.dart';
-import 'package:ai_chat_bot/presentation/bloc/home_bloc.dart';
-import 'package:ai_chat_bot/presentation/bloc/home_event.dart';
-import 'package:ai_chat_bot/presentation/bloc/home_state.dart';
+import 'package:ai_chat_bot/presentation/bloc/home/home_bloc.dart';
 import 'package:ai_chat_bot/core/theme/app_theme.dart';
 import 'package:ai_chat_bot/core/router/app_router.gr.dart';
 import 'package:ai_chat_bot/core/dependency_injection/dependency_injection.dart'
@@ -21,7 +19,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with WidgetsBindingObserver, AutoRouteAware {
+class _HomePageState extends State<HomePage>
+    with WidgetsBindingObserver, AutoRouteAware {
   final HomeBloc _homeBloc = di.sl.get<HomeBloc>();
   AutoRouteObserver? _routeObserver;
 
@@ -35,7 +34,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, AutoRo
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _routeObserver = RouterScope.of(context).firstObserverOfType<AutoRouteObserver>();
+    _routeObserver =
+        RouterScope.of(context).firstObserverOfType<AutoRouteObserver>();
     if (_routeObserver != null) {
       _routeObserver!.subscribe(this, context.routeData);
     }

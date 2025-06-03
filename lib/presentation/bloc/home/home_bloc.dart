@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/usecases/get_chat_sessions_usecase.dart';
-import '../../domain/repositories/chat_history/chat_history_repository.dart';
-import '../../domain/entities/chat_session_entity.dart';
-import 'home_event.dart';
-import 'home_state.dart';
+import '../../../domain/usecases/get_chat_sessions_usecase.dart';
+import '../../../domain/repositories/chat_history/chat_history_repository.dart';
+import '../../../domain/entities/chat_session_entity.dart';
+part 'home_event.dart';
+part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GetChatSessionsUseCase _getChatSessionsUseCase;

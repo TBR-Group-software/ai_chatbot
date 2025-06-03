@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:ai_chat_bot/domain/entities/chat_session_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/usecases/get_chat_sessions_usecase.dart';
-import '../../domain/usecases/delete_chat_session_usecase.dart';
-import '../../domain/repositories/chat_history/chat_history_repository.dart';
-import 'history_event.dart';
-import 'history_state.dart';
+import '../../../domain/usecases/get_chat_sessions_usecase.dart';
+import '../../../domain/usecases/delete_chat_session_usecase.dart';
+import '../../../domain/repositories/chat_history/chat_history_repository.dart';
+part 'history_event.dart';
+part 'history_state.dart';
 
 class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   final GetChatSessionsUseCase _getChatSessionsUseCase;
