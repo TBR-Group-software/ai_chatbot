@@ -7,6 +7,7 @@ import 'widget/chat_input_widget.dart';
 import 'widget/chat_message_widget.dart';
 import 'package:ai_chat_bot/core/dependency_injection/dependency_injection.dart'
     as di;
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 @RoutePage()
 class ChatPage extends StatefulWidget {
@@ -73,12 +74,19 @@ class _ChatPageState extends State<ChatPage> {
                     itemCount: state.messages.length,
                     itemBuilder: (context, index) {
                       final message = state.messages[index];
+                      final isBot = message.author.id == 'bot';
+                      final hasError = message.status == types.Status.error;
+                      final isRateLimitError = state.error == 'rate_limit';
+                      
                       return ChatMessageWidget(
                         message: message,
-                        isUser: message.author.id != 'bot',
+                        isUser: !isBot,
                         isLoading: state.isLoading,
-                        isCompleted:
-                            state.generatedContent?.isComplete ?? false,
+                        isCompleted: state.generatedContent?.isComplete ?? false,
+                        errorMessage: state.error,
+                        onRetry: (isBot && hasError && state.lastFailedPrompt != null && !isRateLimitError)
+                            ? () => _chatBloc.add(RetryLastRequestEvent())
+                            : null,
                       );
                     },
                   );

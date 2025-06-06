@@ -4,7 +4,8 @@ abstract class ChatEvent {}
 
 class GenerateTextEvent extends ChatEvent {
   final String prompt;
-  GenerateTextEvent(this.prompt);
+  final bool isRetry;
+  GenerateTextEvent(this.prompt, {this.isRetry = false});
 }
 
 class SendMessageEvent extends ChatEvent {
@@ -23,4 +24,8 @@ class SaveChatSessionEvent extends ChatEvent {
 
 class CreateNewSessionEvent extends ChatEvent {
   CreateNewSessionEvent();
+}
+
+class RetryLastRequestEvent extends ChatEvent {
+  RetryLastRequestEvent();
 }

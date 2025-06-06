@@ -1,5 +1,6 @@
 import 'package:ai_chat_bot/presentation/pages/chat/widget/chat_thinking_widget.dart';
 import 'package:ai_chat_bot/presentation/pages/chat/widget/chat_streaming_text.dart';
+import 'package:ai_chat_bot/presentation/pages/chat/widget/chat_retry_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_svg/svg.dart';
@@ -9,12 +10,17 @@ class ChatMessageWidget extends StatefulWidget {
   final bool isUser;
   final bool isLoading;
   final bool isCompleted;
+  final VoidCallback? onRetry;
+  final String? errorMessage;
+
   const ChatMessageWidget({
     super.key,
     required this.message,
     required this.isUser,
     required this.isLoading,
     required this.isCompleted,
+    this.onRetry,
+    this.errorMessage,
   });
 
   @override
@@ -27,6 +33,7 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final messageText = (widget.message as types.TextMessage).text;
+    final hasError = widget.message.status == types.Status.error;
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
@@ -70,24 +77,50 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget>
                         ),
               ),
 
-              child:
-                  !widget.isUser &&
-                          widget.isLoading &&
-                          !widget.isCompleted &&
-                          widget.message.status == types.Status.sending
-                      ? ChatThinkingWidget(
-                        animationDuration: const Duration(milliseconds: 500),
-                      )
-                      : ChatStreamingText(
-                        text: messageText,
-                        animate: !widget.isUser && !widget.isCompleted,
-                        style:
-                            widget.isUser
-                                ? theme.textTheme.bodyLarge?.copyWith(
-                                  color: theme.colorScheme.onPrimary,
-                                )
-                                : theme.textTheme.bodyLarge?.copyWith(),
-                      ),
+              child: Builder(
+                builder: (context) {
+                  // Show retry widget for bot messages with error status
+                  if (!widget.isUser && hasError && widget.onRetry != null) {
+                    return ChatRetryWidget(
+                      errorMessage: widget.errorMessage ?? 'connection_failed',
+                      onRetry: widget.onRetry!,
+                      isRetrying: widget.isLoading,
+                    );
+                  }
+
+                  // Show retry widget for bot messages with error status (no retry available)
+                  if (!widget.isUser && hasError) {
+                    return ChatRetryWidget(
+                      errorMessage: widget.errorMessage ?? 'connection_failed',
+                      onRetry:
+                          () {}, // Empty callback, won't be used since canRetry is false
+                      isRetrying: false,
+                    );
+                  }
+
+                  // Show thinking animation for loading bot messages
+                  if (!widget.isUser &&
+                      widget.isLoading &&
+                      !widget.isCompleted &&
+                      widget.message.status == types.Status.sending) {
+                    return ChatThinkingWidget(
+                      animationDuration: const Duration(milliseconds: 500),
+                    );
+                  }
+
+                  // Show regular message content
+                  return ChatStreamingText(
+                    text: messageText,
+                    animate: !widget.isUser && !widget.isCompleted,
+                    style:
+                        widget.isUser
+                            ? theme.textTheme.bodyLarge?.copyWith(
+                              color: theme.colorScheme.onPrimary,
+                            )
+                            : theme.textTheme.bodyLarge?.copyWith(),
+                  );
+                },
+              ),
             ),
           ),
         ],

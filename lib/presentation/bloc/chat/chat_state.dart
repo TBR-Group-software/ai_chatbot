@@ -9,6 +9,8 @@ class ChatState {
   final String? sessionTitle;
   final bool isNewSession;
   final List<ChatMessageEntity> contextMessages;
+  final String? lastFailedPrompt;
+  final String? partialResponse;
 
   ChatState({
     required this.isLoading,
@@ -19,6 +21,8 @@ class ChatState {
     this.sessionTitle,
     this.isNewSession = true,
     this.contextMessages = const [],
+    this.lastFailedPrompt,
+    this.partialResponse,
   });
 
   factory ChatState.initial() => ChatState(
@@ -44,6 +48,8 @@ class ChatState {
     String? sessionTitle,
     bool? isNewSession,
     List<ChatMessageEntity>? contextMessages,
+    String? lastFailedPrompt,
+    String? partialResponse,
   }) {
     return ChatState(
       generatedContent: generatedContent ?? this.generatedContent,
@@ -54,6 +60,8 @@ class ChatState {
       sessionTitle: sessionTitle ?? this.sessionTitle,
       isNewSession: isNewSession ?? this.isNewSession,
       contextMessages: contextMessages ?? this.contextMessages,
+      lastFailedPrompt: lastFailedPrompt ?? this.lastFailedPrompt,
+      partialResponse: partialResponse ?? this.partialResponse,
     );
   }
 }

@@ -25,10 +25,17 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<LoadChatSessionEvent>(_onLoadChatSession);
     on<SaveChatSessionEvent>(_onSaveChatSession);
     on<CreateNewSessionEvent>(_onCreateNewSession);
+    on<RetryLastRequestEvent>(_onRetryLastRequest);
   }
 
   Future<void> _onSendMessage(SendMessageEvent event, Emitter<ChatState> emit) async {
     if (event.messageText.trim().isEmpty) return;
+
+    emit(state.copyWith(
+      error: null,
+      lastFailedPrompt: null,
+      partialResponse: null,
+    ));
 
     final userMessage = types.TextMessage(
       author: const types.User(id: 'user'),
@@ -68,18 +75,27 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   Future<void> _onGenerateText(GenerateTextEvent event, Emitter<ChatState> emit) async {
     try {
+      String accumulatedText = '';
+      
+      // If this is a retry, start with the partial response
+      if (event.isRetry && state.partialResponse != null) {
+        accumulatedText = state.partialResponse!;
+      }
+
       await for (final textResponse in _generateTextWithContextUseCase.call(event.prompt, state.contextMessages)) {
         if (textResponse != null && textResponse.text.isNotEmpty) {
-          // Get current bot message text and append new chunk
+          // Accumulate the response text
+          accumulatedText += textResponse.text;
+          
+          // Get current bot message and update it
           final currentMessages = List<types.Message>.from(state.messages);
           if (currentMessages.isNotEmpty) {
             final currentBotMessage = currentMessages[0] as types.TextMessage;
-            final updatedText = currentBotMessage.text + textResponse.text;
             
             currentMessages[0] = types.TextMessage(
               author: currentBotMessage.author,
               id: currentBotMessage.id,
-              text: updatedText,
+              text: accumulatedText,
               status: textResponse.isComplete
                   ? types.Status.delivered
                   : types.Status.sending,
@@ -89,7 +105,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             if (textResponse.isComplete) {
               final botChatMessage = ChatMessageEntity(
                 id: currentBotMessage.id,
-                content: updatedText,
+                content: accumulatedText,
                 isUser: false,
                 timestamp: DateTime.now(),
                 sessionId: state.currentSessionId ?? '',
@@ -102,6 +118,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 generatedContent: textResponse,
                 messages: currentMessages,
                 contextMessages: updatedContext,
+                error: null,
+                lastFailedPrompt: null,
+                partialResponse: null,
               ));
 
               // Auto-save session after each complete response
@@ -117,12 +136,83 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         }
       }
     } catch (error) {
+      // Determine error type and message
+      String errorMessage = _getErrorMessage(error);
+      
+      // Update the bot message to show error state
+      final currentMessages = List<types.Message>.from(state.messages);
+      if (currentMessages.isNotEmpty) {
+        final currentBotMessage = currentMessages[0] as types.TextMessage;
+        currentMessages[0] = types.TextMessage(
+          author: currentBotMessage.author,
+          id: currentBotMessage.id,
+          text: currentBotMessage.text, // Keep any partial response
+          status: types.Status.error,
+        );
+      }
+      
       emit(state.copyWith(
         isLoading: false,
         generatedContent: null,
-        error: error.toString(),
+        error: errorMessage,
+        messages: currentMessages,
+        lastFailedPrompt: event.prompt,
+        partialResponse: currentMessages.isNotEmpty 
+            ? (currentMessages[0] as types.TextMessage).text 
+            : null,
       ));
     }
+  }
+
+  String _getErrorMessage(dynamic error) {
+    final errorString = error.toString().toLowerCase();
+    
+    // Check for 503 Service Unavailable (rate limiting)
+    if (errorString.contains('503') || 
+        errorString.contains('service unavailable') ||
+        errorString.contains('rate limit') ||
+        errorString.contains('quota') ||
+        errorString.contains('exceeded')) {
+      return 'rate_limit';
+    }
+    
+    // Check for other specific error types
+    if (errorString.contains('network') ||
+        errorString.contains('connection') ||
+        errorString.contains('timeout') ||
+        errorString.contains('socket')) {
+      return 'connection_failed';
+    }
+    
+    // Default error
+    return 'connection_failed';
+  }
+
+  Future<void> _onRetryLastRequest(RetryLastRequestEvent event, Emitter<ChatState> emit) async {
+    if (state.lastFailedPrompt == null) return;
+    
+    // Update state to show retrying
+    emit(state.copyWith(
+      isLoading: true,
+      error: null,
+    ));
+    
+    // Update bot message status to show retrying
+    final currentMessages = List<types.Message>.from(state.messages);
+    if (currentMessages.isNotEmpty) {
+      final currentBotMessage = currentMessages[0] as types.TextMessage;
+      currentMessages[0] = types.TextMessage(
+        author: currentBotMessage.author,
+        id: currentBotMessage.id,
+        text: currentBotMessage.text,
+        status: types.Status.sending,
+      );
+      
+      emit(state.copyWith(messages: currentMessages));
+    }
+    
+    // Retry the request
+    add(GenerateTextEvent(state.lastFailedPrompt!, isRetry: true));
   }
 
   Future<void> _onLoadChatSession(LoadChatSessionEvent event, Emitter<ChatState> emit) async {

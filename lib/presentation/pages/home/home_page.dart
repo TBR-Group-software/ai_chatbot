@@ -92,6 +92,7 @@ class _HomePageState extends State<HomePage>
           await Future.delayed(const Duration(milliseconds: 500));
         },
         child: SafeArea(
+          minimum: const EdgeInsets.only(bottom: 128),
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
@@ -143,9 +144,9 @@ class _HomePageState extends State<HomePage>
                 ),
 
                 Padding(
-                  padding: const EdgeInsets.only(top: 12),
+                  padding: const EdgeInsets.only(top: 12, bottom: 64),
                   child: CategorySection(
-                    items: [
+                    items: <CategoryItemData>[
                       CategoryItemData(
                         title: 'Story',
                         description: 'Generate a story from a given subject.',
@@ -180,7 +181,7 @@ class _HomePageState extends State<HomePage>
                     onSeeAll: () {},
                   ),
                 ),
-                const SizedBox(height: 128),
+                // const SizedBox(height: 128),
               ],
             ),
           ),
