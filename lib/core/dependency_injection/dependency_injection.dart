@@ -4,23 +4,34 @@ import 'package:ai_chat_bot/data/datasources/remote/gemini/gemini_remote_datasou
 import 'package:ai_chat_bot/presentation/bloc/chat/chat_bloc.dart';
 import 'package:ai_chat_bot/presentation/bloc/history/history_bloc.dart';
 import 'package:ai_chat_bot/presentation/bloc/home/home_bloc.dart';
+import 'package:ai_chat_bot/presentation/bloc/memory/memory_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ai_chat_bot/data/datasources/remote/gemini/impl_gemini_remote_datasource.dart';
 import 'package:ai_chat_bot/data/datasources/local/hive_storage/imlp_hive_storage_local_datasource.dart';
 import 'package:ai_chat_bot/data/repositories/impl_chat_history_repository.dart';
+import 'package:ai_chat_bot/data/repositories/impl_memory_repository.dart';
 import 'package:ai_chat_bot/domain/repositories/llm/llm_repository.dart';
 import 'package:ai_chat_bot/domain/repositories/chat_history/chat_history_repository.dart';
+import 'package:ai_chat_bot/domain/repositories/memory/memory_repository.dart';
 import 'package:ai_chat_bot/domain/usecases/generate_text_with_context_usecase.dart';
+import 'package:ai_chat_bot/domain/usecases/generate_text_with_memory_context_usecase.dart';
 import 'package:ai_chat_bot/domain/usecases/save_chat_session_usecase.dart';
 import 'package:ai_chat_bot/domain/usecases/get_chat_sessions_usecase.dart';
 import 'package:ai_chat_bot/domain/usecases/get_chat_session_usecase.dart';
 import 'package:ai_chat_bot/domain/usecases/delete_chat_session_usecase.dart';
+import 'package:ai_chat_bot/domain/usecases/get_memory_items_usecase.dart';
+import 'package:ai_chat_bot/domain/usecases/save_memory_item_usecase.dart';
+import 'package:ai_chat_bot/domain/usecases/delete_memory_item_usecase.dart';
+import 'package:ai_chat_bot/domain/usecases/search_memory_items_usecase.dart';
+import 'package:ai_chat_bot/domain/usecases/get_relevant_memory_for_context_usecase.dart';
 
 final GetIt sl = GetIt.instance;
 
 void init() {
   // Local Data Sources
-  sl.registerLazySingleton<HiveStorageLocalDataSource>(() => ImplHiveStorageLocalDataSource());
+  sl.registerLazySingleton<HiveStorageLocalDataSource>(
+    () => ImplHiveStorageLocalDataSource(),
+  );
 
   // Remote Data Sources
   sl.registerLazySingleton<GeminiRemoteDataSource>(
@@ -36,9 +47,21 @@ void init() {
     () => ImplChatHistoryRepository(sl.get()),
   );
 
+  sl.registerLazySingleton<MemoryRepository>(
+    () => ImplMemoryRepository(sl.get()),
+  );
+
   // Use cases
   sl.registerLazySingleton<GenerateTextWithContextUseCase>(
     () => GenerateTextWithContextUseCase(sl.get()),
+  );
+
+  sl.registerLazySingleton<GetRelevantMemoryForContextUseCase>(
+    () => GetRelevantMemoryForContextUseCase(sl.get()),
+  );
+
+  sl.registerLazySingleton<GenerateTextWithMemoryContextUseCase>(
+    () => GenerateTextWithMemoryContextUseCase(sl.get(), sl.get()),
   );
 
   sl.registerLazySingleton<SaveChatSessionUseCase>(
@@ -57,12 +80,38 @@ void init() {
     () => DeleteChatSessionUseCase(sl.get()),
   );
 
+  sl.registerLazySingleton<GetMemoryItemsUseCase>(
+    () => GetMemoryItemsUseCase(sl.get()),
+  );
+
+  sl.registerLazySingleton<SaveMemoryItemUseCase>(
+    () => SaveMemoryItemUseCase(sl.get()),
+  );
+
+  sl.registerLazySingleton<DeleteMemoryItemUseCase>(
+    () => DeleteMemoryItemUseCase(sl.get()),
+  );
+
+  sl.registerLazySingleton<SearchMemoryItemsUseCase>(
+    () => SearchMemoryItemsUseCase(sl.get()),
+  );
+
   // BLoCs
-  sl.registerFactory<ChatBloc>(() => ChatBloc(sl.get(), sl.get(), sl.get()));
+  sl.registerFactory<ChatBloc>(
+    () => ChatBloc(
+      sl.get<GenerateTextWithMemoryContextUseCase>(),
+      sl.get(),
+      sl.get(),
+    ),
+  );
 
   sl.registerFactory<HistoryBloc>(
     () => HistoryBloc(sl.get(), sl.get(), sl.get()),
   );
 
   sl.registerFactory<HomeBloc>(() => HomeBloc(sl.get(), sl.get()));
+
+  sl.registerFactory<MemoryBloc>(
+    () => MemoryBloc(sl.get(), sl.get(), sl.get(), sl.get(), sl.get()),
+  );
 }
