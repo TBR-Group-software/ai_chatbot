@@ -23,7 +23,7 @@ class CustomBottomNavBar extends StatelessWidget {
           top: Radius.circular(20),
           bottom: Radius.circular(20),
         ),
-        boxShadow: [
+        boxShadow: <BoxShadow>[
           BoxShadow(
             color: const Color.fromRGBO(0, 0, 0, 0.1),
             blurRadius: 10,
@@ -35,7 +35,7 @@ class CustomBottomNavBar extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
+          children: <Widget>[
             _NavBarItem(
               icon: Icons.home_rounded,
               label: 'Home',
@@ -43,13 +43,13 @@ class CustomBottomNavBar extends StatelessWidget {
               onTap: () => onItemSelected(0),
             ),
             _NavBarItem(
-              icon: Icons.explore_outlined,
-              label: 'Explore',
+              icon: Icons.archive_rounded,
+              label: 'Memory',
               isSelected: selectedIndex == 1,
               onTap: () => onItemSelected(1),
             ),
             _NavBarItem(
-              icon: Icons.history,
+              icon: Icons.history_rounded,
               label: 'History',
               isSelected: selectedIndex == 2,
               onTap: () => onItemSelected(2),
@@ -89,7 +89,7 @@ class _NavBarItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <Widget>[
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
               child: Icon(

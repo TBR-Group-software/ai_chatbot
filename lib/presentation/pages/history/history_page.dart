@@ -75,7 +75,7 @@ class _HistoryPageState extends State<HistoryPage>
         bloc: _historyBloc,
         builder: (context, state) {
           return Column(
-            children: [
+            children: <Widget>[
               // Search bar
               Padding(
                 padding: const EdgeInsets.all(16.0),

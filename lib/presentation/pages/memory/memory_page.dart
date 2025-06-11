@@ -1,0 +1,237 @@
+import 'package:ai_chat_bot/core/dependency_injection/dependency_injection.dart'
+    as di;
+import 'package:ai_chat_bot/presentation/bloc/memory/memory_bloc.dart';
+import 'package:ai_chat_bot/presentation/popups/chatbot_alert.dart';
+import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'widgets/memory_item_card.dart';
+import 'widgets/add_memory_dialog.dart';
+
+@RoutePage()
+class MemoryPage extends StatefulWidget {
+  const MemoryPage({super.key});
+
+  @override
+  State<MemoryPage> createState() => _MemoryPageState();
+}
+
+class _MemoryPageState extends State<MemoryPage>
+    with WidgetsBindingObserver, AutoRouteAware {
+  final MemoryBloc _memoryBloc = di.sl.get<MemoryBloc>();
+  final TextEditingController _searchController = TextEditingController();
+  AutoRouteObserver? _routeObserver;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _memoryBloc.add(LoadMemoryEvent());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _routeObserver =
+        RouterScope.of(context).firstObserverOfType<AutoRouteObserver>();
+    if (_routeObserver != null) {
+      _routeObserver!.subscribe(this, context.routeData);
+    }
+  }
+
+  @override
+  void dispose() {
+    _routeObserver?.unsubscribe(this);
+    WidgetsBinding.instance.removeObserver(this);
+    _searchController.dispose();
+    _memoryBloc.close();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      // Refresh memory when app comes back to foreground
+      _refreshMemory();
+    }
+  }
+
+  void _refreshMemory() {
+    _memoryBloc.add(LoadMemoryEvent());
+  }
+
+  void _showAddMemoryDialog() {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AddMemoryDialog(
+            onSave: (item) {
+              _memoryBloc.add(AddMemoryEvent(item));
+            },
+          ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return SafeArea(
+      minimum: const EdgeInsets.only(bottom: 128),
+      child: Scaffold(
+        backgroundColor: theme.scaffoldBackgroundColor,
+        appBar: AppBar(
+          title: const Text('Memory'),
+          backgroundColor: theme.scaffoldBackgroundColor,
+          elevation: 0,
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: theme.colorScheme.primary,
+          onPressed: _showAddMemoryDialog,
+          child: const Icon(Icons.add),
+        ),
+        body: BlocBuilder<MemoryBloc, MemoryState>(
+          bloc: _memoryBloc,
+          builder: (context, state) {
+            return Column(
+              children: <Widget>[
+                // Search bar
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search memory...',
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      filled: true,
+                      fillColor: theme.cardColor,
+                    ),
+                    onChanged: (query) {
+                      _memoryBloc.add(SearchMemoryEvent(query));
+                    },
+                  ),
+                ),
+
+                Expanded(
+                  child: Builder(
+                    builder: (context) {
+                      if (state.isLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (state.error != null) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.error_outline,
+                                size: 64,
+                                color: theme.colorScheme.error,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'Error loading memory',
+                                style: theme.textTheme.headlineSmall,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                state.error!,
+                                style: theme.textTheme.bodyMedium,
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 16),
+                              ElevatedButton(
+                                onPressed:
+                                    () => _memoryBloc.add(LoadMemoryEvent()),
+                                child: const Text('Retry'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+
+                      if (state.filteredItems.isEmpty) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(
+                                Icons.psychology_outlined,
+                                size: 64,
+                                color: theme.colorScheme.onSurface.withOpacity(
+                                  0.5,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                state.searchQuery.isNotEmpty
+                                    ? 'No memory items found'
+                                    : 'No memory items yet',
+                                style: theme.textTheme.headlineSmall,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                state.searchQuery.isNotEmpty
+                                    ? 'Try a different search term'
+                                    : 'Add knowledge to enhance AI responses',
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: theme.colorScheme.onSurface
+                                      .withOpacity(0.7),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+
+                      return RefreshIndicator(
+                        onRefresh: () async {
+                          _refreshMemory();
+                          await Future.delayed(
+                            const Duration(milliseconds: 500),
+                          );
+                        },
+                        child: ListView.builder(
+                          padding: const EdgeInsets.only(
+                            left: 16,
+                            right: 16,
+                            bottom: 128,
+                          ),
+                          itemCount: state.filteredItems.length,
+                          itemBuilder: (context, index) {
+                            final item = state.filteredItems[index];
+                            return MemoryItemCard(
+                              item: item,
+                              onEdit: (updatedItem) {
+                                _memoryBloc.add(UpdateMemoryEvent(updatedItem));
+                              },
+                              onDelete:
+                                  () => ChatbotAlert.showDeleteConfirmation(
+                                    context: context,
+                                    title: 'Delete Memory Item',
+                                    itemName: item.title,
+                                    onConfirm:
+                                        () => _memoryBloc.add(
+                                          DeleteMemoryEvent(item.id),
+                                        ),
+                                  ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}

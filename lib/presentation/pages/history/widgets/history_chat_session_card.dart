@@ -1,6 +1,8 @@
 import 'package:ai_chat_bot/core/router/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import '../../../widgets/date_time_display.dart';
+import '../../../widgets/delete_popup_menu_item.dart';
 
 class HistoryChatSessionCard extends StatelessWidget {
   final dynamic session;
@@ -38,12 +40,7 @@ class HistoryChatSessionCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-            Text(
-              _formatDate(session.updatedAt),
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.5),
-              ),
-            ),
+            DateTimeDisplay(dateTime: session.updatedAt),
           ],
         ),
         leading: CircleAvatar(
@@ -55,19 +52,7 @@ class HistoryChatSessionCard extends StatelessWidget {
         ),
         trailing: PopupMenuButton(
           itemBuilder: (context) => [
-            PopupMenuItem(
-              value: 'delete',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.delete,
-                    color: theme.colorScheme.error,
-                  ),
-                  const SizedBox(width: 8),
-                  const Text('Delete'),
-                ],
-              ),
-            ),
+            const DeletePopupMenuItem(),
           ],
           onSelected: (value) {
             if (value == 'delete') {
@@ -86,20 +71,5 @@ class HistoryChatSessionCard extends StatelessWidget {
     if (session.messages.isEmpty) return 'No messages';
     final lastMessage = session.messages.last;
     return lastMessage.content;
-  }
-
-  String _formatDate(DateTime date) {
-    final now = DateTime.now();
-    final difference = now.difference(date);
-
-    if (difference.inDays == 0) {
-      return 'Today ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
-    } else if (difference.inDays == 1) {
-      return 'Yesterday';
-    } else if (difference.inDays < 7) {
-      return '${difference.inDays} days ago';
-    } else {
-      return '${date.day}/${date.month}/${date.year}';
-    }
   }
 } 

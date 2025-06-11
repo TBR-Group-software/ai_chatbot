@@ -1,5 +1,5 @@
 import 'package:ai_chat_bot/domain/entities/llm_text_response_entity.dart';
-import 'package:ai_chat_bot/domain/usecases/generate_text_with_context_usecase.dart';
+import 'package:ai_chat_bot/domain/usecases/generate_text_with_memory_context_usecase.dart';
 import 'package:ai_chat_bot/domain/usecases/save_chat_session_usecase.dart';
 import 'package:ai_chat_bot/domain/usecases/get_chat_session_usecase.dart';
 import 'package:ai_chat_bot/domain/entities/chat_session_entity.dart';
@@ -11,12 +11,12 @@ part 'chat_event.dart';
 part 'chat_state.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
-  final GenerateTextWithContextUseCase _generateTextWithContextUseCase;
+  final GenerateTextWithMemoryContextUseCase _generateTextWithMemoryContextUseCase;
   final SaveChatSessionUseCase _saveChatSessionUseCase;
   final GetChatSessionUseCase _getChatSessionUseCase;
 
   ChatBloc(
-    this._generateTextWithContextUseCase,
+    this._generateTextWithMemoryContextUseCase,
     this._saveChatSessionUseCase,
     this._getChatSessionUseCase,
   ) : super(ChatState.initial()) {
@@ -69,7 +69,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       contextMessages: updatedContext,
     ));
 
-    // Start text generation with context
+    // Start text generation with memory and chat session context
     add(GenerateTextEvent(event.messageText));
   }
 
@@ -82,7 +82,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         accumulatedText = state.partialResponse!;
       }
 
-      await for (final textResponse in _generateTextWithContextUseCase.call(event.prompt, state.contextMessages)) {
+      await for (final textResponse in _generateTextWithMemoryContextUseCase.call(event.prompt, state.contextMessages)) {
         if (textResponse != null && textResponse.text.isNotEmpty) {
           // Accumulate the response text
           accumulatedText += textResponse.text;
