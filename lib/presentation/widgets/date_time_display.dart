@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/theme/app_theme.dart';
 
 class DateTimeDisplay extends StatelessWidget {
   final DateTime dateTime;
@@ -19,13 +20,13 @@ class DateTimeDisplay extends StatelessWidget {
         Icon(
           Icons.access_time,
           size: 14,
-          color: theme.colorScheme.onSurface.withOpacity(0.6),
+          color: theme.extension<CustomColors>()!.onSurfaceDim,
         ),
         const SizedBox(width: 4),
         Text(
           _formatDate(dateTime),
           style: style ?? theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.6),
+            color: theme.extension<CustomColors>()!.onSurfaceDim,
           ),
         ),
       ],

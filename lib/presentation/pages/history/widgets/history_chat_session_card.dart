@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import '../../../widgets/date_time_display.dart';
 import '../../../widgets/delete_popup_menu_item.dart';
+import 'package:ai_chat_bot/core/theme/app_theme.dart';
 
 class HistoryChatSessionCard extends StatelessWidget {
   final dynamic session;
@@ -36,7 +37,7 @@ class HistoryChatSessionCard extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.7),
+                color: theme.extension<CustomColors>()!.onSurfaceMuted,
               ),
             ),
             const SizedBox(height: 4),
@@ -44,7 +45,7 @@ class HistoryChatSessionCard extends StatelessWidget {
           ],
         ),
         leading: CircleAvatar(
-          backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+          backgroundColor: theme.extension<CustomColors>()!.primarySubtle,
           child: Icon(
             Icons.chat,
             color: theme.colorScheme.primary,

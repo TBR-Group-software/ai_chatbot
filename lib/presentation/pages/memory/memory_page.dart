@@ -7,6 +7,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'widgets/memory_item_card.dart';
 import 'widgets/add_memory_dialog.dart';
+import 'package:ai_chat_bot/core/theme/app_theme.dart';
 
 @RoutePage()
 class MemoryPage extends StatefulWidget {
@@ -163,9 +164,7 @@ class _MemoryPageState extends State<MemoryPage>
                               Icon(
                                 Icons.psychology_outlined,
                                 size: 64,
-                                color: theme.colorScheme.onSurface.withOpacity(
-                                  0.5,
-                                ),
+                                color: theme.extension<CustomColors>()!.onSurfaceSubtle,
                               ),
                               const SizedBox(height: 16),
                               Text(
@@ -180,8 +179,7 @@ class _MemoryPageState extends State<MemoryPage>
                                     ? 'Try a different search term'
                                     : 'Add knowledge to enhance AI responses',
                                 style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: theme.colorScheme.onSurface
-                                      .withOpacity(0.7),
+                                  color: theme.extension<CustomColors>()!.onSurfaceMuted,
                                 ),
                               ),
                             ],

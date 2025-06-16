@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ai_chat_bot/core/theme/app_theme.dart';
 import '../../../../domain/entities/memory_item_entity.dart';
 
 class AddMemoryDialog extends StatefulWidget {
@@ -131,7 +132,7 @@ class _AddMemoryDialogState extends State<AddMemoryDialog> {
                       label: Text(tag),
                       deleteIcon: const Icon(Icons.close, size: 18),
                       onDeleted: () => _removeTag(tag),
-                      backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                      backgroundColor: theme.extension<CustomColors>()!.primarySubtle,
                     );
                   }).toList(),
                 ),

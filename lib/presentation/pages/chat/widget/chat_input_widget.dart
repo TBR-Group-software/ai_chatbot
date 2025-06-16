@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ai_chat_bot/core/theme/app_theme.dart';
 
 class ChatInputWidget extends StatelessWidget {
   final TextEditingController controller;
@@ -31,10 +32,10 @@ class ChatInputWidget extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withOpacity(0.1),
+              color: theme.extension<CustomColors>()!.primarySubtle,
               border: Border(
                 bottom: BorderSide(
-                  color: theme.colorScheme.primary.withOpacity(0.3),
+                  color: theme.extension<CustomColors>()!.primaryMuted,
                   width: 1,
                 ),
               ),

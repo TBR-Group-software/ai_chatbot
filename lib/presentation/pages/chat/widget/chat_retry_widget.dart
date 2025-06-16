@@ -1,5 +1,6 @@
 import 'package:ai_chat_bot/domain/entities/error_info_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:ai_chat_bot/core/theme/app_theme.dart';
 
 class ChatRetryWidget extends StatelessWidget {
   final String errorMessage;
@@ -47,7 +48,7 @@ class ChatRetryWidget extends StatelessWidget {
         Text(
           errorInfo.description,
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.7),
+            color: theme.extension<CustomColors>()!.onSurfaceMuted,
           ),
         ),
         const SizedBox(height: 12),

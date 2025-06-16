@@ -1,7 +1,7 @@
 import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ai_chat_bot/core/theme/app_theme.dart';
 
 class CupertinoMessageDropdown {
   static OverlayEntry? _currentOverlay;
@@ -344,7 +344,7 @@ class _CupertinoDropdownOverlayState extends State<_CupertinoDropdownOverlay>
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                     child: Container(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                     ),
                   ),
                 ),
@@ -388,13 +388,6 @@ class _CupertinoDropdownOverlayState extends State<_CupertinoDropdownOverlay>
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 20,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
                     ),
                     child: _CupertinoDropdownMenu(
                       isUserMessage: widget.isUserMessage,
@@ -428,20 +421,14 @@ class _CupertinoDropdownMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final customColors = theme.extension<CustomColors>()!;
 
     return Container(
       width: 280,
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF2C2C2E) : const Color(0xFFF2F2F7),
+        color: customColors.dropdownBackground,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(14),
@@ -492,7 +479,7 @@ class _CupertinoDropdownItemState extends State<_CupertinoDropdownItem> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final customColors = theme.extension<CustomColors>()!;
 
     return GestureDetector(
       onTapDown: (_) => setState(() => _isPressed = true),
@@ -502,24 +489,15 @@ class _CupertinoDropdownItemState extends State<_CupertinoDropdownItem> {
       child: Container(
         height: 56,
         decoration: BoxDecoration(
-          color:
-              _isPressed
-                  ? (isDark
-                      ? Colors.white.withOpacity(0.1)
-                      : Colors.black.withOpacity(0.05))
-                  : Colors.transparent,
-          border:
-              widget.isFirst
-                  ? null
-                  : Border(
-                    top: BorderSide(
-                      color:
-                          isDark
-                              ? Colors.white.withOpacity(0.1)
-                              : Colors.black.withOpacity(0.1),
-                      width: 0.5,
-                    ),
+          color: _isPressed ? customColors.dropdownItemPressed : Colors.transparent,
+          border: widget.isFirst
+              ? null
+              : Border(
+                  top: BorderSide(
+                    color: customColors.dropdownBorder,
+                    width: 0.5,
                   ),
+                ),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -528,15 +506,14 @@ class _CupertinoDropdownItemState extends State<_CupertinoDropdownItem> {
               Icon(
                 widget.icon,
                 size: 20,
-                color: isDark ? CupertinoColors.white : CupertinoColors.black,
+                color: customColors.dropdownIcon,
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   widget.title,
                   style: theme.textTheme.bodyLarge?.copyWith(
-                    color:
-                        isDark ? CupertinoColors.white : CupertinoColors.black,
+                    color: customColors.dropdownText,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -549,3 +526,4 @@ class _CupertinoDropdownItemState extends State<_CupertinoDropdownItem> {
   }
 }
 
+ 

@@ -43,6 +43,21 @@ class AppTheme {
           darkGreen: Color(0xFF79B79F),
           lightGray: Color(0xFFE0E0E0),
           almond2: Color(0xFFE9CA91),
+          onSurfaceDim: Color(0xFF565656),
+          onSurfaceMuted: Color(0xFF646464),
+          onSurfaceSubtle: Color(0xFF474747),
+          primarySubtle: Color(0xFF1A1815),
+          primaryMuted: Color(0xFF4D4436),
+          primaryDim: Color(0xFF968256),
+          overlayLight: Color(0xFF0D0D0D),
+          overlayMedium: Color(0xFF1A1A1A),
+          overlayShadow: Color(0xFF333333),
+          highlightSubtle: Color(0xFF1A1A1A),
+          dropdownBackground: Color(0xFF2C2C2E),
+          dropdownItemPressed: Color(0xFF1A1A1A),
+          dropdownBorder: Color(0xFF1A1A1A),
+          dropdownText: Color(0xFFFFFFFF),
+          dropdownIcon: Color(0xFFFFFFFF),
         ),
       ],
     );
@@ -63,6 +78,21 @@ class CustomColors extends ThemeExtension<CustomColors> {
     required this.darkGreen,
     required this.lightGray,
     required this.almond2,
+    required this.onSurfaceDim,
+    required this.onSurfaceMuted,
+    required this.onSurfaceSubtle,
+    required this.primarySubtle,
+    required this.primaryMuted,
+    required this.primaryDim,
+    required this.overlayLight,
+    required this.overlayMedium,
+    required this.overlayShadow,
+    required this.highlightSubtle,
+    required this.dropdownBackground,
+    required this.dropdownItemPressed,
+    required this.dropdownBorder,
+    required this.dropdownText,
+    required this.dropdownIcon,
   });
 
   final Color cardBackground;
@@ -76,6 +106,21 @@ class CustomColors extends ThemeExtension<CustomColors> {
   final Color darkGreen;
   final Color lightGray;
   final Color almond2;
+  final Color onSurfaceDim;
+  final Color onSurfaceMuted;
+  final Color onSurfaceSubtle;
+  final Color primarySubtle;
+  final Color primaryMuted;
+  final Color primaryDim;
+  final Color overlayLight;
+  final Color overlayMedium;
+  final Color overlayShadow;
+  final Color highlightSubtle;
+  final Color dropdownBackground;
+  final Color dropdownItemPressed;
+  final Color dropdownBorder;
+  final Color dropdownText;
+  final Color dropdownIcon;
 
   @override
   CustomColors copyWith({
@@ -90,6 +135,21 @@ class CustomColors extends ThemeExtension<CustomColors> {
     Color? darkGreen,
     Color? lightGray,
     Color? almond2,
+    Color? onSurfaceDim,
+    Color? onSurfaceMuted,
+    Color? onSurfaceSubtle,
+    Color? primarySubtle,
+    Color? primaryMuted,
+    Color? primaryDim,
+    Color? overlayLight,
+    Color? overlayMedium,
+    Color? overlayShadow,
+    Color? highlightSubtle,
+    Color? dropdownBackground,
+    Color? dropdownItemPressed,
+    Color? dropdownBorder,
+    Color? dropdownText,
+    Color? dropdownIcon,
   }) {
     return CustomColors(
       cardBackground: cardBackground ?? this.cardBackground,
@@ -103,6 +163,21 @@ class CustomColors extends ThemeExtension<CustomColors> {
       darkGreen: darkGreen ?? this.darkGreen,
       lightGray: lightGray ?? this.lightGray,
       almond2: almond2 ?? this.almond2,
+      onSurfaceDim: onSurfaceDim ?? this.onSurfaceDim,
+      onSurfaceMuted: onSurfaceMuted ?? this.onSurfaceMuted,
+      onSurfaceSubtle: onSurfaceSubtle ?? this.onSurfaceSubtle,
+      primarySubtle: primarySubtle ?? this.primarySubtle,
+      primaryMuted: primaryMuted ?? this.primaryMuted,
+      primaryDim: primaryDim ?? this.primaryDim,
+      overlayLight: overlayLight ?? this.overlayLight,
+      overlayMedium: overlayMedium ?? this.overlayMedium,
+      overlayShadow: overlayShadow ?? this.overlayShadow,
+      highlightSubtle: highlightSubtle ?? this.highlightSubtle,
+      dropdownBackground: dropdownBackground ?? this.dropdownBackground,
+      dropdownItemPressed: dropdownItemPressed ?? this.dropdownItemPressed,
+      dropdownBorder: dropdownBorder ?? this.dropdownBorder,
+      dropdownText: dropdownText ?? this.dropdownText,
+      dropdownIcon: dropdownIcon ?? this.dropdownIcon,
     );
   }
 
@@ -123,6 +198,21 @@ class CustomColors extends ThemeExtension<CustomColors> {
       darkGreen: Color.lerp(darkGreen, other.darkGreen, t)!,
       lightGray: Color.lerp(lightGray, other.lightGray, t)!,
       almond2: Color.lerp(almond2, other.almond2, t)!,
+      onSurfaceDim: Color.lerp(onSurfaceDim, other.onSurfaceDim, t)!,
+      onSurfaceMuted: Color.lerp(onSurfaceMuted, other.onSurfaceMuted, t)!,
+      onSurfaceSubtle: Color.lerp(onSurfaceSubtle, other.onSurfaceSubtle, t)!,
+      primarySubtle: Color.lerp(primarySubtle, other.primarySubtle, t)!,
+      primaryMuted: Color.lerp(primaryMuted, other.primaryMuted, t)!,
+      primaryDim: Color.lerp(primaryDim, other.primaryDim, t)!,
+      overlayLight: Color.lerp(overlayLight, other.overlayLight, t)!,
+      overlayMedium: Color.lerp(overlayMedium, other.overlayMedium, t)!,
+      overlayShadow: Color.lerp(overlayShadow, other.overlayShadow, t)!,
+      highlightSubtle: Color.lerp(highlightSubtle, other.highlightSubtle, t)!,
+      dropdownBackground: Color.lerp(dropdownBackground, other.dropdownBackground, t)!,
+      dropdownItemPressed: Color.lerp(dropdownItemPressed, other.dropdownItemPressed, t)!,
+      dropdownBorder: Color.lerp(dropdownBorder, other.dropdownBorder, t)!,
+      dropdownText: Color.lerp(dropdownText, other.dropdownText, t)!,
+      dropdownIcon: Color.lerp(dropdownIcon, other.dropdownIcon, t)!,
     );
   }
 } 

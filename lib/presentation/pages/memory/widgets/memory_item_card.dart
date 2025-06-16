@@ -3,6 +3,7 @@ import '../../../../domain/entities/memory_item_entity.dart';
 import '../../../widgets/date_time_display.dart';
 import '../../../widgets/delete_popup_menu_item.dart';
 import 'edit_memory_dialog.dart';
+import 'package:ai_chat_bot/core/theme/app_theme.dart';
 
 class MemoryItemCard extends StatelessWidget {
   final MemoryItemEntity item;
@@ -98,10 +99,10 @@ class MemoryItemCard extends StatelessWidget {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.primary.withOpacity(0.1),
+                        color: theme.extension<CustomColors>()!.primarySubtle,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: theme.colorScheme.primary.withOpacity(0.3),
+                          color: theme.extension<CustomColors>()!.primaryMuted,
                         ),
                       ),
                       child: Text(

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_svg/svg.dart';
+import 'package:ai_chat_bot/core/theme/app_theme.dart';
 
 class ChatMessageWidget extends StatefulWidget {
   final types.Message message;
@@ -171,7 +172,7 @@ class _MessageBubble extends StatelessWidget {
                         ? Border.all(
                           color: Theme.of(
                             context,
-                          ).colorScheme.primary.withOpacity(0.6),
+                          ).extension<CustomColors>()!.primaryDim,
                           width: 2,
                         )
                         : null,
@@ -182,7 +183,7 @@ class _MessageBubble extends StatelessWidget {
                           BoxShadow(
                             color: Theme.of(
                               context,
-                            ).colorScheme.primary.withOpacity(0.3),
+                            ).extension<CustomColors>()!.primaryMuted,
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
