@@ -56,15 +56,4 @@ class MemoryItemEntity {
         other.updatedAt == updatedAt &&
         other.relevanceScore == relevanceScore;
   }
-
-  @override
-  int get hashCode {
-    return id.hashCode ^
-        title.hashCode ^
-        content.hashCode ^
-        tags.hashCode ^
-        createdAt.hashCode ^
-        updatedAt.hashCode ^
-        relevanceScore.hashCode;
-  }
-} 
+}

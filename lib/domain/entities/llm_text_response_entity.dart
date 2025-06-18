@@ -14,7 +14,9 @@ class LLMTextResponseEntity {
   });
 
   /// Factory constructor to convert from data model to domain entity
-  factory LLMTextResponseEntity.fromGeminiTextResponse(GeminiTextResponse response) {
+  factory LLMTextResponseEntity.fromGeminiTextResponse(
+    GeminiTextResponse response,
+  ) {
     return LLMTextResponseEntity(
       text: response.output ?? '',
       isComplete: response.isComplete,
@@ -24,18 +26,12 @@ class LLMTextResponseEntity {
 
   /// Factory constructor for completed response
   factory LLMTextResponseEntity.completed() {
-    return const LLMTextResponseEntity(
-      text: '',
-      isComplete: true,
-    );
+    return const LLMTextResponseEntity(text: '', isComplete: true);
   }
 
   /// Factory constructor for empty response
   factory LLMTextResponseEntity.empty() {
-    return const LLMTextResponseEntity(
-      text: '',
-      isComplete: false,
-    );
+    return const LLMTextResponseEntity(text: '', isComplete: false);
   }
 
   @override
@@ -50,10 +46,5 @@ class LLMTextResponseEntity {
         other.text == text &&
         other.isComplete == isComplete &&
         other.finishReason == finishReason;
-  }
-
-  @override
-  int get hashCode {
-    return text.hashCode ^ isComplete.hashCode ^ finishReason.hashCode;
   }
 }
