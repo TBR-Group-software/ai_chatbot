@@ -13,6 +13,12 @@ class SendMessageEvent extends ChatEvent {
   SendMessageEvent(this.messageText);
 }
 
+class EditAndResendMessageEvent extends ChatEvent {
+  final String messageId;
+  final String newMessageText;
+  EditAndResendMessageEvent(this.messageId, this.newMessageText);
+}
+
 class LoadChatSessionEvent extends ChatEvent {
   final String sessionId;
   LoadChatSessionEvent(this.sessionId);

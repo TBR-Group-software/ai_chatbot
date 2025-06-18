@@ -24,6 +24,10 @@ class _ChatPageState extends State<ChatPage> {
   final TextEditingController _messageController = TextEditingController();
   late FocusNode _inputFieldFocusNode;
 
+  bool _isEditing = false;
+  String? _editingMessageId;
+  String? _originalMessageText;
+
   @override
   void initState() {
     super.initState();
@@ -50,8 +54,42 @@ class _ChatPageState extends State<ChatPage> {
     final messageText = _messageController.text.trim();
     if (messageText.isEmpty) return;
 
+    if (_isEditing && _editingMessageId != null) {
+      _chatBloc.add(EditAndResendMessageEvent(_editingMessageId!, messageText));
+      _cancelEdit();
+    } else {
     _chatBloc.add(SendMessageEvent(messageText));
+    }
+    
     _messageController.clear();
+  }
+
+  void _handleEditMessage(String messageId, String messageText) {
+    setState(() {
+      _isEditing = true;
+      _editingMessageId = messageId;
+      _originalMessageText = messageText;
+      _messageController.text = messageText;
+    });
+    
+    _inputFieldFocusNode.requestFocus();
+    
+    // Select all text for easy editing
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _messageController.selection = TextSelection(
+        baseOffset: 0,
+        extentOffset: _messageController.text.length,
+      );
+    });
+  }
+
+  void _cancelEdit() {
+    setState(() {
+      _isEditing = false;
+      _editingMessageId = null;
+      _originalMessageText = null;
+      _messageController.clear();
+    });
   }
 
   @override
@@ -87,6 +125,7 @@ class _ChatPageState extends State<ChatPage> {
                         onRetry: (isBot && hasError && state.lastFailedPrompt != null && !isRateLimitError)
                             ? () => _chatBloc.add(RetryLastRequestEvent())
                             : null,
+                        onEditMessage: !isBot ? _handleEditMessage : null,
                       );
                     },
                   );
@@ -97,6 +136,11 @@ class _ChatPageState extends State<ChatPage> {
               focusNode: _inputFieldFocusNode,
               controller: _messageController,
               onSend: _handleSendMessage,
+              isEditing: _isEditing,
+              editingHint: _originalMessageText != null 
+                ? 'Editing: ${_originalMessageText!.length > 30 ? '${_originalMessageText!.substring(0, 30)}...' : _originalMessageText}'
+                : null,
+              onCancelEdit: _isEditing ? _cancelEdit : null,
             ),
           ],
         ),

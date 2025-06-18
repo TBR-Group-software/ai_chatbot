@@ -1,9 +1,12 @@
 import 'package:ai_chat_bot/presentation/pages/chat/widget/chat_thinking_widget.dart';
 import 'package:ai_chat_bot/presentation/pages/chat/widget/chat_streaming_text.dart';
 import 'package:ai_chat_bot/presentation/pages/chat/widget/chat_retry_widget.dart';
+import 'package:ai_chat_bot/presentation/pages/chat/widget/cupertino_message_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_svg/svg.dart';
+import 'package:ai_chat_bot/core/theme/app_theme.dart';
 
 class ChatMessageWidget extends StatefulWidget {
   final types.Message message;
@@ -12,6 +15,7 @@ class ChatMessageWidget extends StatefulWidget {
   final bool isCompleted;
   final VoidCallback? onRetry;
   final String? errorMessage;
+  final void Function(String messageId, String messageText)? onEditMessage;
 
   const ChatMessageWidget({
     super.key,
@@ -21,6 +25,7 @@ class ChatMessageWidget extends StatefulWidget {
     required this.isCompleted,
     this.onRetry,
     this.errorMessage,
+    this.onEditMessage,
   });
 
   @override
@@ -29,20 +34,106 @@ class ChatMessageWidget extends StatefulWidget {
 
 class _ChatMessageWidgetState extends State<ChatMessageWidget>
     with SingleTickerProviderStateMixin {
+  final GlobalKey _messageKey = GlobalKey();
+  final LayerLink _layerLink = LayerLink();
+
+  void _showCupertinoDropdown() async {
+    HapticFeedback.mediumImpact();
+    final messageText = (widget.message as types.TextMessage).text;
+
+    // Create a new, highlighted instance of the bubble for the overlay
+    final overlayBubble = _MessageBubble(
+      message: widget.message,
+      isUser: widget.isUser,
+      isLoading: widget.isLoading,
+      isCompleted: widget.isCompleted,
+      onRetry: widget.onRetry,
+      errorMessage: widget.errorMessage,
+      isHighlighted: true,
+    );
+
+    CupertinoMessageDropdown.show(
+      context: context,
+      messageKey: _messageKey,
+      layerLink: _layerLink,
+      messageWidget: overlayBubble,
+      isUserMessage: widget.isUser,
+      messageText: messageText,
+      onCopy: () {
+        // Copy functionality is handled in the dropdown
+      },
+      onEdit:
+          widget.isUser && widget.onEditMessage != null
+              ? () => widget.onEditMessage!(widget.message.id, messageText)
+              : null,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final messageText = (widget.message as types.TextMessage).text;
-    final hasError = widget.message.status == types.Status.error;
+    return ValueListenableBuilder<GlobalKey?>(
+      valueListenable: CupertinoMessageDropdown.highlightNotifier,
+      builder: (context, highlightedKey, child) {
+        final isHighlighted = highlightedKey == _messageKey;
+
+        // Hide the original widget if it's being shown in the overlay
+        return Opacity(opacity: isHighlighted ? 0.0 : 1.0, child: child);
+      },
+      child: CompositedTransformTarget(
+        link: _layerLink,
+        child: GestureDetector(
+          onLongPress: _showCupertinoDropdown,
+          // Use a key on a widget that has a render object
+          child: Container(
+            key: _messageKey,
+            child: _MessageBubble(
+              message: widget.message,
+              isUser: widget.isUser,
+              isLoading: widget.isLoading,
+              isCompleted: widget.isCompleted,
+              onRetry: widget.onRetry,
+              errorMessage: widget.errorMessage,
+              isHighlighted: false, // The list version is never highlighted
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MessageBubble extends StatelessWidget {
+  const _MessageBubble({
+    required this.message,
+    required this.isUser,
+    required this.isLoading,
+    required this.isCompleted,
+    this.onRetry,
+    this.errorMessage,
+    required this.isHighlighted,
+  });
+
+  final types.Message message;
+  final bool isUser;
+  final bool isLoading;
+  final bool isCompleted;
+  final VoidCallback? onRetry;
+  final String? errorMessage;
+  final bool isHighlighted;
+
+  @override
+  Widget build(BuildContext context) {
+    final messageText = (message as types.TextMessage).text;
+    final hasError = message.status == types.Status.error;
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
       child: Row(
         mainAxisAlignment:
-            widget.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+            isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (!widget.isUser && widget.message.id == '1')
+          if (!isUser && message.id == '1')
             Padding(
               padding: const EdgeInsets.only(right: 8),
               child: Center(
@@ -53,56 +144,79 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget>
                 ),
               ),
             ),
-
           Flexible(
-            child: Container(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
               constraints: BoxConstraints(
                 maxWidth:
                     MediaQuery.of(context).size.width *
-                    (widget.isUser || widget.message.id == '1' ? 0.75 : 1),
+                    (isUser || message.id == '1' ? 0.75 : 1),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
                 color:
-                    widget.isUser
-                        ? theme.colorScheme.primary
-                        : theme.scaffoldBackgroundColor,
+                    isUser
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).scaffoldBackgroundColor,
                 borderRadius:
-                    widget.isUser
+                    isUser
                         ? BorderRadius.circular(16)
                         : const BorderRadius.only(
                           topRight: Radius.circular(16),
                           bottomLeft: Radius.circular(16),
                           bottomRight: Radius.circular(16),
                         ),
+                // Add highlight border when message is selected
+                border:
+                    isHighlighted
+                        ? Border.all(
+                          color: Theme.of(
+                            context,
+                          ).extension<CustomColors>()!.primaryDim,
+                          width: 2,
+                        )
+                        : null,
+                // Add subtle shadow when highlighted
+                boxShadow:
+                    isHighlighted
+                        ? [
+                          BoxShadow(
+                            color: Theme.of(
+                              context,
+                            ).extension<CustomColors>()!.primaryMuted,
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ]
+                        : null,
               ),
-
               child: Builder(
                 builder: (context) {
+                  final theme = Theme.of(context);
+
                   // Show retry widget for bot messages with error status
-                  if (!widget.isUser && hasError && widget.onRetry != null) {
+                  if (!isUser && hasError && onRetry != null) {
                     return ChatRetryWidget(
-                      errorMessage: widget.errorMessage ?? 'connection_failed',
-                      onRetry: widget.onRetry!,
-                      isRetrying: widget.isLoading,
+                      errorMessage: errorMessage ?? 'connection_failed',
+                      onRetry: onRetry!,
+                      isRetrying: isLoading,
                     );
                   }
 
                   // Show retry widget for bot messages with error status (no retry available)
-                  if (!widget.isUser && hasError) {
+                  if (!isUser && hasError) {
                     return ChatRetryWidget(
-                      errorMessage: widget.errorMessage ?? 'connection_failed',
-                      onRetry:
-                          () {}, // Empty callback, won't be used since canRetry is false
+                      errorMessage: errorMessage ?? 'connection_failed',
+                      onRetry: () {}, // Empty callback
                       isRetrying: false,
                     );
                   }
 
                   // Show thinking animation for loading bot messages
-                  if (!widget.isUser &&
-                      widget.isLoading &&
-                      !widget.isCompleted &&
-                      widget.message.status == types.Status.sending) {
+                  if (!isUser &&
+                      isLoading &&
+                      !isCompleted &&
+                      message.status == types.Status.sending) {
                     return ChatThinkingWidget(
                       animationDuration: const Duration(milliseconds: 500),
                     );
@@ -111,9 +225,9 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget>
                   // Show regular message content
                   return ChatStreamingText(
                     text: messageText,
-                    animate: !widget.isUser && !widget.isCompleted,
+                    animate: !isUser && !isCompleted,
                     style:
-                        widget.isUser
+                        isUser
                             ? theme.textTheme.bodyLarge?.copyWith(
                               color: theme.colorScheme.onPrimary,
                             )

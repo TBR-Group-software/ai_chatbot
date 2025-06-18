@@ -14,7 +14,7 @@ class NavigationPage extends StatelessWidget {
       body: AutoTabsRouter(
         routes: const <PageRouteInfo<dynamic>>[
           HomeRoute(),
-          ExploreRoute(),
+          MemoryRoute(),
           HistoryRoute(),
         ],
         builder: (context, child) {

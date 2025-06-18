@@ -1,5 +1,5 @@
 import 'package:ai_chat_bot/domain/entities/llm_text_response_entity.dart';
-import 'package:ai_chat_bot/domain/usecases/generate_text_with_context_usecase.dart';
+import 'package:ai_chat_bot/domain/usecases/generate_text_with_memory_context_usecase.dart';
 import 'package:ai_chat_bot/domain/usecases/save_chat_session_usecase.dart';
 import 'package:ai_chat_bot/domain/usecases/get_chat_session_usecase.dart';
 import 'package:ai_chat_bot/domain/entities/chat_session_entity.dart';
@@ -11,16 +11,17 @@ part 'chat_event.dart';
 part 'chat_state.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
-  final GenerateTextWithContextUseCase _generateTextWithContextUseCase;
+  final GenerateTextWithMemoryContextUseCase _generateTextWithMemoryContextUseCase;
   final SaveChatSessionUseCase _saveChatSessionUseCase;
   final GetChatSessionUseCase _getChatSessionUseCase;
 
   ChatBloc(
-    this._generateTextWithContextUseCase,
+    this._generateTextWithMemoryContextUseCase,
     this._saveChatSessionUseCase,
     this._getChatSessionUseCase,
   ) : super(ChatState.initial()) {
     on<SendMessageEvent>(_onSendMessage);
+    on<EditAndResendMessageEvent>(_onEditAndResendMessage);
     on<GenerateTextEvent>(_onGenerateText);
     on<LoadChatSessionEvent>(_onLoadChatSession);
     on<SaveChatSessionEvent>(_onSaveChatSession);
@@ -69,8 +70,76 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       contextMessages: updatedContext,
     ));
 
-    // Start text generation with context
+    // Start text generation with memory and chat session context
     add(GenerateTextEvent(event.messageText));
+  }
+
+  Future<void> _onEditAndResendMessage(EditAndResendMessageEvent event, Emitter<ChatState> emit) async {
+    if (event.newMessageText.trim().isEmpty) return;
+
+    emit(state.copyWith(
+      error: null,
+      lastFailedPrompt: null,
+      partialResponse: null,
+    ));
+
+    // Find the message to edit
+    final messages = List<types.Message>.from(state.messages);
+    final messageIndex = messages.indexWhere((msg) => msg.id == event.messageId);
+    
+    if (messageIndex == -1) return;
+
+    // Remove all messages from the edited message onwards (including subsequent bot responses)
+    final messagesToKeep = messages.sublist(0, messageIndex);
+
+    // Update the selected message with new text
+    final updatedMessage = types.TextMessage(
+      author: const types.User(id: 'user'),
+      id: event.messageId, // Keep the same ID
+      text: event.newMessageText,
+      status: types.Status.delivered,
+    );
+
+    // Create new bot message for the response
+    final botMessage = types.TextMessage(
+      author: const types.User(id: 'bot'),
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      text: '',
+      status: types.Status.sending,
+    );
+
+    // Rebuild messages list with updated user message and new bot message
+    final updatedMessages = [botMessage, updatedMessage, ...messagesToKeep];
+
+    // Also update context messages - remove messages from the edited message onwards
+    final contextMessages = List<ChatMessageEntity>.from(state.contextMessages);
+    final contextIndex = contextMessages.indexWhere((msg) => msg.id == event.messageId);
+    
+    List<ChatMessageEntity> updatedContext = contextMessages;
+    if (contextIndex != -1) {
+      // Keep all context messages before the edited message
+      updatedContext = contextMessages.sublist(0, contextIndex);
+    }
+
+    // Add the updated user message to context
+    final updatedUserChatMessage = ChatMessageEntity(
+      id: event.messageId,
+      content: event.newMessageText,
+      isUser: true,
+      timestamp: contextIndex != -1 ? contextMessages[contextIndex].timestamp : DateTime.now(),
+      sessionId: state.currentSessionId ?? '',
+    );
+
+    final finalContext = [...updatedContext, updatedUserChatMessage];
+
+    emit(state.copyWith(
+      messages: updatedMessages,
+      isLoading: true,
+      contextMessages: finalContext,
+    ));
+
+    // Generate new LLM response for the edited message
+    add(GenerateTextEvent(event.newMessageText));
   }
 
   Future<void> _onGenerateText(GenerateTextEvent event, Emitter<ChatState> emit) async {
@@ -82,7 +151,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         accumulatedText = state.partialResponse!;
       }
 
-      await for (final textResponse in _generateTextWithContextUseCase.call(event.prompt, state.contextMessages)) {
+      await for (final textResponse in _generateTextWithMemoryContextUseCase.call(event.prompt, state.contextMessages)) {
         if (textResponse != null && textResponse.text.isNotEmpty) {
           // Accumulate the response text
           accumulatedText += textResponse.text;

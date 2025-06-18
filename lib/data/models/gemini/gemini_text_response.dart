@@ -21,7 +21,7 @@ class GeminiTextResponse {
 
       final candidate = candidates[0] as Map<String, dynamic>;
       final content = candidate['content'] as Map<String, dynamic>?;
-      
+
       if (content == null) {
         return const GeminiTextResponse();
       }
@@ -48,7 +48,7 @@ class GeminiTextResponse {
 
       // Join text parts properly - preserve original formatting from API
       final extractedText = textParts.join('');
-      
+
       // Get finish reason if available
       final finishReason = candidate['finishReason'] as String?;
       final isResponseComplete = finishReason != null;
@@ -66,10 +66,7 @@ class GeminiTextResponse {
 
   /// Factory constructor for completion signal
   factory GeminiTextResponse.completed() {
-    return const GeminiTextResponse(
-      output: '',
-      isComplete: true,
-    );
+    return const GeminiTextResponse(output: '', isComplete: true);
   }
 
   /// Factory constructor for empty response
@@ -89,10 +86,5 @@ class GeminiTextResponse {
         other.output == output &&
         other.isComplete == isComplete &&
         other.finishReason == finishReason;
-  }
-
-  @override
-  int get hashCode {
-    return output.hashCode ^ isComplete.hashCode ^ finishReason.hashCode;
   }
 }

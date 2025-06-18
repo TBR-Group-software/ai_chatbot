@@ -2,6 +2,7 @@ import 'package:ai_chat_bot/core/dependency_injection/dependency_injection.dart'
     as di;
 import 'package:ai_chat_bot/presentation/bloc/history/history_bloc.dart';
 import 'package:ai_chat_bot/presentation/popups/chatbot_alert.dart';
+import 'package:ai_chat_bot/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -75,7 +76,7 @@ class _HistoryPageState extends State<HistoryPage>
         bloc: _historyBloc,
         builder: (context, state) {
           return Column(
-            children: [
+            children: <Widget>[
               // Search bar
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -143,9 +144,7 @@ class _HistoryPageState extends State<HistoryPage>
                             Icon(
                               Icons.chat_bubble_outline,
                               size: 64,
-                              color: theme.colorScheme.onSurface.withOpacity(
-                                0.5,
-                              ),
+                              color: theme.extension<CustomColors>()!.onSurfaceMuted,
                             ),
                             const SizedBox(height: 16),
                             Text(
@@ -160,9 +159,7 @@ class _HistoryPageState extends State<HistoryPage>
                                   ? 'Try a different search term'
                                   : 'Start a conversation to see it here',
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                color: theme.colorScheme.onSurface.withOpacity(
-                                  0.7,
-                                ),
+                                color: theme.extension<CustomColors>()!.onSurfaceMuted,
                               ),
                             ),
                           ],

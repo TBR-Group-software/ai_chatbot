@@ -1,6 +1,7 @@
 import 'package:ai_chat_bot/domain/entities/chat_session_entity.dart';
 import 'package:ai_chat_bot/presentation/pages/home/widgets/home_history_card.dart';
 import 'package:flutter/material.dart';
+import 'package:ai_chat_bot/core/theme/app_theme.dart';
 
 class HomeHistorySection extends StatelessWidget {
   const HomeHistorySection({
@@ -57,13 +58,13 @@ class HomeHistorySection extends StatelessWidget {
                       Icon(
                         Icons.chat_bubble_outline,
                         size: 32,
-                        color: theme.colorScheme.onSurface.withOpacity(0.5),
+                        color: theme.extension<CustomColors>()!.onSurfaceSubtle,
                       ),
                       const SizedBox(height: 8),
                       Text(
                         'No chat history yet',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.7),
+                          color: theme.extension<CustomColors>()!.onSurfaceMuted,
                         ),
                       ),
                     ],

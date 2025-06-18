@@ -5,11 +5,13 @@
 import 'package:hive_ce/hive.dart';
 import 'package:ai_chat_bot/data/models/hive_storage/hive_chat_message.dart';
 import 'package:ai_chat_bot/data/models/hive_storage/hive_chat_session.dart';
+import 'package:ai_chat_bot/data/models/hive_storage/hive_memory_item.dart';
 
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
     registerAdapter(HiveChatMessageAdapter());
     registerAdapter(HiveChatSessionAdapter());
+    registerAdapter(HiveMemoryItemAdapter());
   }
 }
 
@@ -17,5 +19,6 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
   void registerAdapters() {
     registerAdapter(HiveChatMessageAdapter());
     registerAdapter(HiveChatSessionAdapter());
+    registerAdapter(HiveMemoryItemAdapter());
   }
 }

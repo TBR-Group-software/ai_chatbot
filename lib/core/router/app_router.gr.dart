@@ -10,10 +10,12 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:ai_chat_bot/presentation/pages/chat/chat_page.dart' as _i1;
-import 'package:ai_chat_bot/presentation/pages/explore/explore_page.dart' as _i2;
-import 'package:ai_chat_bot/presentation/pages/history/history_page.dart' as _i3;
-import 'package:ai_chat_bot/presentation/pages/home/home_page.dart' as _i4;
-import 'package:ai_chat_bot/presentation/pages/navigation/navigation_page.dart' as _i5;
+import 'package:ai_chat_bot/presentation/pages/history/history_page.dart'
+    as _i2;
+import 'package:ai_chat_bot/presentation/pages/home/home_page.dart' as _i3;
+import 'package:ai_chat_bot/presentation/pages/memory/memory_page.dart' as _i4;
+import 'package:ai_chat_bot/presentation/pages/navigation/navigation_page.dart'
+    as _i5;
 import 'package:auto_route/auto_route.dart' as _i6;
 import 'package:flutter/material.dart' as _i7;
 
@@ -57,23 +59,7 @@ class ChatRouteArgs {
 }
 
 /// generated route for
-/// [_i2.ExplorePage]
-class ExploreRoute extends _i6.PageRouteInfo<void> {
-  const ExploreRoute({List<_i6.PageRouteInfo>? children})
-    : super(ExploreRoute.name, initialChildren: children);
-
-  static const String name = 'ExploreRoute';
-
-  static _i6.PageInfo page = _i6.PageInfo(
-    name,
-    builder: (data) {
-      return const _i2.ExplorePage();
-    },
-  );
-}
-
-/// generated route for
-/// [_i3.HistoryPage]
+/// [_i2.HistoryPage]
 class HistoryRoute extends _i6.PageRouteInfo<void> {
   const HistoryRoute({List<_i6.PageRouteInfo>? children})
     : super(HistoryRoute.name, initialChildren: children);
@@ -83,13 +69,13 @@ class HistoryRoute extends _i6.PageRouteInfo<void> {
   static _i6.PageInfo page = _i6.PageInfo(
     name,
     builder: (data) {
-      return const _i3.HistoryPage();
+      return const _i2.HistoryPage();
     },
   );
 }
 
 /// generated route for
-/// [_i4.HomePage]
+/// [_i3.HomePage]
 class HomeRoute extends _i6.PageRouteInfo<void> {
   const HomeRoute({List<_i6.PageRouteInfo>? children})
     : super(HomeRoute.name, initialChildren: children);
@@ -99,7 +85,23 @@ class HomeRoute extends _i6.PageRouteInfo<void> {
   static _i6.PageInfo page = _i6.PageInfo(
     name,
     builder: (data) {
-      return const _i4.HomePage();
+      return const _i3.HomePage();
+    },
+  );
+}
+
+/// generated route for
+/// [_i4.MemoryPage]
+class MemoryRoute extends _i6.PageRouteInfo<void> {
+  const MemoryRoute({List<_i6.PageRouteInfo>? children})
+    : super(MemoryRoute.name, initialChildren: children);
+
+  static const String name = 'MemoryRoute';
+
+  static _i6.PageInfo page = _i6.PageInfo(
+    name,
+    builder: (data) {
+      return const _i4.MemoryPage();
     },
   );
 }
