@@ -2,7 +2,7 @@ import 'package:ai_chat_bot/core/router/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import '../../../widgets/date_time_display.dart';
-import '../../../widgets/delete_popup_menu_item.dart';
+import '../../../widgets/custom_popup_menu_item.dart';
 import 'package:ai_chat_bot/core/theme/app_theme.dart';
 
 class HistoryChatSessionCard extends StatelessWidget {
@@ -53,7 +53,7 @@ class HistoryChatSessionCard extends StatelessWidget {
         ),
         trailing: PopupMenuButton(
           itemBuilder: (context) => [
-            const DeletePopupMenuItem(),
+             CustomPopupMenuItem.delete(),
           ],
           onSelected: (value) {
             if (value == 'delete') {
