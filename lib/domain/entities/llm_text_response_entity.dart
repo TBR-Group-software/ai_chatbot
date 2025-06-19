@@ -38,13 +38,4 @@ class LLMTextResponseEntity {
   String toString() {
     return 'LLMTextResponseEntity(text: $text, isComplete: $isComplete, finishReason: $finishReason)';
   }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is LLMTextResponseEntity &&
-        other.text == text &&
-        other.isComplete == isComplete &&
-        other.finishReason == finishReason;
-  }
 }

@@ -78,13 +78,4 @@ class GeminiTextResponse {
   String toString() {
     return 'GeminiTextResponse(output: $output, isComplete: $isComplete, finishReason: $finishReason)';
   }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is GeminiTextResponse &&
-        other.output == output &&
-        other.isComplete == isComplete &&
-        other.finishReason == finishReason;
-  }
 }

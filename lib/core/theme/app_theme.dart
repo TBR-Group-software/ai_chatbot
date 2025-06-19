@@ -58,6 +58,11 @@ class AppTheme {
           dropdownBorder: Color(0xFF1A1A1A),
           dropdownText: Color(0xFFFFFFFF),
           dropdownIcon: Color(0xFFFFFFFF),
+          modalShadow: Color(0x66000000),
+          cancelButtonBackground: Color(0x40000000),
+          waveformColor: Color(0xCCEFD9B0),
+          microphoneShadow: Color(0x4DEFD9B0),
+          buttonShadow: Color(0x1A000000), // 10% black shadow for idle state
         ),
       ],
     );
@@ -93,6 +98,11 @@ class CustomColors extends ThemeExtension<CustomColors> {
     required this.dropdownBorder,
     required this.dropdownText,
     required this.dropdownIcon,
+    required this.modalShadow,
+    required this.cancelButtonBackground,
+    required this.waveformColor,
+    required this.microphoneShadow,
+    required this.buttonShadow,
   });
 
   final Color cardBackground;
@@ -121,6 +131,11 @@ class CustomColors extends ThemeExtension<CustomColors> {
   final Color dropdownBorder;
   final Color dropdownText;
   final Color dropdownIcon;
+  final Color modalShadow;
+  final Color cancelButtonBackground;
+  final Color waveformColor;
+  final Color microphoneShadow;
+  final Color buttonShadow;
 
   @override
   CustomColors copyWith({
@@ -150,6 +165,11 @@ class CustomColors extends ThemeExtension<CustomColors> {
     Color? dropdownBorder,
     Color? dropdownText,
     Color? dropdownIcon,
+    Color? modalShadow,
+    Color? cancelButtonBackground,
+    Color? waveformColor,
+    Color? microphoneShadow,
+    Color? buttonShadow,
   }) {
     return CustomColors(
       cardBackground: cardBackground ?? this.cardBackground,
@@ -178,6 +198,11 @@ class CustomColors extends ThemeExtension<CustomColors> {
       dropdownBorder: dropdownBorder ?? this.dropdownBorder,
       dropdownText: dropdownText ?? this.dropdownText,
       dropdownIcon: dropdownIcon ?? this.dropdownIcon,
+      modalShadow: modalShadow ?? this.modalShadow,
+      cancelButtonBackground: cancelButtonBackground ?? this.cancelButtonBackground,
+      waveformColor: waveformColor ?? this.waveformColor,
+      microphoneShadow: microphoneShadow ?? this.microphoneShadow,
+      buttonShadow: buttonShadow ?? this.buttonShadow,
     );
   }
 
@@ -213,6 +238,11 @@ class CustomColors extends ThemeExtension<CustomColors> {
       dropdownBorder: Color.lerp(dropdownBorder, other.dropdownBorder, t)!,
       dropdownText: Color.lerp(dropdownText, other.dropdownText, t)!,
       dropdownIcon: Color.lerp(dropdownIcon, other.dropdownIcon, t)!,
+      modalShadow: Color.lerp(modalShadow, other.modalShadow, t)!,
+      cancelButtonBackground: Color.lerp(cancelButtonBackground, other.cancelButtonBackground, t)!,
+      waveformColor: Color.lerp(waveformColor, other.waveformColor, t)!,
+      microphoneShadow: Color.lerp(microphoneShadow, other.microphoneShadow, t)!,
+      buttonShadow: Color.lerp(buttonShadow, other.buttonShadow, t)!,
     );
   }
 } 

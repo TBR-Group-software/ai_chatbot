@@ -43,17 +43,4 @@ class MemoryItemEntity {
   String toString() {
     return 'MemoryItemEntity(id: $id, title: $title, content: $content, tags: $tags, createdAt: $createdAt, updatedAt: $updatedAt, relevanceScore: $relevanceScore)';
   }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is MemoryItemEntity &&
-        other.id == id &&
-        other.title == title &&
-        other.content == content &&
-        other.tags.toString() == tags.toString() &&
-        other.createdAt == createdAt &&
-        other.updatedAt == updatedAt &&
-        other.relevanceScore == relevanceScore;
-  }
 }
