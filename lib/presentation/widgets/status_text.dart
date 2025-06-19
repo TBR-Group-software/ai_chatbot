@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../bloc/voice_recording/voice_recording_bloc.dart';
+import '../bloc/voice_recording/voice_recording_bloc.dart';
 
 /// Status text widget that displays recording state information
 class StatusText extends StatelessWidget {

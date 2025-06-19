@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../bloc/voice_recording/voice_recording_bloc.dart';
+import '../../core/theme/app_theme.dart';
+import '../bloc/voice_recording/voice_recording_bloc.dart';
 import 'wave_visualization.dart';
 
 /// Central controls widget containing waveform and timer

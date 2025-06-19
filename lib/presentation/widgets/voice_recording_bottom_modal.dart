@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/theme/app_theme.dart';
 import '../bloc/voice_recording/voice_recording_bloc.dart';
-import 'components/circular_icon_button.dart';
-import 'components/voice_recording_controls.dart';
+import 'circular_icon_button.dart';
+import 'voice_recording_controls.dart';
 
 /// Modern bottom modal for voice recording with real-time audio visualization
 /// Follows clean architecture and project design patterns

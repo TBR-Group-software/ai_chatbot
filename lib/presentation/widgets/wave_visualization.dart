@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../bloc/voice_recording/voice_recording_bloc.dart';
+import '../../core/theme/app_theme.dart';
+import '../bloc/voice_recording/voice_recording_bloc.dart';
 import 'audio_waveform_painter.dart';
 
 /// Widget that displays real-time audio waveform visualization
