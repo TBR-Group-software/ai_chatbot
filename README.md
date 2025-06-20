@@ -1,15 +1,16 @@
-# 🤖 AI Chat Bot
+# Chatty -  AI Chat Bot
 
 <div align="center">
 
-![AI Chat Bot](assets/images/chat_bot_logo.png)
+<img src="assets/images/chat_bot_logo.png" alt="Chatty" width="250"/>
+
 
 **A sophisticated, clean-architecture Flutter-based AI chatbot that allows to use any model's API.**
 
-<img src="demo_images/history_gif.gif" alt="HistoryDemo" width="250"/>
-<img src="demo_images/memory_gif.gif" alt="MemoryDemo" width="250"/>
-<img src="demo_images/memory_gif.gif" alt="TextMessageDemo" width="250"/>
-<img src="demo_images/voice_gif.gif" alt="VoiceRecognitionDemo" width="250"/>
+<img src="demo_images/history_gif.gif" alt="HistoryDemo" width="150"/>
+<img src="demo_images/memory_gif.gif" alt="MemoryDemo" width="150"/>
+<img src="demo_images/memory_gif.gif" alt="TextMessageDemo" width="150"/>
+<img src="demo_images/voice_gif.gif" alt="VoiceRecognitionDemo" width="150"/>
 </div>
 
 ---
@@ -194,7 +195,7 @@ Before running this project, make sure you have:
 
 3. **Set up environment variables**
    
-   Create a `.env` file in the root directory:
+   Create a `.env` file in the root directory and adjust with your API KEY:
    ```env
    GEMINI_API_KEY=your_google_gemini_api_key_here
    MODEL_NAME=gemini-2.0-flash
