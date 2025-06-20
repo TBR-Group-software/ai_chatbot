@@ -14,7 +14,6 @@ dependencies:
 
   flutter_native_splash: ^2.4.6
   flutter_chat_types: ^3.6.2
-  introduction_screen: ^3.1.17
   auto_route: ^10.0.1
   flutter_svg: ^2.0.10
   flutter_dotenv: ^5.2.1
