@@ -1,12 +1,13 @@
-# Chatty -  AI Chat Bot
-
 <div align="center">
 
 <img src="assets/images/chat_bot_logo.png" alt="Chatty" width="250"/>
 </div>
 
 ## About the project
-**A sophisticated, clean-architecture Flutter-based AI chatbot that allows to use any model's API.**
+**Chatty** is a sophisticated, clean-architecture Flutter-based AI chatbot designed to be a versatile and powerful conversational AI interface. 
+It allows developers to connect to any model's API, making it a flexible foundation for various AI-driven applications. 
+The project is built with a strong emphasis on testability, scalability, and maintainability by adhering to Clean Architecture principles. 
+It showcases a rich set of features, including real-time response streaming, voice-to-text input, and advanced, custom-built UI components, serving as an excellent example of a modern, production-quality Flutter application.
 
 <div align="center">
 <img src="demo_images/edit_gif.gif" alt="EditDemo" width="250"/>
