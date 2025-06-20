@@ -9,7 +9,7 @@
 
 <img src="demo_images/history_gif.gif" alt="HistoryDemo" width="200"/>
 <img src="demo_images/memory_gif.gif" alt="MemoryDemo" width="200"/>
-<img src="demo_images/memory_gif.gif" alt="TextMessageDemo" width="200"/>
+<img src="demo_images/text_message_gif.gif" alt="TextMessageDemo" width="200"/>
 <img src="demo_images/voice_gif.gif" alt="VoiceRecognitionDemo" width="200"/>
 </div>
 
