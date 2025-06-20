@@ -2,15 +2,15 @@
 
 <div align="center">
 
-<img src="assets/images/chat_bot_logo.png" alt="Chatty" width="100"/>
+<img src="assets/images/chat_bot_logo.png" alt="Chatty" width="250"/>
 
 
 **A sophisticated, clean-architecture Flutter-based AI chatbot that allows to use any model's API.**
 
-<img src="demo_images/history_gif.gif" alt="HistoryDemo" width="100"/>
-<img src="demo_images/memory_gif.gif" alt="MemoryDemo" width="100"/>
-<img src="demo_images/memory_gif.gif" alt="TextMessageDemo" width="100"/>
-<img src="demo_images/voice_gif.gif" alt="VoiceRecognitionDemo" width="100"/>
+<img src="demo_images/history_gif.gif" alt="HistoryDemo" width="200"/>
+<img src="demo_images/memory_gif.gif" alt="MemoryDemo" width="200"/>
+<img src="demo_images/memory_gif.gif" alt="TextMessageDemo" width="200"/>
+<img src="demo_images/voice_gif.gif" alt="VoiceRecognitionDemo" width="200"/>
 </div>
 
 ---
