@@ -11,9 +11,10 @@
 
 </div>
 <br>
-It allows developers to connect to any model's API, making it a flexible foundation for various AI-driven applications. 
+- It allows developers to connect to any model's API, making it a flexible foundation for various AI-driven applications. 
 <br> 
-The project is built with a strong emphasis on testability, scalability, and maintainability by adhering to Clean Architecture principles. 
+- The project is built with a strong emphasis on testability, scalability, and maintainability by adhering to Clean Architecture principles. 
+<br> 
 <br> 
 
 
