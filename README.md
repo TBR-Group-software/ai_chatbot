@@ -34,7 +34,6 @@
 - [Testing](#-testing)
 - [Contributing](#-contributing)
 - [License](#-license)
-- [Acknowledgments](#-acknowledgments)
 
 ---
 
@@ -518,18 +517,12 @@ flutter test --coverage
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
-## Acknowledgments
 
-- [Google Gemini AI](https://deepmind.google/technologies/gemini/) for the AI capabilities
-- [Flutter Team](https://flutter.dev) for the amazing framework
-- [BLoC Library](https://bloclibrary.dev) for excellent state management
-
----
-
-<div align="center">
 
 Developed by [TBR Group](https://github.com/TBR-Group-software).
 
+<div align="center">
+    
 [Back to top](#-ai-chat-bot)
 
 </div>
