@@ -10,6 +10,24 @@ import '../../../domain/repositories/memory/memory_repository.dart';
 part 'memory_event.dart';
 part 'memory_state.dart';
 
+/// BLoC for managing memory items and search functionality
+///
+/// Handles all memory-related operations including CRUD operations,
+/// search functionality, and real-time data synchronization
+///
+/// Features:
+/// - Load and display all memory items
+/// - Add, update, and delete memory items
+/// - Search through memory items with filtering
+/// - Real-time updates via repository streams
+/// - Maintain separate filtered list for search results
+///
+/// Uses multiple use cases for different operations:
+/// - [GetMemoryItemsUseCase] for retrieval
+/// - [SaveMemoryItemUseCase] for persistence
+/// - [DeleteMemoryItemUseCase] for deletion
+/// - [SearchMemoryItemsUseCase] for search operations
+/// - [MemoryRepository] for real-time updates
 class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
   final GetMemoryItemsUseCase _getMemoryItemsUseCase;
   final SaveMemoryItemUseCase _saveMemoryItemUseCase;
@@ -18,6 +36,13 @@ class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
   final MemoryRepository _memoryRepository;
   late final StreamSubscription _dataSubscription;
 
+  /// Constructor for memory BLoC
+  ///
+  /// [_getMemoryItemsUseCase] Use case for retrieving memory items
+  /// [_saveMemoryItemUseCase] Use case for saving memory items
+  /// [_deleteMemoryItemUseCase] Use case for deleting memory items
+  /// [_searchMemoryItemsUseCase] Use case for searching memory items
+  /// [_memoryRepository] Repository for real-time memory updates
   MemoryBloc(
     this._getMemoryItemsUseCase,
     this._saveMemoryItemUseCase,
@@ -39,6 +64,11 @@ class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
     }, onError: (error) {});
   }
 
+  /// Handle load memory event
+  ///
+  /// Loads all memory items from storage and updates the state
+  /// [event] The load memory event
+  /// [emit] State emitter for updating UI state
   Future<void> _onLoadMemory(
     LoadMemoryEvent event,
     Emitter<MemoryState> emit,
@@ -60,6 +90,12 @@ class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
     }
   }
 
+  /// Handle add memory event
+  ///
+  /// Adds a new memory item to storage via use case
+  /// Real-time updates are handled by repository stream
+  /// [event] The add memory event containing the item to add
+  /// [emit] State emitter for updating UI state
   Future<void> _onAddMemory(
     AddMemoryEvent event,
     Emitter<MemoryState> emit,
@@ -73,6 +109,12 @@ class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
     }
   }
 
+  /// Handle update memory event
+  ///
+  /// Updates an existing memory item in storage via use case
+  /// Real-time updates are handled by repository stream
+  /// [event] The update memory event containing the updated item
+  /// [emit] State emitter for updating UI state
   Future<void> _onUpdateMemory(
     UpdateMemoryEvent event,
     Emitter<MemoryState> emit,
@@ -86,6 +128,11 @@ class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
     }
   }
 
+  /// Handle delete memory event
+  ///
+  /// Deletes a memory item from storage and updates local state immediately
+  /// [event] The delete memory event containing the item ID to delete
+  /// [emit] State emitter for updating UI state
   Future<void> _onDeleteMemory(
     DeleteMemoryEvent event,
     Emitter<MemoryState> emit,
@@ -110,6 +157,12 @@ class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
     }
   }
 
+  /// Handle search memory event
+  ///
+  /// Performs search across memory items and updates filtered results
+  /// If query is empty, shows all items
+  /// [event] The search memory event containing the search query
+  /// [emit] State emitter for updating UI state
   Future<void> _onSearchMemory(
     SearchMemoryEvent event,
     Emitter<MemoryState> emit,
@@ -131,6 +184,12 @@ class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
     }
   }
 
+  /// Handle data updated event from repository stream
+  ///
+  /// Processes real-time updates from the memory repository
+  /// Maintains current search filter if one is active
+  /// [event] The data updated event containing new memory items
+  /// [emit] State emitter for updating UI state
   void _onDataUpdated(DataUpdatedEvent event, Emitter<MemoryState> emit) {
     try {
       final items = event.items;

@@ -4,6 +4,16 @@ import '../../domain/entities/chat_session_entity.dart';
 import '../../domain/repositories/chat_history/chat_history_repository.dart';
 import '../models/hive_storage/hive_chat_session.dart';
 
+/// Concrete implementation of [ChatHistoryRepository]
+///
+/// Manages chat session persistence using [HiveStorageLocalDataSource]
+/// Provides real-time data synchronization between BLoCs through streaming
+///
+/// Features:
+/// - CRUD operations for chat sessions
+/// - Real-time updates via broadcast streams
+/// - Automatic data synchronization across multiple BLoCs
+/// - Domain entity conversion from data models
 class ImplChatHistoryRepository implements ChatHistoryRepository {
   final HiveStorageLocalDataSource _hiveStorageLocalDataSource;
 
@@ -12,6 +22,9 @@ class ImplChatHistoryRepository implements ChatHistoryRepository {
   final StreamController<List<ChatSessionEntity>> _sessionsController = 
       StreamController<List<ChatSessionEntity>>.broadcast();
 
+  /// Constructor for chat history repository implementation
+  ///
+  /// [_hiveStorageLocalDataSource] The local data source for chat session persistence
   ImplChatHistoryRepository(this._hiveStorageLocalDataSource);
 
   @override
@@ -61,8 +74,11 @@ class ImplChatHistoryRepository implements ChatHistoryRepository {
     return _sessionsController.stream;
   }
 
-  // This method fetches fresh data and emits it to all listeners
-  // It's called after any data modification operation
+  /// Notify all stream listeners about data changes
+  ///
+  /// Fetches fresh data and broadcasts to all listening BLoCs
+  /// Called after any data modification operation (save, update, delete)
+  /// Ensures data consistency across the application
   Future<void> _notifyDataChanged() async {
     try {
       final sessions = await getAllSessions();
@@ -72,7 +88,10 @@ class ImplChatHistoryRepository implements ChatHistoryRepository {
     }
   }
 
-  // This prevents memory leaks by closing the StreamController
+  /// Clean up resources and close stream controller
+  ///
+  /// Prevents memory leaks by properly disposing of the StreamController
+  /// Should be called when the repository is no longer needed
   void dispose() {
     _sessionsController.close();
   }

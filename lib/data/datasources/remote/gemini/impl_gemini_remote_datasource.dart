@@ -5,7 +5,13 @@ import 'package:ai_chat_bot/data/models/gemini/gemini_text_response.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
-/// Implementation of Gemini remote data source
+/// Concrete implementation of [GeminiRemoteDataSource]
+///
+/// Uses [flutter_dotenv](https://pub.dev/packages/flutter_dotenv) for API key management
+/// and [http](https://pub.dev/packages/http) for HTTP communication
+///
+/// Communicates with Google's Gemini AI API using Server-Sent Events (SSE)
+/// for real-time streaming responses
 class ImplGeminiRemoteDataSource implements GeminiRemoteDataSource {
   static const String _baseUrl = 'https://generativelanguage.googleapis.com';
   static const String _apiVersion = 'v1beta';
@@ -46,6 +52,9 @@ class ImplGeminiRemoteDataSource implements GeminiRemoteDataSource {
   }
 
   /// Builds the request body for Gemini API
+  ///
+  /// [prompt] The user prompt to include in the request
+  /// Returns a properly formatted JSON request body for the Gemini API
   Map<String, dynamic> _buildRequestBody(String prompt) {
     return {
       'contents': [
@@ -63,6 +72,10 @@ class ImplGeminiRemoteDataSource implements GeminiRemoteDataSource {
   }
 
   /// Creates HTTP request with proper headers
+  ///
+  /// [url] The API endpoint URL
+  /// [body] The request body as a Map
+  /// Returns configured [http.Request] for SSE streaming
   http.Request _createHttpRequest(String url, Map<String, dynamic> body) {
     final request = http.Request('POST', Uri.parse(url));
     request.headers['Content-Type'] = 'application/json';
@@ -73,7 +86,12 @@ class ImplGeminiRemoteDataSource implements GeminiRemoteDataSource {
   }
 
   /// Processes the SSE stream and yields typed GeminiTextResponse models
+  ///
+  /// [response] The streamed HTTP response from Gemini API
+  /// [client] The HTTP client for proper cleanup
+  /// 
   /// Converts raw JSON to data models at the datasource level
+  /// Handles SSE format parsing and error recovery
   Stream<GeminiTextResponse?> _processStreamResponse(
     http.StreamedResponse response,
     http.Client client,
@@ -123,6 +141,8 @@ class ImplGeminiRemoteDataSource implements GeminiRemoteDataSource {
 }
 
 /// Custom exception for Gemini remote data source errors
+///
+/// Provides specific error handling for Gemini API communication issues
 class GeminiRemoteDataSourceException implements Exception {
   final String message;
   

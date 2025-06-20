@@ -6,10 +6,24 @@ import '../models/hive_storage/hive_memory_item.dart';
 import '../../domain/entities/memory_item_entity.dart';
 import '../../domain/repositories/memory/memory_repository.dart';
 
+/// Concrete implementation of [MemoryRepository]
+///
+/// Manages long-term memory storage using [HiveStorageLocalDataSource]
+/// Provides intelligent memory retrieval with relevance scoring algorithms
+///
+/// Features:
+/// - CRUD operations for memory items
+/// - Real-time memory updates via streams
+/// - Semantic search with relevance scoring
+/// - Jaccard similarity algorithms for content matching
+/// - Recency-based scoring boosts
 class ImplMemoryRepository implements MemoryRepository {
   final HiveStorageLocalDataSource _hiveStorageLocalDataSource;
   final StreamController<List<MemoryItemEntity>> _memoryStreamController = StreamController<List<MemoryItemEntity>>.broadcast();
 
+  /// Constructor for memory repository implementation
+  ///
+  /// [_hiveStorageLocalDataSource] The local data source for memory persistence
   ImplMemoryRepository(this._hiveStorageLocalDataSource);
 
   @override
@@ -95,7 +109,18 @@ class ImplMemoryRepository implements MemoryRepository {
     return scoredItems.take(limit).toList();
   }
 
-  /// Calculate relevance score using simple text similarity algorithms
+  /// Calculate relevance score using text similarity algorithms
+  ///
+  /// [query] The search query to match against
+  /// [item] The memory item to score for relevance
+  /// 
+  /// Uses Jaccard similarity for text matching combined with:
+  /// - Title scoring (weighted 2x)
+  /// - Content scoring
+  /// - Tag scoring (weighted 1.5x)
+  /// - Recency bonus for recent items
+  /// 
+  /// Returns a score between 0.0 and 1.0
   double _calculateRelevanceScore(String query, MemoryItemEntity item) {
     final queryWords = _extractWords(query.toLowerCase());
     final titleWords = _extractWords(item.title.toLowerCase());
@@ -117,7 +142,15 @@ class ImplMemoryRepository implements MemoryRepository {
     return min(1.0, combinedScore + recencyBonus);
   }
 
-  /// Extract words from text, removing common stop words
+  /// Extract meaningful words from text, removing common stop words
+  ///
+  /// [text] The text to extract words from
+  /// 
+  /// Removes punctuation and common stop words
+  /// 
+  /// Only includes words longer than 2 characters
+  /// 
+  /// Returns list of processed words
   List<String> _extractWords(String text) {
     final stopWords = {'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'is', 'are', 'was', 'were', 'be', 'been', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should'};
     
@@ -129,6 +162,13 @@ class ImplMemoryRepository implements MemoryRepository {
   }
 
   /// Calculate Jaccard similarity between two sets of words
+  ///
+  /// [set1] First set of words
+  /// 
+  /// [set2] Second set of words
+  /// 
+  /// Uses intersection over union formula: |A ∩ B| / |A ∪ B|
+  /// Returns similarity score between 0.0 and 1.0
   double _calculateJaccardSimilarity(List<String> set1, List<String> set2) {
     if (set1.isEmpty && set2.isEmpty) return 0.0;
     
@@ -138,7 +178,16 @@ class ImplMemoryRepository implements MemoryRepository {
     return union > 0 ? intersection / union : 0.0;
   }
 
-  /// Calculate tag similarity (exact matches are weighted higher)
+  /// Calculate tag similarity with exact and partial matching
+  ///
+  /// [queryWords] Words from the search query.
+  /// [tags] List of tags to match against.
+  /// 
+  /// Exact tag matches get full score (1.0)
+  /// 
+  /// Partial matches get half score (0.5)
+  /// 
+  /// Returns normalized similarity score
   double _calculateTagSimilarity(List<String> queryWords, List<String> tags) {
     if (tags.isEmpty) return 0.0;
     
@@ -155,11 +204,18 @@ class ImplMemoryRepository implements MemoryRepository {
   }
 
   /// Notify listeners about memory updates
+  ///
+  /// Fetches updated memory items and broadcasts to all stream listeners
+  /// Called after any CRUD operation to maintain data consistency
   void _notifyMemoryUpdated() async {
     final updatedItems = await getAllMemoryItems();
     _memoryStreamController.add(updatedItems);
   }
 
+  /// Clean up resources and close stream controller
+  ///
+  /// Should be called when the repository is no longer needed
+  /// to prevent memory leaks
   void dispose() {
     _memoryStreamController.close();
   }
