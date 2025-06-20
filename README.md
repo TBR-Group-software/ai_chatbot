@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/images/chat_bot_logo.png" alt="Chatty" width="250"/>
+<img src="assets/images/chat_bot_logo.png" alt="Chatty" width="300"/>
 </div>
 
 ## About the project
