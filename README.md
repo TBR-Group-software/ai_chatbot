@@ -141,9 +141,111 @@ class AudioWaveformPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
+
+### 2. Custom Cupertino-Style Dropdown Menu
+
+To enhance the user experience, the application features a custom-built, animated dropdown menu that appears when a user long-presses a message. This widget is a great example of advanced UI/UX implementation in Flutter.
+
+#### Blurred Background and Overlay
+
+When the menu is shown, it's presented in a new `OverlayEntry`. A `BackdropFilter` with `ImageFilter.blur` is used to create a beautiful, blurred effect over the rest of the UI, drawing the user's focus to the menu.
+
+```dart
+// lib/presentation/pages/chat/widget/cupertino_message_dropdown.dart
+
+@override
+Widget build(BuildContext context) {
+  return Stack(
+    children: [
+      // Blurred background
+      GestureDetector(
+        onTap: widget.onDismiss,
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+          child: Container(
+            color: Colors.black.withOpacity(0.3),
+          ),
+        ),
+      ),
+      // Positioned content
+      // ...
+    ],
+  );
+}
 ```
 
-### 2. End-to-End Streaming Data Flow
+#### Dynamic Positioning Logic
+
+The dropdown's position is not static. It is dynamically calculated to appear either above or below the selected message, depending on the available space in the viewport. This ensures the menu is always fully visible.
+
+```dart
+// lib/presentation/pages/chat/widget/cupertino_message_dropdown.dart
+
+void _calculatePosition() {
+  final messageSize = widget.messageSize;
+  final screenSize = MediaQuery.of(context).size;
+
+  // Calculate available space above and below the message
+  final availableSpaceBelow = screenSize.height - widget.messagePosition.dy - messageSize.height;
+  final availableSpaceAbove = widget.messagePosition.dy;
+
+  // Decide where to show the dropdown
+  if (availableSpaceBelow >= _dropdownSize.height) {
+    // Show below
+    _dropdownPosition = Offset(widget.messagePosition.dx, widget.messagePosition.dy + messageSize.height + 8);
+  } else if (availableSpaceAbove >= _dropdownSize.height) {
+    // Show above
+    _dropdownPosition = Offset(widget.messagePosition.dx, widget.messagePosition.dy - _dropdownSize.height - 8);
+  } else {
+    // Default to below if space is limited
+    _dropdownPosition = Offset(widget.messagePosition.dx, widget.messagePosition.dy + messageSize.height + 8);
+  }
+  // ... horizontal boundary checks
+}
+```
+
+#### Highlighted Message Style on Selection
+
+When a message is long-pressed, its appearance changes to indicate that it is selected. The original widget is faded out, and a new, highlighted version is rendered in the overlay with a border and a subtle shadow.
+
+```dart
+// lib/presentation/pages/chat/widget/chat_message_widget.dart
+
+class _MessageBubble extends StatelessWidget {
+  // ...
+  final bool isHighlighted;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      decoration: BoxDecoration(
+        // ... other decorations
+        border: isHighlighted
+            ? Border.all(
+                color: Theme.of(context).extension<CustomColors>()!.primaryDim,
+                width: 2,
+              )
+            : null,
+        boxShadow: isHighlighted
+            ? [
+                BoxShadow(
+                  color: Theme.of(context).extension<CustomColors>()!.primaryMuted,
+                  blurRadius: 8,
+                ),
+              ]
+            : null,
+      ),
+      // ... child
+    );
+  }
+}
+```
+
+
+```
+
+### 3. End-to-End Streaming Data Flow
 
 The application streams responses from the AI model in real-time. This is accomplished by handling Server-Sent Events (SSE) across all three layers of the Clean Architecture.
 
@@ -246,7 +348,6 @@ Future<void> _onGenerateText(GenerateTextEvent event, Emitter<ChatState> emit) a
   }
 }
 ```
-
 ## Built With
 
 - **Framework**: **[Flutter](https://flutter.dev)**
