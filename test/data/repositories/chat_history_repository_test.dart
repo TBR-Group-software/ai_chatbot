@@ -28,8 +28,7 @@ void main() {
       mockChatSession = TestHelpers.generateMockChatSession();
       
       // Create mock Hive chat sessions
-      mockHiveChatSessions = mockChatSessions.map((session) => 
-        HiveChatSession.fromDomain(session)
+      mockHiveChatSessions = mockChatSessions.map(HiveChatSession.fromDomain,
       ).toList();
 
       // Register fallback values for mocktail
@@ -224,18 +223,19 @@ void main() {
         when(() => mockHiveStorageLocalDataSource.getAllSessions())
             .thenAnswer((_) async => [HiveChatSession.fromDomain(mockChatSession)]);
 
+        // Get the stream before starting operations
         final stream = repository.watchAllSessions();
         
-        // Act
+        // Create a future that will complete when we get the expected emission
+        final emissionFuture = stream.first;
+        
+        // Act - trigger the save operation which should emit data
         await repository.saveSession(mockChatSession);
 
-        // Assert
-        await expectLater(
-          stream,
-          emits(predicate<List<ChatSessionEntity>>((sessions) => 
-            sessions.isNotEmpty && sessions.first.id == mockChatSession.id
-          )),
-        );
+        // Assert - wait for the emission
+        final emittedSessions = await emissionFuture;
+        expect(emittedSessions, isNotEmpty);
+        expect(emittedSessions.first.id, equals(mockChatSession.id));
       });
 
       test('should emit updated data after delete operation', () async {
@@ -245,16 +245,18 @@ void main() {
         when(() => mockHiveStorageLocalDataSource.getAllSessions())
             .thenAnswer((_) async => []);
 
+        // Get the stream before starting operations
         final stream = repository.watchAllSessions();
         
-        // Act
+        // Create a future that will complete when we get the expected emission
+        final emissionFuture = stream.first;
+        
+        // Act - trigger the delete operation which should emit data
         await repository.deleteSession('test-session-id');
 
-        // Assert
-        await expectLater(
-          stream,
-          emits(predicate<List<ChatSessionEntity>>((sessions) => sessions.isEmpty)),
-        );
+        // Assert - wait for the emission
+        final emittedSessions = await emissionFuture;
+        expect(emittedSessions, isEmpty);
       });
 
       test('should emit updated data after update operation', () async {
@@ -265,20 +267,20 @@ void main() {
         when(() => mockHiveStorageLocalDataSource.getAllSessions())
             .thenAnswer((_) async => [HiveChatSession.fromDomain(updatedSession)]);
 
+        // Get the stream before starting operations
         final stream = repository.watchAllSessions();
         
-        // Act
+        // Create a future that will complete when we get the expected emission
+        final emissionFuture = stream.first;
+        
+        // Act - trigger the update operation which should emit data
         await repository.updateSession(updatedSession);
 
-        // Assert
-        await expectLater(
-          stream,
-          emits(predicate<List<ChatSessionEntity>>((sessions) => 
-            sessions.isNotEmpty && 
-            sessions.first.id == updatedSession.id &&
-            sessions.first.title == 'Updated Title'
-          )),
-        );
+        // Assert - wait for the emission
+        final emittedSessions = await emissionFuture;
+        expect(emittedSessions, isNotEmpty);
+        expect(emittedSessions.first.id, equals(updatedSession.id));
+        expect(emittedSessions.first.title, equals('Updated Title'));
       });
 
       test('should handle stream errors gracefully', () async {
@@ -288,16 +290,32 @@ void main() {
         when(() => mockHiveStorageLocalDataSource.getAllSessions())
             .thenThrow(Exception('Stream error'));
 
+        // Get the stream before starting operations  
         final stream = repository.watchAllSessions();
         
-        // Act
-        await repository.saveSession(mockChatSession);
-
-        // Assert
-        await expectLater(
-          stream,
-          emitsError(isA<Exception>()),
+        // Set up error capture
+        Object? capturedError;
+        final subscription = stream.listen(
+          (data) {
+            // This shouldn't be called in this test
+          },
+          onError: (error) {
+            capturedError = error;
+          },
         );
+        
+        // Act - trigger an operation that will cause an error in _notifyDataChanged
+        await repository.saveSession(mockChatSession);
+        
+        // Give some time for the error to propagate
+        await Future.delayed(Duration(milliseconds: 100));
+
+        // Assert - verify the error was captured
+        expect(capturedError, isA<Exception>());
+        expect(capturedError.toString(), contains('Stream error'));
+        
+        // Clean up subscription
+        await subscription.cancel();
       });
     });
 
@@ -328,7 +346,7 @@ void main() {
         expect(retrievedSession.messages.length, equals(sessionWithComplexData.messages.length));
         
         // Verify message content is preserved
-        for (int i = 0; i < retrievedSession.messages.length; i++) {
+        for (var i = 0; i < retrievedSession.messages.length; i++) {
           final originalMessage = sessionWithComplexData.messages[i];
           final retrievedMessage = retrievedSession.messages[i];
           

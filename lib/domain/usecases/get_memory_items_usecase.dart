@@ -1,5 +1,5 @@
-import '../entities/memory_item_entity.dart';
-import '../repositories/memory/memory_repository.dart';
+import 'package:ai_chat_bot/domain/entities/memory_item_entity.dart';
+import 'package:ai_chat_bot/domain/repositories/memory/memory_repository.dart';
 
 /// Use case for retrieving all memory items from storage
 ///
@@ -8,12 +8,12 @@ import '../repositories/memory/memory_repository.dart';
 ///
 /// Uses [MemoryRepository] for memory retrieval operations
 class GetMemoryItemsUseCase {
-  final MemoryRepository _memoryRepository;
 
   /// Constructor for get memory items use case
   ///
   /// [_memoryRepository] The memory repository for retrieval operations
   GetMemoryItemsUseCase(this._memoryRepository);
+  final MemoryRepository _memoryRepository;
 
   /// Execute the use case to get all memory items
   ///

@@ -1,25 +1,11 @@
 import 'package:hive_ce/hive.dart';
-import 'hive_chat_message.dart';
-import '../../../domain/entities/chat_session_entity.dart';
+import 'package:ai_chat_bot/data/models/hive_storage/hive_chat_message.dart';
+import 'package:ai_chat_bot/domain/entities/chat_session_entity.dart';
 
 part 'hive_chat_session.g.dart';
 
 @HiveType(typeId: 0)
 class HiveChatSession extends HiveObject {
-  @HiveField(0)
-  String id;
-
-  @HiveField(1)
-  String title;
-
-  @HiveField(2)
-  DateTime createdAt;
-
-  @HiveField(3)
-  DateTime updatedAt;
-
-  @HiveField(4)
-  List<HiveChatMessage> messages;
 
   HiveChatSession({
     required this.id,
@@ -37,10 +23,24 @@ class HiveChatSession extends HiveObject {
       createdAt: session.createdAt,
       updatedAt: session.updatedAt,
       messages: session.messages
-          .map((msg) => HiveChatMessage.fromDomain(msg))
+          .map(HiveChatMessage.fromDomain)
           .toList(),
     );
   }
+  @HiveField(0)
+  String id;
+
+  @HiveField(1)
+  String title;
+
+  @HiveField(2)
+  DateTime createdAt;
+
+  @HiveField(3)
+  DateTime updatedAt;
+
+  @HiveField(4)
+  List<HiveChatMessage> messages;
 
   // Convert to domain entity
   ChatSessionEntity toDomain() {

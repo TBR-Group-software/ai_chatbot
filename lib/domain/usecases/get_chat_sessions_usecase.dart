@@ -1,5 +1,5 @@
-import '../entities/chat_session_entity.dart';
-import '../repositories/chat_history/chat_history_repository.dart';
+import 'package:ai_chat_bot/domain/entities/chat_session_entity.dart';
+import 'package:ai_chat_bot/domain/repositories/chat_history/chat_history_repository.dart';
 
 /// Use case for retrieving all chat sessions from storage
 ///
@@ -8,12 +8,12 @@ import '../repositories/chat_history/chat_history_repository.dart';
 ///
 /// Uses [ChatHistoryRepository] for chat session retrieval operations
 class GetChatSessionsUseCase {
-  final ChatHistoryRepository _repository;
 
   /// Constructor for get chat sessions use case
   ///
   /// [_repository] The chat history repository for retrieval operations
   GetChatSessionsUseCase(this._repository);
+  final ChatHistoryRepository _repository;
 
   /// Execute the use case to get all chat sessions
   ///

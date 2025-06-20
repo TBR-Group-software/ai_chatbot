@@ -66,6 +66,45 @@ part of 'history_bloc.dart';
 /// * [HistoryEvent] for available actions
 /// * [ChatSessionEntity] for session data structure
 class HistoryState {
+
+  /// Creates a new history state instance.
+  ///
+  /// All required parameters must be provided to ensure complete state
+  /// representation. Use the [initial] factory constructor for default
+  /// state or [copyWith] for incremental updates.
+  ///
+  /// Parameters:
+  /// * [sessions] - Complete list of all chat sessions
+  /// * [filteredSessions] - Filtered list for display purposes
+  /// * [isLoading] - Whether loading operations are in progress
+  /// * [error] - Current error message (optional)
+  /// * [searchQuery] - Active search query string (defaults to empty)
+  HistoryState({
+    required this.sessions,
+    required this.filteredSessions,
+    required this.isLoading,
+    this.error,
+    this.searchQuery = '',
+  });
+
+  /// Creates the initial history state with empty data.
+  ///
+  /// This factory constructor provides the default state for new
+  /// history instances. All lists are empty, loading is false,
+  /// and no search query or error is present.
+  ///
+  /// The initial state represents:
+  /// * No sessions loaded yet
+  /// * No active search or filtering
+  /// * Ready for loading operations
+  /// * Clean error state
+  ///
+  /// Returns a [HistoryState] configured for initial use.
+  factory HistoryState.initial() => HistoryState(
+    sessions: [],
+    filteredSessions: [],
+    isLoading: false,
+  );
   /// The complete list of all available chat sessions.
   ///
   /// This list contains all chat sessions loaded from the repository,
@@ -127,46 +166,6 @@ class HistoryState {
   /// * Preserved during background data updates
   /// * Used for search result highlighting
   final String searchQuery;
-
-  /// Creates a new history state instance.
-  ///
-  /// All required parameters must be provided to ensure complete state
-  /// representation. Use the [initial] factory constructor for default
-  /// state or [copyWith] for incremental updates.
-  ///
-  /// Parameters:
-  /// * [sessions] - Complete list of all chat sessions
-  /// * [filteredSessions] - Filtered list for display purposes
-  /// * [isLoading] - Whether loading operations are in progress
-  /// * [error] - Current error message (optional)
-  /// * [searchQuery] - Active search query string (defaults to empty)
-  HistoryState({
-    required this.sessions,
-    required this.filteredSessions,
-    required this.isLoading,
-    this.error,
-    this.searchQuery = '',
-  });
-
-  /// Creates the initial history state with empty data.
-  ///
-  /// This factory constructor provides the default state for new
-  /// history instances. All lists are empty, loading is false,
-  /// and no search query or error is present.
-  ///
-  /// The initial state represents:
-  /// * No sessions loaded yet
-  /// * No active search or filtering
-  /// * Ready for loading operations
-  /// * Clean error state
-  ///
-  /// Returns a [HistoryState] configured for initial use.
-  factory HistoryState.initial() => HistoryState(
-    sessions: [],
-    filteredSessions: [],
-    isLoading: false,
-    searchQuery: '',
-  );
 
   /// Creates a copy of this state with modified properties.
   ///

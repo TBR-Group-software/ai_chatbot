@@ -5,10 +5,10 @@ class AppTheme {
     return ThemeData.dark().copyWith(
       scaffoldBackgroundColor: const Color(0xFF131313),
       colorScheme: const ColorScheme.dark().copyWith(
-        surface: Color(0xFF1C1C1E),
-        primary: Color(0xFFEFD9B0),
-        onSurface: Color(0xFF8F8F8F),
-        surfaceContainerHighest: Color(0xFF242424), // for bottom navigation bar
+        surface: const Color(0xFF1C1C1E),
+        primary: const Color(0xFFEFD9B0),
+        onSurface: const Color(0xFF8F8F8F),
+        surfaceContainerHighest: const Color(0xFF242424), // for bottom navigation bar
       ),
       textTheme: const TextTheme(
         displayLarge: TextStyle(
@@ -31,7 +31,7 @@ class AppTheme {
         ),
       ),
       extensions: [
-        CustomColors(
+        const CustomColors(
           cardBackground: Color(0xFF242424),
           categoryCardBackground: Color(0xFF1C1C1E),
           iconBackground: Color(0xFF2C2C2E),

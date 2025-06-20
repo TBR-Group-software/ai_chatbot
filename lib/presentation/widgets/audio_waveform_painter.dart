@@ -3,6 +3,14 @@ import 'package:flutter/material.dart';
 
 /// Custom painter for real-time audio waveform visualization
 class AudioWaveformPainter extends CustomPainter {
+
+  const AudioWaveformPainter({
+    required this.soundLevel,
+    required this.animationValue,
+    required this.waveformColor,
+    required this.isListening,
+    required this.isRecording,
+  });
   /// The sound level of the audio
   final double soundLevel;
   /// The animation value of the audio
@@ -16,17 +24,11 @@ class AudioWaveformPainter extends CustomPainter {
   /// Whether the user is recording
   final bool isRecording;
 
-  const AudioWaveformPainter({
-    required this.soundLevel,
-    required this.animationValue,
-    required this.waveformColor,
-    required this.isListening,
-    required this.isRecording,
-  });
-
   @override
   void paint(Canvas canvas, Size size) {
-    if (!isRecording) return;
+    if (!isRecording) {
+      return;
+    }
 
     final paint = Paint()
       ..color = waveformColor
@@ -36,13 +38,13 @@ class AudioWaveformPainter extends CustomPainter {
     final width = size.width - 32; // Account for padding
     final height = size.height - 16; // Account for padding
     final centerY = size.height / 2;
-    final centerX = 16.0; // Left padding
+    const centerX = 16.0; // Left padding
 
     // Number of bars in the waveform
     const barCount = 25;
     final barWidth = width / barCount;
 
-    for (int i = 0; i < barCount; i++) {
+    for (var i = 0; i < barCount; i++) {
       final x = centerX + (i * barWidth) + (barWidth / 2);
 
       // Create animated wave effect based on real sound level

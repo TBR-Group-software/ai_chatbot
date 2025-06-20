@@ -116,10 +116,10 @@ class _HomePageState extends State<HomePage>
   }
 
   @override
-  void dispose() {
+  Future<void> dispose() async {
     _routeObserver?.unsubscribe(this);
     WidgetsBinding.instance.removeObserver(this);
-    _homeBloc.close();
+    await _homeBloc.close();
     super.dispose();
   }
 
@@ -211,15 +211,15 @@ class _HomePageState extends State<HomePage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 16, bottom: 24),
-                  child: const HomeAppBar(points: 20),
+                const Padding(
+                  padding: EdgeInsets.only(top: 16, bottom: 24),
+                  child: HomeAppBar(points: 20),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: HomeTapToChatCard(
-                    onTap: () {
-                      context.router.push(ChatRoute()).then((_) {
+                    onTap: () async {
+                      await context.router.push(ChatRoute()).then((_) {
                         // Refresh history when returning from chat
                         _refreshHistory();
                       });
@@ -235,14 +235,14 @@ class _HomePageState extends State<HomePage>
                         return HomeHistorySection(
                           sessions: state.recentSessions,
                           isLoading: state.isLoading,
-                          onSeeAll: () {
-                            context.router.navigate(
+                          onSeeAll: () async {
+                            await context.router.navigate(
                               const NavigationRoute(children: [HistoryRoute()]),
                             );
                           },
-                          onSessionTap: (sessionId) {
+                          onSessionTap: (sessionId) async {
                             // Navigate to chat page with session loaded
-                            context.router
+                            await context.router
                                 .push(ChatRoute(sessionId: sessionId))
                                 .then((_) {
                                   // Refresh history when returning from chat

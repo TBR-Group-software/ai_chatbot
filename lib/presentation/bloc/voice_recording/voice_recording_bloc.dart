@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../domain/entities/voice_recording_entity.dart';
-import '../../../domain/usecases/start_voice_recording_usecase.dart';
-import '../../../domain/usecases/stop_voice_recording_usecase.dart';
-import '../../../domain/usecases/cancel_voice_recording_usecase.dart';
+import 'package:ai_chat_bot/domain/entities/voice_recording_entity.dart';
+import 'package:ai_chat_bot/domain/usecases/start_voice_recording_usecase.dart';
+import 'package:ai_chat_bot/domain/usecases/stop_voice_recording_usecase.dart';
+import 'package:ai_chat_bot/domain/usecases/cancel_voice_recording_usecase.dart';
 
 part 'voice_recording_event.dart';
 part 'voice_recording_state.dart';
@@ -63,11 +63,6 @@ part 'voice_recording_state.dart';
 /// * [StopVoiceRecordingUseCase] for recording termination
 /// * [CancelVoiceRecordingUseCase] for recording cancellation
 class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> {
-  final StartVoiceRecordingUseCase _startVoiceRecordingUseCase;
-  final StopVoiceRecordingUseCase _stopVoiceRecordingUseCase;
-  final CancelVoiceRecordingUseCase _cancelVoiceRecordingUseCase;
-
-  StreamSubscription<VoiceRecordingEntity>? _recordingSubscription;
 
   /// Creates a new [VoiceRecordingBloc] instance.
   ///
@@ -87,6 +82,11 @@ class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> 
     on<CancelVoiceRecordingEvent>(_onCancelRecording);
     on<_VoiceRecordingUpdateEvent>(_onRecordingUpdate);
   }
+  final StartVoiceRecordingUseCase _startVoiceRecordingUseCase;
+  final StopVoiceRecordingUseCase _stopVoiceRecordingUseCase;
+  final CancelVoiceRecordingUseCase _cancelVoiceRecordingUseCase;
+
+  StreamSubscription<VoiceRecordingEntity>? _recordingSubscription;
 
   @override
   Future<void> close() {
@@ -124,7 +124,7 @@ class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> 
         return;
       }
 
-      emit(state.copyWith(isInitializing: true, error: null));
+      emit(state.copyWith(isInitializing: true));
 
       // Cancel any existing subscription
       await _recordingSubscription?.cancel();
@@ -137,11 +137,11 @@ class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> 
             add(_VoiceRecordingUpdateEvent(recordingEntity));
           }
         },
-        onError: (error) {
+        onError: (Object error) {
           if (!isClosed) {
             add(_VoiceRecordingUpdateEvent(
               VoiceRecordingEntity.error(error.toString()),
-            ));
+            ),);
           }
         },
         onDone: () {
@@ -152,8 +152,8 @@ class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> 
       emit(state.copyWith(
         isInitializing: false,
         isRecording: false,
-        error: 'Failed to start recording: ${error.toString()}',
-      ));
+        error: 'Failed to start recording: $error',
+      ),);
     }
   }
 
@@ -207,8 +207,8 @@ class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> 
       if (!isClosed) {
         emit(state.copyWith(
           isStopping: false,
-          error: 'Failed to stop recording: ${error.toString()}',
-        ));
+          error: 'Failed to stop recording: $error',
+        ),);
       }
     }
   }
@@ -262,8 +262,8 @@ class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> 
       if (!isClosed) {
         emit(state.copyWith(
           isCancelling: false,
-          error: 'Failed to cancel recording: ${error.toString()}',
-        ));
+          error: 'Failed to cancel recording: $error',
+        ),);
       }
     }
   }
@@ -290,7 +290,9 @@ class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> 
     Emitter<VoiceRecordingState> emit,
   ) {
     // Don't process updates if BLoC is closed
-    if (isClosed) return;
+    if (isClosed) {
+      return;
+    }
     
     final recordingEntity = event.recordingEntity;
 
@@ -301,7 +303,7 @@ class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> 
         isStopping: false,
         isCancelling: false,
         error: recordingEntity.errorMessage,
-      ));
+      ),);
       return;
     }
 
@@ -312,8 +314,7 @@ class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> 
       soundLevel: recordingEntity.soundLevel,
       recognizedText: recordingEntity.recognizedText,
       recordingDuration: recordingEntity.recordingDuration,
-      error: null,
-    ));
+    ),);
   }
 }
 
@@ -325,7 +326,7 @@ class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> 
 ///
 /// [recordingEntity] The current recording data from the stream
 class _VoiceRecordingUpdateEvent extends VoiceRecordingEvent {
-  final VoiceRecordingEntity recordingEntity;
 
   const _VoiceRecordingUpdateEvent(this.recordingEntity);
+  final VoiceRecordingEntity recordingEntity;
 } 

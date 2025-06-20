@@ -10,12 +10,12 @@ import 'package:ai_chat_bot/domain/repositories/llm/llm_repository.dart';
 ///
 /// Uses [LLMRepository] for language model communication.
 class GenerateTextUseCase {
-  final LLMRepository _repository;
 
   /// Constructor for generate text use case
   ///
   /// [_repository] The LLM repository for text generation operations
   GenerateTextUseCase(this._repository);
+  final LLMRepository _repository;
 
   /// Execute the use case to generate text response
   ///

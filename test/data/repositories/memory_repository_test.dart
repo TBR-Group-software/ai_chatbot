@@ -9,7 +9,6 @@ import '../../helpers/test_helpers.dart';
 
 /// Mock classes using mocktail
 class MockHiveStorageLocalDataSource extends Mock implements HiveStorageLocalDataSource {}
-class MockHiveMemoryItem extends Mock implements HiveMemoryItem {}
 
 void main() {
   group('ImplMemoryRepository', () {
@@ -29,8 +28,7 @@ void main() {
       mockMemoryItem = TestHelpers.generateMockMemoryItem();
       
       // Create mock Hive memory items
-      mockHiveMemoryItems = mockMemoryItems.map((item) => 
-        HiveMemoryItem.fromDomain(item)
+      mockHiveMemoryItems = mockMemoryItems.map(HiveMemoryItem.fromDomain,
       ).toList();
 
       // Register fallback values for mocktail
@@ -58,10 +56,10 @@ void main() {
         expect(result.any((item) => item.id == '2'), isTrue);
         expect(result.any((item) => item.id == '3'), isTrue);
         // Verify items are sorted by updatedAt (most recent first)
-        for (int i = 0; i < result.length - 1; i++) {
+        for (var i = 0; i < result.length - 1; i++) {
           expect(result[i].updatedAt.isAfter(result[i + 1].updatedAt) ||
                  result[i].updatedAt.isAtSameMomentAs(result[i + 1].updatedAt), 
-                 isTrue);
+                 isTrue,);
         }
         verify(() => mockHiveStorageLocalDataSource.getAllMemoryItems()).called(1);
       });
@@ -286,7 +284,7 @@ void main() {
           expect(item.relevanceScore! > 0, isTrue);
         }
         // Items should be sorted by relevance score (highest first)
-        for (int i = 0; i < result.length - 1; i++) {
+        for (var i = 0; i < result.length - 1; i++) {
           expect(result[i].relevanceScore! >= result[i + 1].relevanceScore!, isTrue);
         }
       });
@@ -344,8 +342,7 @@ void main() {
           ),
         ];
         
-        final hiveItems = itemsWithDifferentContent.map((item) => 
-          HiveMemoryItem.fromDomain(item)
+        final hiveItems = itemsWithDifferentContent.map(HiveMemoryItem.fromDomain,
         ).toList();
         
         when(() => mockHiveStorageLocalDataSource.getAllMemoryItems())
@@ -378,8 +375,8 @@ void main() {
         await expectLater(
           stream,
           emits(predicate<List<MemoryItemEntity>>((items) => 
-            items.isNotEmpty && items.first.id == mockMemoryItem.id
-          )),
+            items.isNotEmpty && items.first.id == mockMemoryItem.id,
+          ),),
         );
       });
 
@@ -421,8 +418,7 @@ void main() {
           ),
         ];
         
-        final hiveItems = itemsWithDifferentMatches.map((item) => 
-          HiveMemoryItem.fromDomain(item)
+        final hiveItems = itemsWithDifferentMatches.map(HiveMemoryItem.fromDomain,
         ).toList();
         
         when(() => mockHiveStorageLocalDataSource.getAllMemoryItems())
@@ -447,18 +443,17 @@ void main() {
             id: 'recent-item',
             title: 'Flutter Guide',
             content: 'Recent Flutter guide',
-            updatedAt: now.subtract(Duration(days: 1)), // Very recent
+            updatedAt: now.subtract(const Duration(days: 1)), // Very recent
           ),
           TestHelpers.generateMockMemoryItem(
             id: 'old-item',
             title: 'Flutter Guide',
             content: 'Old Flutter guide',
-            updatedAt: now.subtract(Duration(days: 60)), // Old
+            updatedAt: now.subtract(const Duration(days: 60)), // Old
           ),
         ];
         
-        final hiveItems = itemsWithDifferentDates.map((item) => 
-          HiveMemoryItem.fromDomain(item)
+        final hiveItems = itemsWithDifferentDates.map(HiveMemoryItem.fromDomain,
         ).toList();
         
         when(() => mockHiveStorageLocalDataSource.getAllMemoryItems())

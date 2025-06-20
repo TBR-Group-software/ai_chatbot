@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:ai_chat_bot/core/theme/app_theme.dart';
-import '../../../../domain/entities/memory_item_entity.dart';
+import 'package:ai_chat_bot/domain/entities/memory_item_entity.dart';
 
 class AddMemoryDialog extends StatefulWidget {
-  final Function(MemoryItemEntity) onSave;
 
   const AddMemoryDialog({
     super.key,
     required this.onSave,
   });
+  final Function(MemoryItemEntity) onSave;
 
   @override
   State<AddMemoryDialog> createState() => _AddMemoryDialogState();

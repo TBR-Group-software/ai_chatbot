@@ -1,9 +1,6 @@
 /// Data model for Gemini API text response
 /// Represents the structure of data returned from Gemini API
 class GeminiTextResponse {
-  final String? output;
-  final bool isComplete;
-  final String? finishReason;
 
   const GeminiTextResponse({
     this.output,
@@ -47,7 +44,7 @@ class GeminiTextResponse {
       }
 
       // Join text parts properly - preserve original formatting from API
-      final extractedText = textParts.join('');
+      final extractedText = textParts.join();
 
       // Get finish reason if available
       final finishReason = candidate['finishReason'] as String?;
@@ -73,6 +70,9 @@ class GeminiTextResponse {
   factory GeminiTextResponse.empty() {
     return const GeminiTextResponse();
   }
+  final String? output;
+  final bool isComplete;
+  final String? finishReason;
 
   @override
   String toString() {

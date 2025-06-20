@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:ai_chat_bot/data/datasources/local/hive_storage/hive_storage_local_datasource.dart';
-import '../../domain/entities/chat_session_entity.dart';
-import '../../domain/repositories/chat_history/chat_history_repository.dart';
-import '../models/hive_storage/hive_chat_session.dart';
+import 'package:ai_chat_bot/domain/entities/chat_session_entity.dart';
+import 'package:ai_chat_bot/domain/repositories/chat_history/chat_history_repository.dart';
+import 'package:ai_chat_bot/data/models/hive_storage/hive_chat_session.dart';
 
 /// Concrete implementation of [ChatHistoryRepository]
 ///
@@ -15,17 +15,17 @@ import '../models/hive_storage/hive_chat_session.dart';
 /// - Automatic data synchronization across multiple BLoCs
 /// - Domain entity conversion from data models
 class ImplChatHistoryRepository implements ChatHistoryRepository {
+
+  /// Constructor for chat history repository implementation
+  ///
+  /// [_hiveStorageLocalDataSource] The local data source for chat session persistence
+  ImplChatHistoryRepository(this._hiveStorageLocalDataSource);
   final HiveStorageLocalDataSource _hiveStorageLocalDataSource;
 
   // This enables real-time data synchronization between BLoCs
   // When data changes, all listening BLoCs will be notified automatically
   final StreamController<List<ChatSessionEntity>> _sessionsController = 
       StreamController<List<ChatSessionEntity>>.broadcast();
-
-  /// Constructor for chat history repository implementation
-  ///
-  /// [_hiveStorageLocalDataSource] The local data source for chat session persistence
-  ImplChatHistoryRepository(this._hiveStorageLocalDataSource);
 
   @override
   Future<List<ChatSessionEntity>> getAllSessions() async {
@@ -46,7 +46,7 @@ class ImplChatHistoryRepository implements ChatHistoryRepository {
     
     // After saving a session, emit updated data to all listening BLoCs
     // This ensures HomeBloc shows new sessions immediately after creation
-    _notifyDataChanged();
+    await _notifyDataChanged();
   }
 
   @override
@@ -55,7 +55,7 @@ class ImplChatHistoryRepository implements ChatHistoryRepository {
     
     // After deleting a session, emit updated data to all listening BLoCs
     // This ensures HomeBloc removes deleted sessions immediately
-    _notifyDataChanged();
+    await _notifyDataChanged();
   }
 
   @override
@@ -65,7 +65,7 @@ class ImplChatHistoryRepository implements ChatHistoryRepository {
     
     // After updating a session, emit updated data to all listening BLoCs
     // This ensures all BLoCs show the latest session information
-    _notifyDataChanged();
+    await _notifyDataChanged();
   }
 
   @override
@@ -92,7 +92,7 @@ class ImplChatHistoryRepository implements ChatHistoryRepository {
   ///
   /// Prevents memory leaks by properly disposing of the StreamController
   /// Should be called when the repository is no longer needed
-  void dispose() {
-    _sessionsController.close();
+  Future<void> dispose() async {
+    await _sessionsController.close();
   }
 } 

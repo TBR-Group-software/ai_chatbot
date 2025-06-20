@@ -26,11 +26,11 @@ class RefreshRecentHistoryEvent extends HomeEvent {
 /// Triggered automatically when the repository stream
 /// emits new chat session data
 class DataUpdatedEvent extends HomeEvent {
-  // Using dynamic to match the domain entity type
-  final List<dynamic> sessions;
 
   /// Constructor for data updated event
   ///
   /// [sessions] The updated list of chat sessions from repository
   DataUpdatedEvent(this.sessions);
+  // Using dynamic to match the domain entity type
+  final List<dynamic> sessions;
 }

@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-import '../bloc/voice_recording/voice_recording_bloc.dart';
-import 'wave_visualization.dart';
+import 'package:ai_chat_bot/core/theme/app_theme.dart';
+import 'package:ai_chat_bot/presentation/bloc/voice_recording/voice_recording_bloc.dart';
+import 'package:ai_chat_bot/presentation/widgets/wave_visualization.dart';
 
 /// Central controls widget containing waveform and timer
 class VoiceRecordingControls extends StatelessWidget {
-  final VoiceRecordingState state;
-  final AnimationController waveController;
-  final ThemeData theme;
-  final CustomColors customColors;
 
   const VoiceRecordingControls({
     super.key,
@@ -17,6 +13,10 @@ class VoiceRecordingControls extends StatelessWidget {
     required this.theme,
     required this.customColors,
   });
+  final VoiceRecordingState state;
+  final AnimationController waveController;
+  final ThemeData theme;
+  final CustomColors customColors;
 
   @override
   Widget build(BuildContext context) {

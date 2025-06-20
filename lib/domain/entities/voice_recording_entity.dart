@@ -1,12 +1,5 @@
 /// Voice recording entity representing the current state of voice recording
 class VoiceRecordingEntity {
-  final bool isRecording;
-  final bool isListening;
-  final double soundLevel;
-  final String recognizedText;
-  final bool hasError;
-  final String? errorMessage;
-  final Duration recordingDuration;
 
   const VoiceRecordingEntity({
     required this.isRecording,
@@ -23,10 +16,9 @@ class VoiceRecordingEntity {
     return const VoiceRecordingEntity(
       isRecording: false,
       isListening: false,
-      soundLevel: 0.0,
+      soundLevel: 0,
       recognizedText: '',
       hasError: false,
-      errorMessage: null,
       recordingDuration: Duration.zero,
     );
   }
@@ -44,7 +36,6 @@ class VoiceRecordingEntity {
       soundLevel: soundLevel,
       recognizedText: recognizedText,
       hasError: false,
-      errorMessage: null,
       recordingDuration: recordingDuration,
     );
   }
@@ -54,13 +45,20 @@ class VoiceRecordingEntity {
     return VoiceRecordingEntity(
       isRecording: false,
       isListening: false,
-      soundLevel: 0.0,
+      soundLevel: 0,
       recognizedText: '',
       hasError: true,
       errorMessage: errorMessage,
       recordingDuration: Duration.zero,
     );
   }
+  final bool isRecording;
+  final bool isListening;
+  final double soundLevel;
+  final String recognizedText;
+  final bool hasError;
+  final String? errorMessage;
+  final Duration recordingDuration;
 
   /// Copy with method for immutable updates
   VoiceRecordingEntity copyWith({

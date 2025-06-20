@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/voice_recording/voice_recording_bloc.dart';
-import 'animated_microphone_button.dart';
+import 'package:ai_chat_bot/presentation/bloc/voice_recording/voice_recording_bloc.dart';
+import 'package:ai_chat_bot/presentation/widgets/animated_microphone_button.dart';
 
 /// A comprehensive voice recording button widget that manages the complete recording lifecycle.
 ///
@@ -71,6 +71,20 @@ import 'animated_microphone_button.dart';
 /// * [VoiceRecordingState] for available states
 /// * [VoiceRecordingEvent] for recording operations
 class VoiceRecordingButton extends StatefulWidget {
+
+  /// Creates a voice recording button widget.
+  ///
+  /// Both callback parameters are optional, allowing flexible integration
+  /// with different use cases. The widget will function properly without
+  /// callbacks, but they enable custom handling of recording results.
+  ///
+  /// [onRecordingComplete] Optional callback for recording completion
+  /// [onTextRecognized] Optional callback for text recognition results
+  const VoiceRecordingButton({
+    super.key,
+    this.onRecordingComplete,
+    this.onTextRecognized,
+  });
   /// Called when the recording process is completed successfully.
   ///
   /// This callback is invoked after the recording has been stopped and
@@ -99,20 +113,6 @@ class VoiceRecordingButton extends StatefulWidget {
   /// )
   /// ```
   final void Function(String text)? onTextRecognized;
-
-  /// Creates a voice recording button widget.
-  ///
-  /// Both callback parameters are optional, allowing flexible integration
-  /// with different use cases. The widget will function properly without
-  /// callbacks, but they enable custom handling of recording results.
-  ///
-  /// [onRecordingComplete] Optional callback for recording completion
-  /// [onTextRecognized] Optional callback for text recognition results
-  const VoiceRecordingButton({
-    super.key,
-    this.onRecordingComplete,
-    this.onTextRecognized,
-  });
 
   @override
   State<VoiceRecordingButton> createState() => _VoiceRecordingButtonState();
@@ -158,20 +158,20 @@ class _VoiceRecordingButtonState extends State<VoiceRecordingButton>
     );
 
     _pulseAnimation = Tween<double>(
-      begin: 1.0,
+      begin: 1,
       end: 1.3,
     ).animate(CurvedAnimation(
       parent: _pulseController,
       curve: Curves.easeInOut,
-    ));
+    ),);
 
     _scaleAnimation = Tween<double>(
-      begin: 1.0,
+      begin: 1,
       end: 0.95,
     ).animate(CurvedAnimation(
       parent: _scaleController,
       curve: Curves.easeInOut,
-    ));
+    ),);
   }
 
   @override
@@ -193,7 +193,9 @@ class _VoiceRecordingButtonState extends State<VoiceRecordingButton>
   ///
   /// [state] The current voice recording state from the BLoC
   void _handleTap(VoiceRecordingState state) {
-    if (state.isProcessing) return;
+    if (state.isProcessing) {
+      return;
+    }
 
     if (!state.isRecording) {
       _startRecording();
@@ -241,7 +243,9 @@ class _VoiceRecordingButtonState extends State<VoiceRecordingButton>
   ///
   /// [state] The current voice recording state from the BLoC
   void _handleLongPressStart(VoiceRecordingState state) {
-    if (state.isProcessing) return;
+    if (state.isProcessing) {
+      return;
+    }
     _scaleController.forward();
   }
 

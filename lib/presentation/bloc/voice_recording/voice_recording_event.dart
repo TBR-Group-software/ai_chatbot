@@ -74,6 +74,13 @@ class StartVoiceRecordingEvent extends VoiceRecordingEvent {
 /// );
 /// ```
 class StopVoiceRecordingEvent extends VoiceRecordingEvent {
+
+  /// Creates a stop voice recording event.
+  ///
+  /// [onComplete] Optional callback that receives the final recognized text.
+  /// The callback is executed after the recording has been successfully
+  /// stopped and the state updated.
+  const StopVoiceRecordingEvent({this.onComplete});
   /// Optional callback executed when recording is successfully stopped.
   ///
   /// The callback receives the final recognized text as a [String] parameter.
@@ -84,13 +91,6 @@ class StopVoiceRecordingEvent extends VoiceRecordingEvent {
   /// completed, ensuring the UI reflects the final state before the
   /// callback is invoked.
   final void Function(String recognizedText)? onComplete;
-
-  /// Creates a stop voice recording event.
-  ///
-  /// [onComplete] Optional callback that receives the final recognized text.
-  /// The callback is executed after the recording has been successfully
-  /// stopped and the state updated.
-  const StopVoiceRecordingEvent({this.onComplete});
 }
 
 /// Event to cancel voice recording without saving text.
@@ -122,6 +122,12 @@ class StopVoiceRecordingEvent extends VoiceRecordingEvent {
 /// );
 /// ```
 class CancelVoiceRecordingEvent extends VoiceRecordingEvent {
+
+  /// Creates a cancel voice recording event.
+  ///
+  /// [onCancel] Optional callback executed after the recording
+  /// has been canceled and state reset to initial.
+  const CancelVoiceRecordingEvent({this.onCancel});
   /// Optional callback executed when recording is successfully canceled.
   ///
   /// This callback is invoked after the recording has been terminated
@@ -131,10 +137,4 @@ class CancelVoiceRecordingEvent extends VoiceRecordingEvent {
   /// The callback receives no parameters as no data is preserved
   /// during cancellation.
   final VoidCallback? onCancel;
-
-  /// Creates a cancel voice recording event.
-  ///
-  /// [onCancel] Optional callback executed after the recording
-  /// has been canceled and state reset to initial.
-  const CancelVoiceRecordingEvent({this.onCancel});
 } 

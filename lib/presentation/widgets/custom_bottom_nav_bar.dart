@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart' show TabsRouter;
 import 'package:flutter/material.dart';
 
 /// A beautifully designed custom bottom navigation bar with smooth animations and modern styling.
@@ -82,6 +83,20 @@ import 'package:flutter/material.dart';
 /// * Material Design bottom navigation guidelines
 /// * [TabsRouter] for route-based navigation integration
 class CustomBottomNavBar extends StatelessWidget {
+
+  /// Creates a custom bottom navigation bar widget.
+  ///
+  /// Both parameters are required for proper functionality. The widget
+  /// manages its own visual state based on the provided [selectedIndex]
+  /// and communicates user interactions through [onItemSelected].
+  ///
+  /// [selectedIndex] The currently active tab index (0-2)
+  /// [onItemSelected] Callback for handling tab selection
+  const CustomBottomNavBar({
+    super.key,
+    required this.selectedIndex,
+    required this.onItemSelected,
+  });
   /// The currently selected tab index.
   ///
   /// This value determines which navigation item appears as selected
@@ -116,20 +131,6 @@ class CustomBottomNavBar extends StatelessWidget {
   /// ```
   final Function(int) onItemSelected;
 
-  /// Creates a custom bottom navigation bar widget.
-  ///
-  /// Both parameters are required for proper functionality. The widget
-  /// manages its own visual state based on the provided [selectedIndex]
-  /// and communicates user interactions through [onItemSelected].
-  ///
-  /// [selectedIndex] The currently active tab index (0-2)
-  /// [onItemSelected] Callback for handling tab selection
-  const CustomBottomNavBar({
-    super.key,
-    required this.selectedIndex,
-    required this.onItemSelected,
-  });
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -143,16 +144,16 @@ class CustomBottomNavBar extends StatelessWidget {
           top: Radius.circular(20),
           bottom: Radius.circular(20),
         ),
-        boxShadow: <BoxShadow>[
+        boxShadow: const <BoxShadow>[
           BoxShadow(
-            color: const Color.fromRGBO(0, 0, 0, 0.1),
+            color: Color.fromRGBO(0, 0, 0, 0.1),
             blurRadius: 10,
-            offset: const Offset(0, -5),
+            offset: Offset(0, -5),
           ),
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
@@ -197,6 +198,22 @@ class CustomBottomNavBar extends StatelessWidget {
 /// This widget is internal to [CustomBottomNavBar] and should not be
 /// used directly in other contexts.
 class _NavBarItem extends StatelessWidget {
+
+  /// Creates a navigation bar item widget.
+  ///
+  /// This is a private widget used internally by [CustomBottomNavBar]
+  /// and requires all parameters for proper functionality.
+  ///
+  /// [icon] The icon to display
+  /// [label] The text label
+  /// [isSelected] The selection state
+  /// [onTap] The tap callback
+  const _NavBarItem({
+    required this.icon,
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
   /// The icon to display for this navigation item.
   ///
   /// Should be a Material Design icon that clearly represents the
@@ -221,22 +238,6 @@ class _NavBarItem extends StatelessWidget {
   /// Should communicate the selection back to the parent navigation bar
   /// for handling the actual navigation logic.
   final VoidCallback onTap;
-
-  /// Creates a navigation bar item widget.
-  ///
-  /// This is a private widget used internally by [CustomBottomNavBar]
-  /// and requires all parameters for proper functionality.
-  ///
-  /// [icon] The icon to display
-  /// [label] The text label
-  /// [isSelected] The selection state
-  /// [onTap] The tap callback
-  const _NavBarItem({
-    required this.icon,
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
 
   @override
   Widget build(BuildContext context) {

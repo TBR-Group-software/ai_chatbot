@@ -55,6 +55,63 @@ part of 'chat_bloc.dart';
 /// * [types.Message] from flutter_chat_types for UI message format
 /// * [ChatMessageEntity] for domain layer message representation
 class ChatState {
+
+  /// Creates a new chat state instance.
+  ///
+  /// All required parameters must be provided to ensure complete
+  /// state representation. Use the [initial] factory constructor
+  /// for default state or [copyWith] for incremental updates.
+  ///
+  /// Parameters:
+  /// * [isLoading] - Whether operations are in progress
+  /// * [generatedContent] - Latest AI response entity (optional)
+  /// * [error] - Current error message (optional)
+  /// * [messages] - UI messages for display
+  /// * [currentSessionId] - Current session identifier (optional)
+  /// * [sessionTitle] - Human-readable session title (optional)
+  /// * [isNewSession] - Whether this is an unsaved session (defaults to true)
+  /// * [contextMessages] - Domain messages for AI processing (defaults to empty)
+  /// * [lastFailedPrompt] - Cached failed prompt for retry (optional)
+  /// * [partialResponse] - Cached partial response (optional)
+  ChatState({
+    required this.isLoading,
+    this.generatedContent,
+    this.error,
+    required this.messages,
+    this.currentSessionId,
+    this.sessionTitle,
+    this.isNewSession = true,
+    this.contextMessages = const [],
+    this.lastFailedPrompt,
+    this.partialResponse,
+  });
+
+  /// Creates the initial chat state with welcome message.
+  ///
+  /// This factory constructor provides the default state for new
+  /// chat sessions. Includes a welcome message from the AI and
+  /// sets up the basic structure for conversation.
+  ///
+  /// The initial state features:
+  /// * Welcome message from the AI bot
+  /// * No loading or error states
+  /// * Empty conversation context
+  /// * New session flag enabled
+  /// * Ready for user interaction
+  ///
+  /// Returns a [ChatState] configured for starting new conversations.
+  factory ChatState.initial() => ChatState(
+    isLoading: false,
+    messages: [
+      const types.TextMessage(
+        author: types.User(id: 'bot'),
+        id: '1',
+        text: 'Hi, can I help you?',
+        status: types.Status.delivered,
+      ),
+    ],
+    contextMessages: [],
+  );
   /// The most recent AI-generated content response.
   ///
   /// Contains the latest response from the LLM including completion status,
@@ -133,64 +190,6 @@ class ChatState {
   /// from where generation stopped rather than starting over.
   /// Null when no partial response is cached.
   final String? partialResponse;
-
-  /// Creates a new chat state instance.
-  ///
-  /// All required parameters must be provided to ensure complete
-  /// state representation. Use the [initial] factory constructor
-  /// for default state or [copyWith] for incremental updates.
-  ///
-  /// Parameters:
-  /// * [isLoading] - Whether operations are in progress
-  /// * [generatedContent] - Latest AI response entity (optional)
-  /// * [error] - Current error message (optional)
-  /// * [messages] - UI messages for display
-  /// * [currentSessionId] - Current session identifier (optional)
-  /// * [sessionTitle] - Human-readable session title (optional)
-  /// * [isNewSession] - Whether this is an unsaved session (defaults to true)
-  /// * [contextMessages] - Domain messages for AI processing (defaults to empty)
-  /// * [lastFailedPrompt] - Cached failed prompt for retry (optional)
-  /// * [partialResponse] - Cached partial response (optional)
-  ChatState({
-    required this.isLoading,
-    this.generatedContent,
-    this.error,
-    required this.messages,
-    this.currentSessionId,
-    this.sessionTitle,
-    this.isNewSession = true,
-    this.contextMessages = const [],
-    this.lastFailedPrompt,
-    this.partialResponse,
-  });
-
-  /// Creates the initial chat state with welcome message.
-  ///
-  /// This factory constructor provides the default state for new
-  /// chat sessions. Includes a welcome message from the AI and
-  /// sets up the basic structure for conversation.
-  ///
-  /// The initial state features:
-  /// * Welcome message from the AI bot
-  /// * No loading or error states
-  /// * Empty conversation context
-  /// * New session flag enabled
-  /// * Ready for user interaction
-  ///
-  /// Returns a [ChatState] configured for starting new conversations.
-  factory ChatState.initial() => ChatState(
-    isLoading: false,
-    messages: [
-      types.TextMessage(
-        author: const types.User(id: 'bot'),
-        id: '1',
-        text: 'Hi, can I help you?',
-        status: types.Status.delivered,
-      ),
-    ],
-    isNewSession: true,
-    contextMessages: [],
-  );
 
   /// Creates a copy of this state with modified properties.
   ///

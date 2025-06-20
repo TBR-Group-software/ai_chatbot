@@ -1,4 +1,4 @@
-import '../repositories/voice_recording_repository.dart';
+import 'package:ai_chat_bot/domain/repositories/voice_recording_repository.dart';
 
 /// Use case for canceling voice recording
 ///
@@ -8,12 +8,12 @@ import '../repositories/voice_recording_repository.dart';
 ///
 /// Uses [VoiceRecordingRepository] for recording operations
 class CancelVoiceRecordingUseCase {
-  final VoiceRecordingRepository _repository;
 
   /// Constructor for cancel voice recording use case
   ///
   /// [_repository] The voice recording repository for recording operations
   const CancelVoiceRecordingUseCase(this._repository);
+  final VoiceRecordingRepository _repository;
 
   /// Execute the use case to cancel voice recording
   ///
@@ -24,7 +24,7 @@ class CancelVoiceRecordingUseCase {
     try {
       await _repository.cancelRecording();
     } catch (error) {
-      throw Exception('Failed to cancel recording: ${error.toString()}');
+      throw Exception('Failed to cancel recording: $error');
     }
   }
 } 

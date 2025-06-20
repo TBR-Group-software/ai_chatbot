@@ -5,8 +5,8 @@ import 'package:ai_chat_bot/presentation/popups/chatbot_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'widgets/memory_item_card.dart';
-import 'widgets/add_memory_dialog.dart';
+import 'package:ai_chat_bot/presentation/pages/memory/widgets/memory_item_card.dart';
+import 'package:ai_chat_bot/presentation/pages/memory/widgets/add_memory_dialog.dart';
 import 'package:ai_chat_bot/core/theme/app_theme.dart';
 
 @RoutePage()
@@ -99,7 +99,7 @@ class _MemoryPageState extends State<MemoryPage>
               children: <Widget>[
                 // Search bar
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16),
                   child: TextField(
                     controller: _searchController,
                     decoration: InputDecoration(

@@ -190,8 +190,6 @@ void main() {
           isLoading: false,
           items: mockMemoryItems,
           filteredItems: mockMemoryItems,
-          searchQuery: '',
-          error: null,
         ),
         act: (bloc) => bloc.add(DeleteMemoryEvent(itemIdToDelete)),
         skip: 1, // Skip the state emission
@@ -212,8 +210,6 @@ void main() {
           isLoading: false,
           items: mockMemoryItems,
           filteredItems: mockMemoryItems,
-          searchQuery: '',
-          error: null,
         ),
         act: (bloc) => bloc.add(DeleteMemoryEvent(itemIdToDelete)),
         skip: 1, // Skip the state emission
@@ -243,8 +239,6 @@ void main() {
           isLoading: false,
           items: mockMemoryItems,
           filteredItems: mockMemoryItems,
-          searchQuery: '',
-          error: null,
         ),
         act: (bloc) => bloc.add(SearchMemoryEvent(searchQuery)),
         skip: 1, // Skip the state emission
@@ -261,7 +255,6 @@ void main() {
           items: mockMemoryItems,
           filteredItems: [],
           searchQuery: 'previous-query',
-          error: null,
         ),
         act: (bloc) => bloc.add(SearchMemoryEvent('')),
         skip: 1, // Skip the state emission
@@ -283,8 +276,6 @@ void main() {
           isLoading: false,
           items: mockMemoryItems,
           filteredItems: mockMemoryItems,
-          searchQuery: '',
-          error: null,
         ),
         act: (bloc) => bloc.add(SearchMemoryEvent(searchQuery)),
         skip: 1, // Skip the state emission
@@ -307,8 +298,6 @@ void main() {
           isLoading: true,
           items: [],
           filteredItems: [],
-          searchQuery: '',
-          error: null,
         ),
         act: (bloc) => bloc.add(DataUpdatedEvent(updatedMemoryItems)),
         skip: 1, // Skip the state emission
@@ -322,7 +311,6 @@ void main() {
           items: [],
           filteredItems: [],
           searchQuery: 'new',
-          error: null,
         ),
         act: (bloc) => bloc.add(DataUpdatedEvent(updatedMemoryItems)),
         skip: 1, // Skip the state emission

@@ -9,13 +9,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:ai_chat_bot/core/theme/app_theme.dart';
 
 class ChatMessageWidget extends StatefulWidget {
-  final types.Message message;
-  final bool isUser;
-  final bool isLoading;
-  final bool isCompleted;
-  final VoidCallback? onRetry;
-  final String? errorMessage;
-  final void Function(String messageId, String messageText)? onEditMessage;
 
   const ChatMessageWidget({
     super.key,
@@ -27,6 +20,13 @@ class ChatMessageWidget extends StatefulWidget {
     this.errorMessage,
     this.onEditMessage,
   });
+  final types.Message message;
+  final bool isUser;
+  final bool isLoading;
+  final bool isCompleted;
+  final VoidCallback? onRetry;
+  final String? errorMessage;
+  final void Function(String messageId, String messageText)? onEditMessage;
 
   @override
   State<ChatMessageWidget> createState() => _ChatMessageWidgetState();
@@ -37,8 +37,8 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget>
   final GlobalKey _messageKey = GlobalKey();
   final LayerLink _layerLink = LayerLink();
 
-  void _showCupertinoDropdown() async {
-    HapticFeedback.mediumImpact();
+  Future<void> _showCupertinoDropdown() async {
+    await HapticFeedback.mediumImpact();
     final messageText = (widget.message as types.TextMessage).text;
 
     // Create a new, highlighted instance of the bubble for the overlay
@@ -208,7 +208,6 @@ class _MessageBubble extends StatelessWidget {
                     return ChatRetryWidget(
                       errorMessage: errorMessage ?? 'connection_failed',
                       onRetry: () {}, // Empty callback
-                      isRetrying: false,
                     );
                   }
 
@@ -217,8 +216,8 @@ class _MessageBubble extends StatelessWidget {
                       isLoading &&
                       !isCompleted &&
                       message.status == types.Status.sending) {
-                    return ChatThinkingWidget(
-                      animationDuration: const Duration(milliseconds: 500),
+                    return const ChatThinkingWidget(
+                      
                     );
                   }
 

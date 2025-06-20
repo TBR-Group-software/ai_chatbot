@@ -6,7 +6,7 @@ import 'package:ai_chat_bot/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'widgets/history_chat_session_card.dart';
+import 'package:ai_chat_bot/presentation/pages/history/widgets/history_chat_session_card.dart';
 
 @RoutePage()
 class HistoryPage extends StatefulWidget {
@@ -40,11 +40,11 @@ class _HistoryPageState extends State<HistoryPage>
   }
 
   @override
-  void dispose() {
+  Future<void> dispose() async {
     _routeObserver?.unsubscribe(this);
     WidgetsBinding.instance.removeObserver(this);
     _searchController.dispose();
-    _historyBloc.close();
+    await _historyBloc.close();
     super.dispose();
   }
 
@@ -79,7 +79,7 @@ class _HistoryPageState extends State<HistoryPage>
             children: <Widget>[
               // Search bar
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16),
                 child: TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
@@ -184,7 +184,7 @@ class _HistoryPageState extends State<HistoryPage>
                           return HistoryChatSessionCard(
                             session: session,
                             onDelete:
-                                () => ChatbotAlert.showDeleteConfirmation(
+                                () async => ChatbotAlert.showDeleteConfirmation(
                                   context: context,
                                   title: 'Delete Conversation',
                                   itemName: session.title,

@@ -1,7 +1,7 @@
 import 'package:ai_chat_bot/core/router/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
-import '../../widgets/custom_bottom_nav_bar.dart';
+import 'package:ai_chat_bot/presentation/widgets/custom_bottom_nav_bar.dart';
 
 @RoutePage()
 class NavigationPage extends StatelessWidget {

@@ -2,9 +2,9 @@ import 'package:ai_chat_bot/core/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:auto_route/auto_route.dart';
-import 'core/theme/app_theme.dart';
-import 'core/dependency_injection/dependency_injection.dart' as di;
-import 'data/datasources/local/hive_storage/imlp_hive_storage_local_datasource.dart';
+import 'package:ai_chat_bot/core/theme/app_theme.dart';
+import 'package:ai_chat_bot/core/dependency_injection/dependency_injection.dart' as di;
+import 'package:ai_chat_bot/data/datasources/local/hive_storage/imlp_hive_storage_local_datasource.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +17,7 @@ void main() async {
   di.init();
 
   // Initialize environment variables
-  await dotenv.load(fileName: ".env");
+  await dotenv.load();
 
   runApp(ChatBotApp());
 }

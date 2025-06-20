@@ -1,4 +1,4 @@
-import '../repositories/memory/memory_repository.dart';
+import 'package:ai_chat_bot/domain/repositories/memory/memory_repository.dart';
 
 /// Use case for deleting memory items from storage
 ///
@@ -8,12 +8,12 @@ import '../repositories/memory/memory_repository.dart';
 ///
 /// Uses [MemoryRepository] for memory deletion operations
 class DeleteMemoryItemUseCase {
-  final MemoryRepository _memoryRepository;
 
   /// Constructor for delete memory item use case
   ///
   /// [_memoryRepository] The memory repository for deletion operations
   DeleteMemoryItemUseCase(this._memoryRepository);
+  final MemoryRepository _memoryRepository;
 
   /// Execute the use case to delete a memory item
   ///

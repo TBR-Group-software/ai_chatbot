@@ -82,9 +82,6 @@ part 'chat_state.dart';
 /// * [SaveChatSessionUseCase] for persistence
 /// * [types.Message] from flutter_chat_types for UI compatibility
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
-  final GenerateTextWithMemoryContextUseCase _generateTextWithMemoryContextUseCase;
-  final SaveChatSessionUseCase _saveChatSessionUseCase;
-  final GetChatSessionUseCase _getChatSessionUseCase;
 
   /// Creates a new [ChatBloc] with required dependencies.
   ///
@@ -110,6 +107,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<CreateNewSessionEvent>(_onCreateNewSession);
     on<RetryLastRequestEvent>(_onRetryLastRequest);
   }
+  final GenerateTextWithMemoryContextUseCase _generateTextWithMemoryContextUseCase;
+  final SaveChatSessionUseCase _saveChatSessionUseCase;
+  final GetChatSessionUseCase _getChatSessionUseCase;
 
   /// Handles sending new user messages and triggering AI responses.
   ///
@@ -131,13 +131,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   /// Empty or whitespace-only messages are silently ignored to prevent
   /// unnecessary API calls and maintain conversation quality.
   Future<void> _onSendMessage(SendMessageEvent event, Emitter<ChatState> emit) async {
-    if (event.messageText.trim().isEmpty) return;
+    if (event.messageText.trim().isEmpty) {
+      return;
+    }
 
     emit(state.copyWith(
-      error: null,
-      lastFailedPrompt: null,
-      partialResponse: null,
-    ));
+      
+    ),);
 
     final userMessage = types.TextMessage(
       author: const types.User(id: 'user'),
@@ -169,7 +169,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       messages: updatedMessages,
       isLoading: true,
       contextMessages: updatedContext,
-    ));
+    ),);
 
     // Start text generation with memory and chat session context
     add(GenerateTextEvent(event.messageText));
@@ -198,19 +198,21 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   /// If the target message is not found, the operation is silently ignored.
   /// Empty replacement text is rejected to maintain conversation quality.
   Future<void> _onEditAndResendMessage(EditAndResendMessageEvent event, Emitter<ChatState> emit) async {
-    if (event.newMessageText.trim().isEmpty) return;
+    if (event.newMessageText.trim().isEmpty) {
+      return;
+    }
 
     emit(state.copyWith(
-      error: null,
-      lastFailedPrompt: null,
-      partialResponse: null,
-    ));
+      
+    ),);
 
     // Find the message to edit
     final messages = List<types.Message>.from(state.messages);
     final messageIndex = messages.indexWhere((msg) => msg.id == event.messageId);
     
-    if (messageIndex == -1) return;
+    if (messageIndex == -1) {
+      return;
+    }
 
     // Remove all messages from the edited message onwards (including subsequent bot responses)
     final messagesToKeep = messages.sublist(0, messageIndex);
@@ -238,7 +240,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     final contextMessages = List<ChatMessageEntity>.from(state.contextMessages);
     final contextIndex = contextMessages.indexWhere((msg) => msg.id == event.messageId);
     
-    List<ChatMessageEntity> updatedContext = contextMessages;
+    var updatedContext = contextMessages;
     if (contextIndex != -1) {
       // Keep all context messages before the edited message
       updatedContext = contextMessages.sublist(0, contextIndex);
@@ -259,7 +261,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       messages: updatedMessages,
       isLoading: true,
       contextMessages: finalContext,
-    ));
+    ),);
 
     // Generate new LLM response for the edited message
     add(GenerateTextEvent(event.newMessageText));
@@ -292,7 +294,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   /// categorized for appropriate user feedback.
   Future<void> _onGenerateText(GenerateTextEvent event, Emitter<ChatState> emit) async {
     try {
-      String accumulatedText = '';
+      var accumulatedText = '';
       
       // If this is a retry, start with the partial response
       if (event.isRetry && state.partialResponse != null) {
@@ -335,10 +337,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 generatedContent: textResponse,
                 messages: currentMessages,
                 contextMessages: updatedContext,
-                error: null,
-                lastFailedPrompt: null,
-                partialResponse: null,
-              ));
+              ),);
 
               // Auto-save session after each complete response
               add(SaveChatSessionEvent());
@@ -347,14 +346,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 isLoading: false,
                 generatedContent: textResponse,
                 messages: currentMessages,
-              ));
+              ),);
             }
           }
         }
       }
     } catch (error) {
       // Determine error type and message
-      String errorMessage = _getErrorMessage(error);
+      final errorMessage = _getErrorMessage(error);
       
       // Update the bot message to show error state
       final currentMessages = List<types.Message>.from(state.messages);
@@ -370,14 +369,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       
       emit(state.copyWith(
         isLoading: false,
-        generatedContent: null,
         error: errorMessage,
         messages: currentMessages,
         lastFailedPrompt: event.prompt,
         partialResponse: currentMessages.isNotEmpty 
             ? (currentMessages[0] as types.TextMessage).text 
             : null,
-      ));
+      ),);
     }
   }
 
@@ -439,13 +437,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ///
   /// If no failed request is cached, the operation is silently ignored.
   Future<void> _onRetryLastRequest(RetryLastRequestEvent event, Emitter<ChatState> emit) async {
-    if (state.lastFailedPrompt == null) return;
+    if (state.lastFailedPrompt == null) {
+      return;
+    }
     
     // Update state to show retrying
     emit(state.copyWith(
       isLoading: true,
-      error: null,
-    ));
+    ),);
     
     // Update bot message status to show retrying
     final currentMessages = List<types.Message>.from(state.messages);
@@ -506,7 +505,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           isNewSession: false,
           messages: uiMessages,
           contextMessages: session.messages,
-        ));
+        ),);
       }
     } catch (error) {
       emit(state.copyWith(error: error.toString()));
@@ -556,7 +555,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           currentSessionId: sessionId,
           sessionTitle: title,
           isNewSession: false,
-        ));
+        ),);
       }
     } catch (error) {
       emit(state.copyWith(error: error.toString()));

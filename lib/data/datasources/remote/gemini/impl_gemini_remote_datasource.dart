@@ -24,7 +24,7 @@ class ImplGeminiRemoteDataSource implements GeminiRemoteDataSource {
     final modelName = dotenv.env['MODEL_NAME'] ?? 'gemini-2.0-flash';
     
     if (apiKey == null) {
-      throw GeminiRemoteDataSourceException('API_KEY not found in environment variables');
+      throw const GeminiRemoteDataSourceException('API_KEY not found in environment variables');
     }
 
     final url = '$_baseUrl/$_apiVersion/models/$modelName:streamGenerateContent?alt=sse&key=$apiKey';
@@ -60,14 +60,14 @@ class ImplGeminiRemoteDataSource implements GeminiRemoteDataSource {
       'contents': [
         {
           'parts': [
-            {'text': prompt}
-          ]
+            {'text': prompt},
+          ],
         }
       ],
       'generationConfig': {
         'maxOutputTokens': 2048,
         'temperature': 0.7,
-      }
+      },
     };
   }
 
@@ -96,18 +96,22 @@ class ImplGeminiRemoteDataSource implements GeminiRemoteDataSource {
     http.StreamedResponse response,
     http.Client client,
   ) async* {
-    String buffer = '';
+    final buffer = StringBuffer();
     
     try {
       await for (final chunk in response.stream.transform(utf8.decoder)) {
-        buffer += chunk;
+        buffer.write(chunk);
         
         // Process complete lines
-        final lines = buffer.split('\n');
-        buffer = lines.removeLast(); // Keep incomplete line in buffer
+        final lines = buffer.toString().split('\n');
+        final remainingContent = lines.removeLast(); // Keep incomplete line in buffer
+        buffer.clear();
+        buffer.write(remainingContent);
         
         for (final line in lines) {
-          if (line.trim().isEmpty) continue;
+          if (line.trim().isEmpty) {
+            continue;
+          }
           
           // Parse SSE format
           if (line.startsWith('data: ')) {
@@ -144,9 +148,9 @@ class ImplGeminiRemoteDataSource implements GeminiRemoteDataSource {
 ///
 /// Provides specific error handling for Gemini API communication issues
 class GeminiRemoteDataSourceException implements Exception {
-  final String message;
   
   const GeminiRemoteDataSourceException(this.message);
+  final String message;
   
   @override
   String toString() => 'GeminiRemoteDataSourceException: $message';

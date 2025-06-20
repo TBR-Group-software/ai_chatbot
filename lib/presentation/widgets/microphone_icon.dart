@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-import '../bloc/voice_recording/voice_recording_bloc.dart';
+import 'package:ai_chat_bot/core/theme/app_theme.dart';
+import 'package:ai_chat_bot/presentation/bloc/voice_recording/voice_recording_bloc.dart';
 
 /// Animated microphone icon widget with pulse effect
 class MicrophoneIcon extends StatelessWidget {
-  final VoiceRecordingState state;
-  final Animation<double> pulseAnimation;
-  final ThemeData theme;
-  final CustomColors customColors;
 
   const MicrophoneIcon({
     super.key,
@@ -16,6 +12,10 @@ class MicrophoneIcon extends StatelessWidget {
     required this.theme,
     required this.customColors,
   });
+  final VoiceRecordingState state;
+  final Animation<double> pulseAnimation;
+  final ThemeData theme;
+  final CustomColors customColors;
 
   @override
   Widget build(BuildContext context) {

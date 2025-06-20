@@ -108,8 +108,6 @@ void main() {
           isLoading: false,
           sessions: mockChatSessions,
           filteredSessions: mockChatSessions,
-          searchQuery: '',
-          error: null,
         ),
         act: (bloc) => bloc.add(DeleteSessionEvent(sessionIdToDelete)),
         skip: 1,
@@ -130,8 +128,6 @@ void main() {
           isLoading: false,
           sessions: mockChatSessions,
           filteredSessions: mockChatSessions,
-          searchQuery: '',
-          error: null,
         ),
         act: (bloc) => bloc.add(DeleteSessionEvent(sessionIdToDelete)),
         skip: 1,
@@ -151,8 +147,6 @@ void main() {
           isLoading: false,
           sessions: mockChatSessions,
           filteredSessions: mockChatSessions,
-          searchQuery: '',
-          error: null,
         ),
         act: (bloc) => bloc.add(SearchSessionsEvent(searchQuery)),
         skip: 1,
@@ -165,8 +159,6 @@ void main() {
           isLoading: false,
           sessions: mockChatSessions,
           filteredSessions: mockChatSessions,
-          searchQuery: '',
-          error: null,
         ),
         act: (bloc) => bloc.add(SearchSessionsEvent('help')), // Search for content in messages
         skip: 1,
@@ -180,7 +172,6 @@ void main() {
           sessions: mockChatSessions,
           filteredSessions: [],
           searchQuery: 'previous-query',
-          error: null,
         ),
         act: (bloc) => bloc.add(SearchSessionsEvent('')),
         skip: 1,
@@ -200,8 +191,6 @@ void main() {
           isLoading: true,
           sessions: [],
           filteredSessions: [],
-          searchQuery: '',
-          error: null,
         ),
         act: (bloc) => bloc.add(DataUpdatedEvent(updatedSessions)),
         skip: 1,
@@ -215,7 +204,6 @@ void main() {
           sessions: [],
           filteredSessions: [],
           searchQuery: 'new',
-          error: null,
         ),
         act: (bloc) => bloc.add(DataUpdatedEvent(updatedSessions)),
         skip: 1,
@@ -229,7 +217,7 @@ void main() {
             TestHelpers.generateMockChatSession(
               id: 'old-session',
               title: 'Old Session',
-              updatedAt: DateTime(2024, 1, 1),
+              updatedAt: DateTime(2024),
             ),
             TestHelpers.generateMockChatSession(
               id: 'new-session',
@@ -280,7 +268,7 @@ void main() {
           mockGetChatSessionsUseCase,
           mockDeleteChatSessionUseCase,
           mockChatHistoryRepository,
-        ), returnsNormally);
+        ), returnsNormally,);
       });
     });
   });

@@ -36,12 +36,12 @@ final GetIt sl = GetIt.instance;
 void init() {
   // Local Data Sources
   sl.registerLazySingleton<HiveStorageLocalDataSource>(
-    () => ImplHiveStorageLocalDataSource(),
+    ImplHiveStorageLocalDataSource.new,
   );
 
   // Remote Data Sources
   sl.registerLazySingleton<GeminiRemoteDataSource>(
-    () => ImplGeminiRemoteDataSource(),
+    ImplGeminiRemoteDataSource.new,
   );
 
   // Repositories
@@ -58,7 +58,7 @@ void init() {
   );
 
   sl.registerLazySingleton<VoiceRecordingRepository>(
-    () => VoiceRecordingRepositoryImpl(),
+    VoiceRecordingRepositoryImpl.new,
   );
 
   // Use cases

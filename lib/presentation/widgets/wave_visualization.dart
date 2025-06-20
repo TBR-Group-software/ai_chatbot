@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-import '../bloc/voice_recording/voice_recording_bloc.dart';
-import 'audio_waveform_painter.dart';
+import 'package:ai_chat_bot/core/theme/app_theme.dart';
+import 'package:ai_chat_bot/presentation/bloc/voice_recording/voice_recording_bloc.dart';
+import 'package:ai_chat_bot/presentation/widgets/audio_waveform_painter.dart';
 
 /// A sophisticated real-time audio waveform visualization widget for voice recording interfaces.
 ///
@@ -118,6 +118,23 @@ import 'audio_waveform_painter.dart';
 /// * [VoiceRecordingBloc] for recording control
 /// * [CustomColors] for theme integration
 class WaveVisualization extends StatelessWidget {
+
+  /// Creates a wave visualization widget.
+  ///
+  /// All parameters are required for proper functionality. The widget
+  /// depends on external state and animation management for its operation.
+  ///
+  /// [state] Current voice recording state for visual adaptation
+  /// [waveController] Animation controller for waveform movement
+  /// [theme] Flutter theme data for consistent styling
+  /// [customColors] Custom color scheme for app-specific theming
+  const WaveVisualization({
+    super.key,
+    required this.state,
+    required this.waveController,
+    required this.theme,
+    required this.customColors,
+  });
   /// The current voice recording state from the BLoC.
   ///
   /// This state contains the real-time audio information needed for
@@ -165,23 +182,6 @@ class WaveVisualization extends StatelessWidget {
   /// These colors ensure the waveform integrates seamlessly with the
   /// app's visual design system.
   final CustomColors customColors;
-
-  /// Creates a wave visualization widget.
-  ///
-  /// All parameters are required for proper functionality. The widget
-  /// depends on external state and animation management for its operation.
-  ///
-  /// [state] Current voice recording state for visual adaptation
-  /// [waveController] Animation controller for waveform movement
-  /// [theme] Flutter theme data for consistent styling
-  /// [customColors] Custom color scheme for app-specific theming
-  const WaveVisualization({
-    super.key,
-    required this.state,
-    required this.waveController,
-    required this.theme,
-    required this.customColors,
-  });
 
   @override
   Widget build(BuildContext context) {

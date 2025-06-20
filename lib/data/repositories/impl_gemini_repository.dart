@@ -12,12 +12,12 @@ import 'package:ai_chat_bot/domain/repositories/llm/llm_repository.dart';
 ///
 /// Uses [GeminiRemoteDataSource] for API communication
 class ImplGeminiRepository implements LLMRepository {
-  final GeminiRemoteDataSource _remoteDataSource;
 
   /// Constructor for Gemini repository implementation
   ///
   /// [_remoteDataSource] The Gemini data source for API communication
   ImplGeminiRepository(this._remoteDataSource);
+  final GeminiRemoteDataSource _remoteDataSource;
 
   @override
   Stream<LLMTextResponseEntity?> generateResponse(String prompt) async* {

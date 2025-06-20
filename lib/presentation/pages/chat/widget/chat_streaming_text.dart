@@ -103,8 +103,7 @@ class _ChatStreamingTextState extends State<ChatStreamingText>
         return AnimatedBuilder(
           animation: _controller,
           builder: (final context, final child) {
-            final textAlign = TextAlign.left;
-            final textDirection = TextDirection.ltr;
+            const textAlign = TextAlign.left;
 
             if (!_controller.isAnimating &&
                 _controller.status != AnimationStatus.completed) {
@@ -112,11 +111,10 @@ class _ChatStreamingTextState extends State<ChatStreamingText>
                 widget.text,
                 style: widget.style,
                 textAlign: textAlign,
-                textDirection: textDirection,
               );
             }
 
-            String newText = '';
+            var newText = '';
             if (_displayedText.length > _previousText.length &&
                 _displayedText.startsWith(_previousText)) {
               newText = _displayedText.substring(_previousText.length);
@@ -136,7 +134,6 @@ class _ChatStreamingTextState extends State<ChatStreamingText>
                       _previousText,
                       style: widget.style,
                       textAlign: textAlign,
-                      textDirection: textDirection,
                     ),
                   ),
                 if (newText.isNotEmpty)
@@ -151,7 +148,6 @@ class _ChatStreamingTextState extends State<ChatStreamingText>
                         ),
                       ),
                       textAlign: textAlign,
-                      textDirection: textDirection,
                     ),
                   ),
                 if (newText.isEmpty && _previousText.isEmpty)
@@ -166,7 +162,6 @@ class _ChatStreamingTextState extends State<ChatStreamingText>
                         ),
                       ),
                       textAlign: textAlign,
-                      textDirection: textDirection,
                     ),
                   ),
               ],
@@ -176,14 +171,12 @@ class _ChatStreamingTextState extends State<ChatStreamingText>
       } catch (e) {
         debugPrint('Error in ChatStreamingText build: $e');
 
-        final textAlign = TextAlign.left;
-        final textDirection = TextDirection.ltr;
+        const textAlign = TextAlign.left;
 
         return GptMarkdown(
           widget.text,
           style: widget.style,
           textAlign: textAlign,
-          textDirection: textDirection,
         );
       }
     }

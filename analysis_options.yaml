@@ -1,28 +1,132 @@
-# This file configures the analyzer, which statically analyzes Dart code to
-# check for errors, warnings, and lints.
-#
-# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
-# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
-# invoked from the command line by running `flutter analyze`.
-
-# The following line activates a set of recommended lints for Flutter apps,
-# packages, and plugins designed to encourage good coding practices.
-include: package:flutter_lints/flutter.yaml
+include: flutter_lints.yaml
 
 linter:
-  # The lint rules applied to this project can be customized in the
-  # section below to disable rules from the `package:flutter_lints/flutter.yaml`
-  # included above or to enable additional rules. A list of all available lints
-  # and their documentation is published at https://dart.dev/lints.
+  # The lint rules applied to this project can be customized below to disable rules from the included `package:flutter_lints/flutter.yaml`
+  # or to activate additional rules.
+  # A complete list of available lints and their documentation is available at https://dart.dev/lints.
   #
-  # Instead of disabling a lint rule for the entire project in the
-  # section below, it can also be suppressed for a single line of code
-  # or a specific dart file by using the `// ignore: name_of_lint` and
-  # `// ignore_for_file: name_of_lint` syntax on the line or in the file
-  # producing the lint.
+  # Instead of disabling lint rules project-wide in the section below, you can also disable lints on a single line or for specific Dart files
+  # using the syntax `// ignore: name_of_lint` or `// ignore_for_file: name_of_lint`.
   rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    ##########################
+    ### Incompatible rules ###
+    ##########################
 
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+    # The `always_specify_types` rule is incompatible with `avoid_types_on_closure_parameters`, `omit_local_variable_types`, `omit_obvious_local_variable_types`, and `omit_obvious_property_types`.
+    always_specify_types: false
+    # The `avoid_types_on_closure_parameters` rule is incompatible with the `always_specify_types` rule.
+    avoid_types_on_closure_parameters: false
+    # The `prefer_final_parameters` rule is incompatible with the `unnecessary_final` rule.
+    prefer_final_parameters: false
+    # The `avoid_final_parameters` rule is incompatible with the `prefer_final_parameters` rule.
+    avoid_final_parameters: false
+    # The `unnecessary_final` rule is incompatible with `prefer_final_locals`, `prefer_final_parameters`, and `prefer_final_in_for_each`.
+    unnecessary_final: false
+    # The `prefer_relative_imports` rule is incompatible with the `always_use_package_imports` rule.
+    prefer_relative_imports: false
+    # The `prefer_double_quotes` rule is incompatible with the `prefer_single_quotes` rule.
+    prefer_double_quotes: false
+    # The `specify_nonobvious_local_variable_types` rule is incompatible with the `omit_local_variable_types` rule.
+    specify_nonobvious_local_variable_types: false
+    # The `omit_obvious_property_types` rule is incompatible with `always_specify_types` and `type_annotate_public_apis`.
+    omit_obvious_property_types: false
+
+    #########################
+    ### Customized Styles ###
+    #########################
+
+    # Arrow functions should only be used for short functions.
+    prefer_expression_function_bodies: false
+    # Changing this rule would require modifying too much code during project development.
+    always_put_required_named_parameters_first: false
+    # This rule is more suitable for projects with multiple collaborators.
+    flutter_style_todos: false
+    # Typically only Exception handling is used, but in certain cases, Error handling is necessary.
+    avoid_catches_without_on_clauses: false
+    # The 80-character limit rule causes too many unnecessary line breaks.
+    lines_longer_than_80_chars: false
+    # In specific cases, using the dynamic type is necessary.
+    avoid_annotating_with_dynamic: false
+    # This rule generates excessive boilerplate code.
+    diagnostic_describe_all_properties: false
+    # It is challenging to always update booleans using a named parameter when the state changes.
+    avoid_positional_boolean_parameters: false
+    # In most apps, documentation for every public member is not required.
+    public_member_api_docs: false
+    # The `import_sorter` package triggers this lint.
+    directives_ordering: false
+    # Classes without instance members or methods can be useful in certain cases.
+    avoid_classes_with_only_static_members: false
+    # In some cases, CONSTANT_CASE is more appropriate.
+    constant_identifier_names: false
+    # Some packages (e.g., go_router) require using context in routing.
+    use_build_context_synchronously: false
+    # Disable this rule when using proxy classes.
+    one_member_abstracts: false
+    # Functions returning Future without using the `await` keyword may be unrecognized.
+    unnecessary_async: false
+    # Disable this rule when using generic types.
+    unsafe_variance: false
+
+analyzer:
+  exclude:
+    # Exclude generated Retrofit files from analysis.
+    - lib/data/api/*.g.dart
+    # - "**/*.g.dart"
+    # - "**/*.freezed.dart"
+  plugins:
+    - custom_lint
+  language:
+    # Do not cast nullable values to non-nullable types.
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+  errors:
+    #########################
+    # Enhanced Error Levels #
+    #########################
+    # Triggered when declared elements like classes, methods, or fields are not used in the code.
+    unused_element: error
+    # Triggered when fields are declared but not used in the code.
+    unused_field: error
+    # Triggered when local variables declared within a function or method are not used.
+    unused_local_variable: error
+    # Triggered when a name declared in the import show clause is not actually used.
+    unused_shown_name: error
+    # Triggered when imported elements are not used in the file.
+    unused_import: error
+    # Triggered when a function or method returns a value that is not used.
+    unused_result: error
+    # Enables a warning for unnecessary null checks.
+    unnecessary_null_checks: warning
+    # Triggered when constructor parameters are declared but not used within the constructor.
+    avoid_unused_constructor_parameters: error
+    # Triggered when an exception is caught but not used in the catch block.
+    unused_catch_clause: error
+    # Triggered when operations on primitive types have no actual effect.
+    noop_primitive_operations: error
+
+    ###########################
+    # Ignored Redundant Rules #
+    ###########################
+    # Warning for conflicting linter options from the included 'flutter_lints.yaml' file.
+    included_file_warning: ignore
+    # Disable this warning when using freezed with json_serializable.
+    invalid_annotation_target: ignore
+    # Elements marked with @Deprecated should not be referenced within the same package.
+    deprecated_member_use_from_same_package: ignore
+    # If the method's type arguments cannot be inferred, use explicit type arguments.
+    inference_failure_on_function_invocation: ignore
+    # A comment explaining why the ignore is in place is missing. Try adding a comment above the ignore.
+    document_ignores: ignore
+    # Avoid duplicate cascade invocations; consider using a cascade.
+    cascade_invocations: ignore
+    inference_failure_on_function_return_type: ignore
+    inference_failure_on_collection_literal: ignore
+    inference_failure_on_instance_creation: ignore
+    comment_references: ignore
+
+# Formatter settings
+formatter:
+
+  page_width: 120
