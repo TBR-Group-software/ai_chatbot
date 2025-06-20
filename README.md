@@ -2,15 +2,15 @@
 
 <div align="center">
 
-<img src="assets/images/chat_bot_logo.png" alt="Chatty" width="250"/>
+<img src="assets/images/chat_bot_logo.png" alt="Chatty" width="100"/>
 
 
 **A sophisticated, clean-architecture Flutter-based AI chatbot that allows to use any model's API.**
 
-<img src="demo_images/history_gif.gif" alt="HistoryDemo" width="150"/>
-<img src="demo_images/memory_gif.gif" alt="MemoryDemo" width="150"/>
-<img src="demo_images/memory_gif.gif" alt="TextMessageDemo" width="150"/>
-<img src="demo_images/voice_gif.gif" alt="VoiceRecognitionDemo" width="150"/>
+<img src="demo_images/history_gif.gif" alt="HistoryDemo" width="100"/>
+<img src="demo_images/memory_gif.gif" alt="MemoryDemo" width="100"/>
+<img src="demo_images/memory_gif.gif" alt="TextMessageDemo" width="100"/>
+<img src="demo_images/voice_gif.gif" alt="VoiceRecognitionDemo" width="100"/>
 </div>
 
 ---
@@ -87,71 +87,163 @@ ai_chat_bot/
 
 ## Code Samples
 
-### Chat Message Entity
-```dart
-class ChatMessageEntity {
-  final String id;
-  final String content;
-  final bool isUser;
-  final DateTime timestamp;
-  final String sessionId;
+### 1. Waveform Visualization with CustomPainter
 
-  const ChatMessageEntity({
-    required this.id,
-    required this.content,
-    required this.isUser,
-    required this.timestamp,
-    required this.sessionId,
+This project features a real-time audio waveform visualization that provides users with visual feedback during voice input. This is achieved using a `CustomPainter`, which is a low-level drawing API in Flutter that offers high performance. The `AudioWaveformPainter` animates based on the microphone's sound level.
+
+```dart
+// lib/presentation/widgets/audio_waveform_painter.dart
+
+class AudioWaveformPainter extends CustomPainter {
+  final double soundLevel;
+  final double animationValue;
+  final Color waveformColor;
+  // ... other properties
+
+  const AudioWaveformPainter({
+    required this.soundLevel,
+    required this.animationValue,
+    required this.waveformColor,
+    // ...
   });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = waveformColor
+      ..strokeWidth = 2.5
+      ..strokeCap = StrokeCap.round;
+
+    const barCount = 25;
+    final barWidth = (size.width - 32) / barCount;
+
+    for (int i = 0; i < barCount; i++) {
+      // Create an animated sine wave effect
+      final wavePhase = (animationValue * 4 * math.pi) + (i * 0.5);
+      final baseHeight = math.sin(wavePhase) * 8 + 12;
+
+      // Amplify the wave based on the actual sound level from the microphone
+      final normalizedSoundLevel = soundLevel.clamp(0.0, 1.0);
+      final soundMultiplier = isListening ? (0.5 + normalizedSoundLevel * 1.5) : 0.3;
+
+      final barHeight = (baseHeight * soundMultiplier).clamp(4.0, size.height * 0.7);
+
+      // Draw the animated bar
+      final x = 16.0 + (i * barWidth) + (barWidth / 2);
+      canvas.drawLine(
+        Offset(x, size.height / 2 - barHeight / 2),
+        Offset(x, size.height / 2 + barHeight / 2),
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 ```
 
-### Voice Recording State Management
-```dart
-class VoiceRecordingEntity {
-  final bool isRecording;
-  final bool isListening;
-  final double soundLevel;
-  final String recognizedText;
-  final Duration recordingDuration;
+### 2. End-to-End Streaming Data Flow
 
-  factory VoiceRecordingEntity.recording({
-    required bool isListening,
-    required double soundLevel,
-    required String recognizedText,
-    required Duration recordingDuration,
-  }) {
-    return VoiceRecordingEntity(
-      isRecording: true,
-      isListening: isListening,
-      soundLevel: soundLevel,
-      recognizedText: recognizedText,
-      recordingDuration: recordingDuration,
-    );
+The application streams responses from the AI model in real-time. This is accomplished by handling Server-Sent Events (SSE) across all three layers of the Clean Architecture.
+
+#### Data Layer: Parsing Raw SSE Stream
+
+The `ImplGeminiRemoteDataSource` is responsible for making the HTTP request and parsing the raw SSE response. It decodes the UTF-8 chunks, identifies the `data:` lines, and deserializes the JSON into a strongly-typed `GeminiTextResponse` model.
+
+```dart
+// lib/data/datasources/remote/gemini/impl_gemini_remote_datasource.dart
+
+Stream<GeminiTextResponse?> _processStreamResponse(
+  http.StreamedResponse response,
+  http.Client client,
+) async* {
+  String buffer = '';
+  
+  try {
+    await for (final chunk in response.stream.transform(utf8.decoder)) {
+      buffer += chunk;
+      final lines = buffer.split('\n');
+      buffer = lines.removeLast(); // Keep incomplete line in buffer
+      
+      for (final line in lines) {
+        if (line.startsWith('data: ')) {
+          final data = line.substring(6).trim();
+          if (data == '[DONE]') {
+            yield GeminiTextResponse.completed();
+            return;
+          }
+          final jsonData = jsonDecode(data) as Map<String, dynamic>;
+          // Convert raw JSON to a typed data model
+          yield GeminiTextResponse.fromJson(jsonData);
+        }
+      }
+    }
+  } finally {
+    client.close();
   }
 }
 ```
 
-### Gemini AI Integration
-```dart
-Stream<GeminiTextResponse?> streamGenerateContent(String prompt) async* {
-  final apiKey = dotenv.env['GEMINI_API_KEY'];
-  final modelName = dotenv.env['MODEL_NAME'] ?? 'gemini-2.0-flash';
-  
-  final url = '$_baseUrl/$_apiVersion/models/$modelName:streamGenerateContent?alt=sse&key=$apiKey';
-  
-  final requestBody = {
-    'contents': [{
-      'parts': [{'text': prompt}]
-    }],
-    'generationConfig': {
-      'maxOutputTokens': 2048,
-      'temperature': 0.7,
-    }
-  };
+#### Domain Layer: Abstracting the Data Flow
 
-  // Stream real-time responses
-  yield* _processStreamResponse(response, client);
+The `GenerateTextWithMemoryContextUseCase` abstracts the data source. Its role is to call the repository and pass the resulting stream of `LlmTextResponseEntity` objects to the Presentation layer, completely hiding the implementation details of the data source.
+
+```dart
+// lib/domain/usecases/generate_text_with_memory_context_usecase.dart
+
+class GenerateTextWithMemoryContextUseCase {
+  final ChatRepository _chatRepository;
+  // ...
+
+  Stream<LlmTextResponseEntity?> call(String prompt, List<ChatMessageEntity> context) {
+    // ... logic to prepare context
+    return _chatRepository.generateText(prompt, fullContext);
+  }
+}
+```
+
+#### Presentation Layer: Consuming the Stream in BLoC
+
+Finally, the `ChatBloc` listens to the stream provided by the use case. With each `LlmTextResponseEntity` that arrives, it updates its state. This triggers a UI rebuild, creating the real-time "typing" effect for the user.
+
+```dart
+// lib/presentation/bloc/chat/chat_bloc.dart
+
+Future<void> _onGenerateText(GenerateTextEvent event, Emitter<ChatState> emit) async {
+  // ...
+  final stream = _generateTextWithMemoryContextUseCase.call(
+    event.prompt,
+    state.contextMessages,
+  );
+
+  await for (final response in stream) {
+    if (response != null) {
+      final isCompleted = response.isComplete;
+      final generatedText = response.output;
+
+      if (generatedText != null) {
+        // Append the new text chunk to the existing partial response
+        final newPartialResponse = (state.partialResponse ?? '') + generatedText;
+
+        // Find the bot message and update its text
+        final messages = List<types.Message>.from(state.messages);
+        final botMessageIndex = messages.indexWhere((m) => m.author.id == 'bot' && (m as types.TextMessage).status == types.Status.sending);
+        
+        if (botMessageIndex != -1) {
+          messages[botMessageIndex] = (messages[botMessageIndex] as types.TextMessage).copyWith(
+            text: newPartialResponse,
+          );
+        }
+        
+        emit(state.copyWith(
+          messages: messages,
+          partialResponse: newPartialResponse,
+          isLoading: !isCompleted,
+        ));
+      }
+    }
+  }
 }
 ```
 
@@ -232,6 +324,68 @@ Before running this project, make sure you have:
 
 ## Testing
 
+The project maintains a high level of code quality with a comprehensive suite of unit tests. We leverage the following packages to ensure our logic is robust and predictable:
+
+- **[Mocktail](https://pub.dev/packages/mocktail)**: For creating mock implementations of dependencies (Use Cases, Repositories), allowing us to isolate the code being tested.
+- **[bloc_test](https://pub.dev/packages/bloc_test)**: A powerful utility for testing BLoCs, which simplifies the process of dispatching events and asserting state changes.
+
+### BLoC Unit Test Example
+
+Below is a unit test for the `ChatBloc` that verifies the message editing functionality. This test demonstrates how we:
+1.  **Arrange**: Set up mock dependencies and seed the BLoC with a predefined state.
+2.  **Act**: Dispatch the `EditAndResendMessageEvent` to the BLoC.
+3.  **Assert**: Verify that the BLoC emits the correct sequence of states and that the appropriate use case is called with the correct parameters.
+
+```dart
+// test/presentation/bloc/chat/chat_bloc_test.dart
+
+group('EditAndResendMessageEvent', () {
+  const messageId = 'test-message-id';
+  const newMessageText = 'Edited message';
+
+  blocTest<ChatBloc, ChatState>(
+    'should edit message, prune history, and regenerate response',
+    build: () {
+      // Arrange: Mock the AI use case to return a predictable stream
+      when(() => mockGenerateTextWithMemoryContextUseCase.call(any(), any()))
+          .thenAnswer((_) => Stream.value(mockLLMResponse));
+      return chatBloc;
+    },
+    // Arrange: Seed the BLoC with an initial conversation state
+    seed: () => ChatState(
+      isLoading: false,
+      messages: [
+        types.TextMessage(
+          author: const types.User(id: 'bot'),
+          id: 'bot-response',
+          text: 'Previous bot response',
+        ),
+        types.TextMessage(
+          author: const types.User(id: 'user'),
+          id: messageId,
+          text: 'Original message',
+        ),
+      ],
+      contextMessages: [
+        ChatMessageEntity(
+          id: messageId,
+          content: 'Original message',
+          isUser: true,
+          timestamp: DateTime.now(),
+          sessionId: 'test-session',
+        ),
+      ],
+    ),
+    // Act: Dispatch the event to the BLoC
+    act: (bloc) => bloc.add(EditAndResendMessageEvent(messageId, newMessageText)),
+    // Assert: Check that the correct use case was called
+    verify: (_) {
+      verify(() => mockGenerateTextWithMemoryContextUseCase.call(newMessageText, any())).called(1);
+    },
+  );
+});
+```
+
 Run the test suite:
 
 ```bash
@@ -241,7 +395,6 @@ flutter test
 # Run tests with coverage
 flutter test --coverage
 ```
-
 
 ## Contributing
 
@@ -265,8 +418,8 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 <div align="center">
 
-**Made with ❤️ and Flutter**
+Developed by [TBR Group](https://github.com/TBR-Group-software).
 
-[⬆ Back to top](#-ai-chat-bot)
+[Back to top](#-ai-chat-bot)
 
 </div>
