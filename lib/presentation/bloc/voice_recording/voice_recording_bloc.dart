@@ -9,7 +9,59 @@ import '../../../domain/usecases/cancel_voice_recording_usecase.dart';
 part 'voice_recording_event.dart';
 part 'voice_recording_state.dart';
 
-/// BLoC for managing voice recording
+/// A BLoC that manages voice recording operations and state.
+///
+/// This BLoC handles the complete voice recording lifecycle including
+/// initialization, recording, stopping, and cancellation. It provides
+/// real-time updates on recording status, sound levels, and recognized text.
+///
+/// The BLoC automatically handles microphone permissions, speech recognition
+/// initialization, and stream management. It integrates with the domain layer
+/// through use cases for clean architecture compliance.
+///
+/// Key features:
+/// * Real-time voice recording with live text recognition
+/// * Automatic permission handling and initialization
+/// * Sound level monitoring and visual feedback
+/// * Robust error handling and recovery
+/// * Clean state management with immutable states
+/// * Callback support for completion and cancellation
+///
+/// Example usage:
+/// ```dart
+/// // In your widget
+/// BlocBuilder<VoiceRecordingBloc, VoiceRecordingState>(
+///   builder: (context, state) {
+///     if (state.isRecording) {
+///       return RecordingIndicator(
+///         soundLevel: state.soundLevel,
+///         recognizedText: state.recognizedText,
+///       );
+///     }
+///     return RecordButton(
+///       onPressed: () => context.read<VoiceRecordingBloc>()
+///         .add(StartVoiceRecordingEvent()),
+///     );
+///   },
+/// )
+///
+/// // Starting recording
+/// context.read<VoiceRecordingBloc>().add(StartVoiceRecordingEvent());
+///
+/// // Stopping with callback
+/// context.read<VoiceRecordingBloc>().add(
+///   StopVoiceRecordingEvent(
+///     onComplete: (text) => _handleRecognizedText(text),
+///   ),
+/// );
+/// ```
+///
+/// See also:
+/// * [VoiceRecordingState] for available state properties
+/// * [VoiceRecordingEvent] for available events
+/// * [StartVoiceRecordingUseCase] for recording initialization
+/// * [StopVoiceRecordingUseCase] for recording termination
+/// * [CancelVoiceRecordingUseCase] for recording cancellation
 class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> {
   final StartVoiceRecordingUseCase _startVoiceRecordingUseCase;
   final StopVoiceRecordingUseCase _stopVoiceRecordingUseCase;
@@ -17,6 +69,14 @@ class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> 
 
   StreamSubscription<VoiceRecordingEntity>? _recordingSubscription;
 
+  /// Creates a new [VoiceRecordingBloc] instance.
+  ///
+  /// All use case parameters are required for proper functionality:
+  /// * [_startVoiceRecordingUseCase] handles recording initialization and streaming
+  /// * [_stopVoiceRecordingUseCase] manages recording termination and final text retrieval
+  /// * [_cancelVoiceRecordingUseCase] handles recording cancellation without saving text
+  ///
+  /// The BLoC starts in an initial state with no active recording.
   VoiceRecordingBloc(
     this._startVoiceRecordingUseCase,
     this._stopVoiceRecordingUseCase,
@@ -34,7 +94,26 @@ class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> 
     return super.close();
   }
 
-  /// Handle start voice recording event
+  /// Handles the start voice recording event.
+  ///
+  /// Initiates voice recording with automatic permission checking and
+  /// microphone initialization. Sets up a stream subscription to receive
+  /// real-time recording updates including sound levels and recognized text.
+  ///
+  /// The method performs these operations:
+  /// 1. Validates current state (prevents duplicate recordings)
+  /// 2. Sets initialization state for UI feedback
+  /// 3. Cancels any existing recording subscription
+  /// 4. Starts recording stream and sets up event handlers
+  /// 5. Handles errors gracefully with user-friendly messages
+  ///
+  /// [event] The start recording event (no additional parameters)
+  /// [emit] The state emitter for updating the UI
+  ///
+  /// Throws no exceptions directly, but may emit error states if:
+  /// * Microphone permissions are denied
+  /// * Speech recognition is unavailable
+  /// * Device microphone is not accessible
   Future<void> _onStartRecording(
     StartVoiceRecordingEvent event,
     Emitter<VoiceRecordingState> emit,
@@ -78,7 +157,25 @@ class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> 
     }
   }
 
-  /// Handle stop voice recording event
+  /// Handles the stop voice recording event.
+  ///
+  /// Terminates the active recording session and retrieves the final
+  /// recognized text. The method ensures proper cleanup of resources
+  /// and provides the recognized text through an optional callback.
+  ///
+  /// The stopping process includes:
+  /// 1. State validation to prevent duplicate stop requests
+  /// 2. Setting stopping state for UI feedback
+  /// 3. Calling the stop use case to finalize recording
+  /// 4. Cleaning up stream subscriptions
+  /// 5. Emitting completed state with final text
+  /// 6. Executing the completion callback if provided
+  ///
+  /// [event] The stop recording event, may contain an optional completion callback
+  /// [emit] The state emitter for updating the UI
+  ///
+  /// The [event.onComplete] callback receives the final recognized text
+  /// and is called after the state has been updated to completed.
   Future<void> _onStopRecording(
     StopVoiceRecordingEvent event,
     Emitter<VoiceRecordingState> emit,
@@ -116,7 +213,25 @@ class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> 
     }
   }
 
-  /// Handle cancel voice recording event
+  /// Handles the cancel voice recording event.
+  ///
+  /// Immediately terminates the recording session without saving any
+  /// recognized text. This is used when the user wants to discard
+  /// the current recording attempt.
+  ///
+  /// The cancellation process:
+  /// 1. Validates current state to prevent duplicate cancellations
+  /// 2. Sets cancelling state for UI feedback
+  /// 3. Calls the cancel use case to terminate recording
+  /// 4. Cleans up all resources and subscriptions
+  /// 5. Resets to initial state
+  /// 6. Executes the cancellation callback if provided
+  ///
+  /// [event] The cancel recording event, may contain an optional cancellation callback
+  /// [emit] The state emitter for updating the UI
+  ///
+  /// The [event.onCancel] callback is executed after the state has been
+  /// reset to initial, allowing the UI to respond to the cancellation.
   Future<void> _onCancelRecording(
     CancelVoiceRecordingEvent event,
     Emitter<VoiceRecordingState> emit,
@@ -153,7 +268,23 @@ class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> 
     }
   }
 
-  /// Handle voice recording updates from the stream
+  /// Handles real-time voice recording updates from the stream.
+  ///
+  /// Processes updates from the recording stream and updates the state
+  /// with current recording information including sound levels, recognized
+  /// text, and recording duration. This method ensures the UI stays
+  /// synchronized with the recording progress.
+  ///
+  /// The method handles both successful updates and error conditions:
+  /// * For successful updates: extracts recording data and updates state
+  /// * For errors: resets recording flags and displays error message
+  /// * Ignores updates if the BLoC has been closed
+  ///
+  /// [event] Internal event containing the recording entity with current data
+  /// [emit] The state emitter for updating the UI
+  ///
+  /// This is an internal method triggered automatically by the recording
+  /// stream and should not be called directly from external code.
   void _onRecordingUpdate(
     _VoiceRecordingUpdateEvent event,
     Emitter<VoiceRecordingState> emit,
@@ -186,7 +317,13 @@ class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> 
   }
 }
 
-/// Internal event for voice recording updates
+/// Internal event for voice recording updates.
+///
+/// This private event is used internally by the BLoC to handle
+/// real-time updates from the recording stream. It should not
+/// be used directly by external code.
+///
+/// [recordingEntity] The current recording data from the stream
 class _VoiceRecordingUpdateEvent extends VoiceRecordingEvent {
   final VoiceRecordingEntity recordingEntity;
 

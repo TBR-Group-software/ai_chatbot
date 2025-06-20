@@ -4,9 +4,19 @@ import 'package:ai_chat_bot/data/datasources/remote/gemini/gemini_remote_datasou
 import 'package:ai_chat_bot/domain/entities/llm_text_response_entity.dart';
 import 'package:ai_chat_bot/domain/repositories/llm/llm_repository.dart';
 
+/// Concrete implementation of [LLMRepository] for Gemini AI
+///
+/// Acts as a bridge between the domain layer and Gemini data source
+/// 
+/// Converts data models to domain entities following clean architecture principles
+///
+/// Uses [GeminiRemoteDataSource] for API communication
 class ImplGeminiRepository implements LLMRepository {
   final GeminiRemoteDataSource _remoteDataSource;
 
+  /// Constructor for Gemini repository implementation
+  ///
+  /// [_remoteDataSource] The Gemini data source for API communication
   ImplGeminiRepository(this._remoteDataSource);
 
   @override

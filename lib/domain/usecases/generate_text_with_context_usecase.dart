@@ -4,16 +4,44 @@ import '../entities/llm_text_response_entity.dart';
 import '../entities/chat_message_entity.dart';
 import '../repositories/llm/llm_repository.dart';
 
+/// Use case for generating text responses with conversation context
+///
+/// Enhances LLM responses by including recent conversation history
+/// as context. Provides more coherent and contextually aware responses
+/// compared to simple text generation
+///
+/// Features:
+/// - Automatic context window management (last 10 messages)
+/// - Conversation history formatting
+/// - Context-aware prompt construction
+///
+/// Uses [LLMRepository] for language model communication
 class GenerateTextWithContextUseCase {
   final LLMRepository _llmRepository;
 
+  /// Constructor for generate text with context use case
+  ///
+  /// [_llmRepository] The LLM repository for text generation operations
   GenerateTextWithContextUseCase(this._llmRepository);
 
+  /// Execute the use case to generate contextual text response
+  ///
+  /// Generates an AI response enhanced with conversation context
+  /// [prompt] The current user message
+  /// [context] List of previous chat messages for context
+  /// Returns a stream of [LLMTextResponseEntity] updates with contextual response
   Stream<LLMTextResponseEntity?> call(String prompt, List<ChatMessageEntity> context) {
     final contextualPrompt = _buildContextualPrompt(prompt, context);
     return _llmRepository.generateResponse(contextualPrompt);
   }
 
+  /// Build a contextual prompt including conversation history
+  ///
+  /// Constructs a prompt that includes recent conversation context
+  /// to help the LLM provide more relevant responses
+  /// [prompt] The current user message
+  /// [context] List of previous chat messages
+  /// Returns a formatted prompt with conversation context
   String _buildContextualPrompt(String prompt, List<ChatMessageEntity> context) {
     if (context.isEmpty) {
       return prompt;

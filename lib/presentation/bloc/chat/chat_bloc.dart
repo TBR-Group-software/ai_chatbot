@@ -10,11 +10,93 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 part 'chat_event.dart';
 part 'chat_state.dart';
 
+/// A comprehensive BLoC that manages the main chat interface and AI interactions.
+///
+/// This BLoC orchestrates the complete chat experience including real-time
+/// messaging, AI response generation with memory enhancement, conversation
+/// branching through message editing, and session persistence. It serves as
+/// the central hub for all chat-related operations in the application.
+///
+/// The BLoC integrates multiple advanced features:
+/// * **Memory-Enhanced AI Responses**: Uses relevant memories to provide
+///   contextually aware and personalized AI responses
+/// * **Real-time Streaming**: Displays AI responses as they are generated
+///   for improved user experience
+/// * **Message Editing & Conversation Branching**: Allows users to edit
+///   previous messages and explore different conversation paths
+/// * **Session Persistence**: Automatically saves and restores conversations
+/// * **Error Recovery**: Robust error handling with retry mechanisms
+/// * **Dual Message Format**: Maintains both UI-optimized and domain-optimized
+///   message representations
+///
+/// Architecture integration:
+/// * Uses domain layer use cases for clean architecture compliance
+/// * Integrates with flutter_chat_types for UI compatibility
+/// * Manages both presentation and domain layer message formats
+/// * Coordinates with memory and session management systems
+///
+/// Example usage:
+/// ```dart
+/// // Basic chat interface setup
+/// BlocProvider<ChatBloc>(
+///   create: (context) => GetIt.instance<ChatBloc>(),
+///   child: BlocBuilder<ChatBloc, ChatState>(
+///     builder: (context, state) {
+///       return Chat(
+///         messages: state.messages,
+///         onSendPressed: (message) {
+///           context.read<ChatBloc>().add(
+///             SendMessageEvent(message.text),
+///           );
+///         },
+///         user: const types.User(id: 'user'),
+///       );
+///     },
+///   ),
+/// )
+///
+/// // Load existing conversation
+/// context.read<ChatBloc>().add(
+///   LoadChatSessionEvent('session-123'),
+/// );
+///
+/// // Edit and regenerate conversation
+/// context.read<ChatBloc>().add(
+///   EditAndResendMessageEvent(
+///     messageId: 'msg-456',
+///     newMessageText: 'Tell me more about Flutter widgets',
+///   ),
+/// );
+/// ```
+///
+/// Performance considerations:
+/// * Efficient message list management for large conversations
+/// * Streaming responses reduce perceived latency
+/// * Smart context management prevents memory bloat
+/// * Auto-saving minimizes data loss risk
+///
+/// See also:
+/// * [ChatState] for complete state representation
+/// * [ChatEvent] for available user actions
+/// * [GenerateTextWithMemoryContextUseCase] for AI integration
+/// * [SaveChatSessionUseCase] for persistence
+/// * [types.Message] from flutter_chat_types for UI compatibility
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final GenerateTextWithMemoryContextUseCase _generateTextWithMemoryContextUseCase;
   final SaveChatSessionUseCase _saveChatSessionUseCase;
   final GetChatSessionUseCase _getChatSessionUseCase;
 
+  /// Creates a new [ChatBloc] with required dependencies.
+  ///
+  /// All use case parameters are essential for full functionality:
+  /// * [_generateTextWithMemoryContextUseCase] - Handles AI response generation
+  ///   with memory enhancement and conversation context
+  /// * [_saveChatSessionUseCase] - Manages conversation persistence to storage
+  /// * [_getChatSessionUseCase] - Handles loading of existing conversations
+  ///
+  /// The BLoC initializes with a welcome state and sets up event handlers
+  /// for all supported chat operations including messaging, editing,
+  /// session management, and error recovery.
   ChatBloc(
     this._generateTextWithMemoryContextUseCase,
     this._saveChatSessionUseCase,
@@ -29,6 +111,25 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<RetryLastRequestEvent>(_onRetryLastRequest);
   }
 
+  /// Handles sending new user messages and triggering AI responses.
+  ///
+  /// This method orchestrates the complete message sending flow:
+  /// 1. Validates message content (ignores empty messages)
+  /// 2. Clears any previous error states
+  /// 3. Creates UI-compatible user and bot message objects
+  /// 4. Updates the message list for immediate UI feedback
+  /// 5. Adds the user message to conversation context
+  /// 6. Triggers AI response generation
+  ///
+  /// The process maintains dual message representations:
+  /// * [types.Message] for UI display compatibility
+  /// * [ChatMessageEntity] for domain layer processing
+  ///
+  /// [event] The send message event containing the user's text
+  /// [emit] State emitter for updating the chat interface
+  ///
+  /// Empty or whitespace-only messages are silently ignored to prevent
+  /// unnecessary API calls and maintain conversation quality.
   Future<void> _onSendMessage(SendMessageEvent event, Emitter<ChatState> emit) async {
     if (event.messageText.trim().isEmpty) return;
 
@@ -74,6 +175,28 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     add(GenerateTextEvent(event.messageText));
   }
 
+  /// Handles editing existing messages and regenerating subsequent conversation.
+  ///
+  /// This powerful feature allows users to modify previous messages and
+  /// automatically regenerate all subsequent conversation content, enabling
+  /// conversation branching and experimentation with different approaches.
+  ///
+  /// The editing process involves:
+  /// 1. Validating the new message content
+  /// 2. Locating the target message in the conversation
+  /// 3. Removing all subsequent messages (conversation pruning)
+  /// 4. Updating the target message with new content
+  /// 5. Rebuilding conversation context appropriately
+  /// 6. Triggering AI response generation for the new branch
+  ///
+  /// Both UI and domain message representations are updated consistently
+  /// to maintain data integrity across the application layers.
+  ///
+  /// [event] The edit event containing message ID and new content
+  /// [emit] State emitter for updating the chat interface
+  ///
+  /// If the target message is not found, the operation is silently ignored.
+  /// Empty replacement text is rejected to maintain conversation quality.
   Future<void> _onEditAndResendMessage(EditAndResendMessageEvent event, Emitter<ChatState> emit) async {
     if (event.newMessageText.trim().isEmpty) return;
 
@@ -142,6 +265,31 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     add(GenerateTextEvent(event.newMessageText));
   }
 
+  /// Handles AI text generation with memory enhancement and streaming.
+  ///
+  /// This is the core method for AI response generation, managing the complete
+  /// process from prompt enhancement to real-time streaming display. It
+  /// integrates conversation context, relevant memories, and error recovery
+  /// mechanisms to provide intelligent, contextual responses.
+  ///
+  /// The generation process includes:
+  /// 1. **Retry Logic**: Handles continuation from partial responses
+  /// 2. **Memory Enhancement**: Incorporates relevant stored knowledge
+  /// 3. **Context Integration**: Uses conversation history for coherence
+  /// 4. **Streaming Display**: Updates UI in real-time as text generates
+  /// 5. **Completion Handling**: Finalizes response and triggers auto-save
+  /// 6. **Error Recovery**: Caches partial responses for retry attempts
+  ///
+  /// The method manages both streaming (incomplete) and final (complete)
+  /// responses, updating message status and conversation context accordingly.
+  /// Auto-saving occurs after each complete response to prevent data loss.
+  ///
+  /// [event] The generation event containing prompt and retry information
+  /// [emit] State emitter for updating the chat interface
+  ///
+  /// Errors are handled gracefully with user-friendly messages and retry
+  /// capabilities. Network issues, rate limiting, and API failures are
+  /// categorized for appropriate user feedback.
   Future<void> _onGenerateText(GenerateTextEvent event, Emitter<ChatState> emit) async {
     try {
       String accumulatedText = '';
@@ -233,6 +381,20 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
+  /// Categorizes errors into user-friendly error types for appropriate handling.
+  ///
+  /// Analyzes error messages and exceptions to determine the most likely
+  /// cause and return an appropriate error code for UI display. This
+  /// enables the UI to show specific error messages and recovery options.
+  ///
+  /// Error categories:
+  /// * **rate_limit**: API rate limiting or quota exceeded
+  /// * **connection_failed**: Network connectivity issues
+  /// * **service_unavailable**: Server-side service problems
+  ///
+  /// [error] The caught exception or error object
+  ///
+  /// Returns a standardized error code string for UI handling.
   String _getErrorMessage(dynamic error) {
     final errorString = error.toString().toLowerCase();
     
@@ -257,6 +419,25 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     return 'connection_failed';
   }
 
+  /// Handles retrying the last failed AI generation request.
+  ///
+  /// Attempts to continue or restart the most recent failed AI generation
+  /// using cached context and partial responses. This provides users with
+  /// a seamless recovery experience for temporary failures.
+  ///
+  /// The retry process:
+  /// 1. Validates that a retry-able request exists
+  /// 2. Updates UI state to show retry in progress
+  /// 3. Restores message status to sending state
+  /// 4. Re-triggers generation with retry flag enabled
+  ///
+  /// Retry attempts may use cached partial responses to continue generation
+  /// from where it was interrupted rather than starting completely over.
+  ///
+  /// [event] The retry event (contains no additional parameters)
+  /// [emit] State emitter for updating the chat interface
+  ///
+  /// If no failed request is cached, the operation is silently ignored.
   Future<void> _onRetryLastRequest(RetryLastRequestEvent event, Emitter<ChatState> emit) async {
     if (state.lastFailedPrompt == null) return;
     
@@ -284,6 +465,27 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     add(GenerateTextEvent(state.lastFailedPrompt!, isRetry: true));
   }
 
+  /// Handles loading existing chat sessions from persistent storage.
+  ///
+  /// Retrieves a previously saved conversation and restores its complete
+  /// state including all messages, metadata, and conversation context.
+  /// This enables users to continue previous conversations seamlessly.
+  ///
+  /// The loading process:
+  /// 1. Fetches session data using the provided session ID
+  /// 2. Converts domain messages to UI-compatible format
+  /// 3. Restores conversation context for AI processing
+  /// 4. Updates session metadata (ID, title, status)
+  /// 5. Replaces current chat state with loaded content
+  ///
+  /// Message conversion maintains data integrity while adapting between
+  /// domain and presentation layer requirements.
+  ///
+  /// [event] The load event containing the session ID to restore
+  /// [emit] State emitter for updating the chat interface
+  ///
+  /// If the session is not found or loading fails, an error state is
+  /// emitted with appropriate user feedback.
   Future<void> _onLoadChatSession(LoadChatSessionEvent event, Emitter<ChatState> emit) async {
     try {
       final session = await _getChatSessionUseCase.call(event.sessionId);
@@ -311,6 +513,29 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
+  /// Handles saving the current chat session to persistent storage.
+  ///
+  /// Persists the current conversation state including all messages,
+  /// metadata, and session information. This operation typically occurs
+  /// automatically after complete AI responses or manually through
+  /// user actions.
+  ///
+  /// The saving process:
+  /// 1. Validates that saveable content exists
+  /// 2. Generates or reuses session ID for identification
+  /// 3. Creates or updates session title from conversation content
+  /// 4. Constructs complete session entity with metadata
+  /// 5. Persists to storage via use case
+  /// 6. Updates local state with session information
+  ///
+  /// Auto-generated titles are derived from the first user message,
+  /// truncated appropriately for display purposes.
+  ///
+  /// [event] The save event (contains no additional parameters)
+  /// [emit] State emitter for updating the chat interface
+  ///
+  /// Empty conversations are not saved to prevent unnecessary storage
+  /// usage. Save failures emit error states with user feedback.
   Future<void> _onSaveChatSession(SaveChatSessionEvent event, Emitter<ChatState> emit) async {
     try {
       if (state.contextMessages.isNotEmpty) {
@@ -338,10 +563,43 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
+  /// Handles creating a new chat session with fresh state.
+  ///
+  /// Resets the chat interface to its initial state, clearing all messages,
+  /// context, and session information. This provides users with a clean
+  /// slate for starting new conversations.
+  ///
+  /// The reset includes:
+  /// * All messages cleared except welcome message
+  /// * Conversation context reset
+  /// * Session metadata cleared
+  /// * Error states cleared
+  /// * Loading states reset
+  ///
+  /// [event] The new session event (contains no additional parameters)
+  /// [emit] State emitter for updating the chat interface
+  ///
+  /// This operation is immediate and does not involve any persistence
+  /// operations. Current unsaved conversation content will be lost.
   Future<void> _onCreateNewSession(CreateNewSessionEvent event, Emitter<ChatState> emit) async {
     emit(ChatState.initial());
   }
 
+  /// Generates a user-friendly session title from conversation content.
+  ///
+  /// Creates an appropriate title for the chat session based on the first
+  /// user message in the conversation. Titles are truncated to maintain
+  /// reasonable display length in session lists and navigation.
+  ///
+  /// Title generation logic:
+  /// * Uses the first user message as the base
+  /// * Truncates to 30 characters with ellipsis if needed
+  /// * Falls back to "New Chat" if no suitable content exists
+  /// * Handles empty messages gracefully
+  ///
+  /// [messages] The conversation context messages to analyze
+  ///
+  /// Returns a human-readable title string suitable for UI display.
   String _generateSessionTitle(List<ChatMessageEntity> messages) {
     final firstUserMessage = messages.firstWhere(
       (msg) => msg.isUser,

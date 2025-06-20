@@ -7,14 +7,166 @@ import '../../../bloc/voice_recording/voice_recording_bloc.dart';
 import 'package:ai_chat_bot/core/dependency_injection/dependency_injection.dart'
     as di;
 
+/// A comprehensive chat input widget that provides multi-modal message composition capabilities.
+///
+/// This sophisticated input widget serves as the primary interface for users to compose
+/// and send messages in the chat interface. It supports both text input and voice
+/// recording, with advanced features for message editing and contextual feedback.
+/// The widget integrates seamlessly with the chat system and provides an intuitive
+/// user experience across different input modalities.
+///
+/// Key capabilities:
+/// * **Text Composition**: Multi-line text field with automatic height adjustment
+/// * **Voice Input**: Long-press voice recording with drag-to-cancel functionality
+/// * **Edit Mode**: Visual indicators and specialized behavior for message editing
+/// * **Send Actions**: Integrated send button with immediate message dispatch
+/// * **Cancellation**: User-friendly cancellation for both text and voice inputs
+/// * **Accessibility**: Proper focus management and gesture handling
+///
+/// Input modes:
+/// * **Text Mode**: Standard text input with expandable field
+/// * **Voice Mode**: Long-press recording with visual feedback modal
+/// * **Edit Mode**: Specialized interface for modifying existing messages
+///
+/// Example usage:
+/// ```dart
+/// // Basic chat input widget
+/// class ChatPage extends StatefulWidget {
+///   @override
+///   _ChatPageState createState() => _ChatPageState();
+/// }
+///
+/// class _ChatPageState extends State<ChatPage> {
+///   final TextEditingController _controller = TextEditingController();
+///   final FocusNode _focusNode = FocusNode();
+///   bool _isEditing = false;
+///   String? _editingHint;
+///
+///   @override
+///   Widget build(BuildContext context) {
+///     return Scaffold(
+///       body: Column(
+///         children: [
+///           Expanded(child: ChatMessagesList()),
+///           ChatInputWidget(
+///             controller: _controller,
+///             focusNode: _focusNode,
+///             isEditing: _isEditing,
+///             editingHint: _editingHint,
+///             onSend: _handleSendMessage,
+///             onCancelEdit: _handleCancelEdit,
+///           ),
+///         ],
+///       ),
+///     );
+///   }
+///
+///   void _handleSendMessage() {
+///     final text = _controller.text.trim();
+///     if (text.isNotEmpty) {
+///       if (_isEditing) {
+///         _updateMessage(text);
+///       } else {
+///         _sendNewMessage(text);
+///       }
+///       _controller.clear();
+///       _exitEditMode();
+///     }
+///   }
+///
+///   void _handleCancelEdit() {
+///     setState(() {
+///       _isEditing = false;
+///       _editingHint = null;
+///     });
+///   }
+/// }
+///
+/// // Voice recording integration
+/// ChatInputWidget(
+///   controller: messageController,
+///   focusNode: messageFocus,
+///   onSend: () {
+///     context.read<ChatBloc>().add(
+///       SendMessageEvent(messageController.text),
+///     );
+///     messageController.clear();
+///   },
+/// )
+/// ```
+///
+///
+/// See also:
+/// * [VoiceRecordingBottomModal] for voice recording interface
+/// * [VoiceRecordingBloc] for voice recording state management
+/// * [_VoiceLongPressButton] for voice input handling
 class ChatInputWidget extends StatefulWidget {
+  /// Text editing controller for the input field.
+  ///
+  /// This controller manages the text content of the input field and should
+  /// be managed by the parent widget. The controller is used for both
+  /// regular message composition and message editing scenarios.
+  ///
+  /// The parent should clear the controller after successful message sending.
   final TextEditingController controller;
+  
+  /// Callback invoked when the send button is pressed or a voice message is complete.
+  ///
+  /// This callback should handle the message sending logic, including validation,
+  /// BLoC event dispatch, and any necessary UI updates. The callback is triggered
+  /// by both text message sending and voice message completion.
+  ///
+  /// For text messages, the controller's text should be retrieved and processed.
+  /// For voice messages, the text is automatically populated in the controller
+  /// before this callback is invoked.
   final VoidCallback onSend;
+  
+  /// Focus node for the text input field.
+  ///
+  /// This focus node should be managed by the parent widget and is used for
+  /// controlling keyboard visibility and input focus. Proper focus management
+  /// ensures a smooth user experience during chat interactions.
   final FocusNode focusNode;
+  
+  /// Whether the widget is in message editing mode.
+  ///
+  /// When true, the widget displays an editing indicator bar and modifies
+  /// the input placeholder text. The voice recording button is hidden during
+  /// editing mode to focus on text-based editing.
+  ///
+  /// Defaults to false for normal message composition.
   final bool isEditing;
+  
+  /// Hint text displayed in the editing mode indicator.
+  ///
+  /// This optional text provides context about what is being edited,
+  /// such as showing a preview of the original message content. When null,
+  /// a default "Editing message" text is displayed.
+  ///
+  /// Only relevant when [isEditing] is true.
   final String? editingHint;
+  
+  /// Callback invoked when the user cancels message editing.
+  ///
+  /// This optional callback is triggered when the user taps the close button
+  /// in the editing mode indicator. The parent should handle exiting edit mode
+  /// and restoring the normal chat input state.
+  ///
+  /// If null, the close button is not displayed in edit mode.
   final VoidCallback? onCancelEdit;
 
+  /// Creates a chat input widget.
+  ///
+  /// The [controller], [onSend], and [focusNode] parameters are required
+  /// for basic functionality. The editing-related parameters are optional
+  /// and enable advanced message editing capabilities.
+  ///
+  /// [controller] Text editing controller for input management
+  /// [onSend] Callback for handling message sending
+  /// [focusNode] Focus node for input field control
+  /// [isEditing] Whether the widget is in editing mode (defaults to false)
+  /// [editingHint] Optional hint text for editing mode
+  /// [onCancelEdit] Optional callback for cancelling edit mode
   const ChatInputWidget({
     super.key,
     required this.controller,

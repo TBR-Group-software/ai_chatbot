@@ -6,15 +6,40 @@ import '../entities/memory_item_entity.dart';
 import '../repositories/llm/llm_repository.dart';
 import 'get_relevant_memory_for_context_usecase.dart';
 
+/// Use case for generating text responses with memory-enhanced context
+///
+/// Provides the most advanced text generation by combining relevant memories
+/// with conversation context. Creates highly personalized and contextually
+/// aware AI responses based on stored knowledge
+///
+/// Features:
+/// - Intelligent memory retrieval based on prompt relevance
+/// - Conversation context integration
+/// - Enhanced prompt construction with memory knowledge
+/// - Personalized response generation
+///
+/// Uses [LLMRepository] for language model communication
+/// and [GetRelevantMemoryForContextUseCase] for memory retrieval
 class GenerateTextWithMemoryContextUseCase {
   final LLMRepository _llmRepository;
   final GetRelevantMemoryForContextUseCase _getRelevantMemoryUseCase;
 
+  /// Constructor for generate text with memory context use case
+  ///
+  /// [_llmRepository] The LLM repository for text generation operations
+  /// [_getRelevantMemoryUseCase] Use case for retrieving relevant memories
   GenerateTextWithMemoryContextUseCase(
     this._llmRepository,
     this._getRelevantMemoryUseCase,
   );
 
+  /// Execute the use case to generate memory-enhanced text response
+  ///
+  /// Generates AI responses enhanced with both relevant memories and
+  /// conversation context for maximum personalization and relevance
+  /// [prompt] The current user message
+  /// [chatContext] List of previous chat messages for context
+  /// Returns a stream of [LLMTextResponseEntity] updates with enhanced response
   Stream<LLMTextResponseEntity?> call(
     String prompt,
     List<ChatMessageEntity> chatContext,
@@ -29,6 +54,16 @@ class GenerateTextWithMemoryContextUseCase {
     yield* _llmRepository.generateResponse(enhancedPrompt);
   }
 
+  /// Build an enhanced prompt with memory knowledge and conversation context
+  ///
+  /// Creates a comprehensive prompt that includes:
+  /// - Relevant memories from the knowledge base
+  /// - Recent conversation history
+  /// - Current user message
+  /// [prompt] The current user message
+  /// [chatContext] List of previous chat messages
+  /// [memories] List of relevant memory items
+  /// Returns a formatted prompt with comprehensive context
   String _buildEnhancedPrompt(
     String prompt,
     List<ChatMessageEntity> chatContext,
