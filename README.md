@@ -4,13 +4,15 @@
 </div>
 
 ## About the project
+
+<div align = "center">
 **Chatty** is a sophisticated, clean-architecture Flutter-based AI chatbot designed to be a versatile and powerful conversational AI interface. 
 <br>
 It allows developers to connect to any model's API, making it a flexible foundation for various AI-driven applications. 
 <br> 
 The project is built with a strong emphasis on testability, scalability, and maintainability by adhering to Clean Architecture principles. 
 <br> 
-It showcases a rich set of features, including real-time response streaming, voice-to-text input, and advanced, custom-built UI components, serving as an excellent example of a modern, production-quality Flutter application.
+</div>
 
 <div align="center">
 <img src="demo_images/edit_gif.gif" alt="EditDemo" width="250"/>
