@@ -149,7 +149,7 @@ class AudioWaveformPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
-
+```
 ### 2. Custom Cupertino-Style Dropdown Menu
 
 To enhance the user experience, the application features a custom-built, animated dropdown menu that appears when a user long-presses a message. This widget is a great example of advanced UI/UX implementation in Flutter.
@@ -251,7 +251,7 @@ class _MessageBubble extends StatelessWidget {
 ```
 
 
-```
+
 
 ### 3. End-to-End Streaming Data Flow
 
