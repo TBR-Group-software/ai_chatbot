@@ -7,9 +7,6 @@ part of 'home_bloc.dart';
 ///
 /// Used to manage UI state for displaying recent conversation history
 class HomeState {
-  final List<ChatSessionEntity> recentSessions;
-  final bool isLoading;
-  final String? error;
 
   /// Constructor for home state
   ///
@@ -30,6 +27,9 @@ class HomeState {
         recentSessions: [],
         isLoading: false,
       );
+  final List<ChatSessionEntity> recentSessions;
+  final bool isLoading;
+  final String? error;
 
   /// Create a copy of the current state with optional modifications
   ///

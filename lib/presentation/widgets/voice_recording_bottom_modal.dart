@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../core/theme/app_theme.dart';
-import '../bloc/voice_recording/voice_recording_bloc.dart';
-import 'circular_icon_button.dart';
-import 'voice_recording_controls.dart';
+import 'package:ai_chat_bot/core/theme/app_theme.dart';
+import 'package:ai_chat_bot/presentation/bloc/voice_recording/voice_recording_bloc.dart';
+import 'package:ai_chat_bot/presentation/widgets/circular_icon_button.dart';
+import 'package:ai_chat_bot/presentation/widgets/voice_recording_controls.dart';
 
 /// Modern bottom modal for voice recording with real-time audio visualization
 /// Follows clean architecture and project design patterns
 class VoiceRecordingBottomModal extends StatefulWidget {
-  final void Function(String text)? onComplete;
-  final VoidCallback? onCancel;
-  final VoiceRecordingBloc voiceBloc;
 
   const VoiceRecordingBottomModal({
     super.key,
@@ -19,6 +16,9 @@ class VoiceRecordingBottomModal extends StatefulWidget {
     this.onComplete,
     this.onCancel,
   });
+  final void Function(String text)? onComplete;
+  final VoidCallback? onCancel;
+  final VoiceRecordingBloc voiceBloc;
 
   @override
   State<VoiceRecordingBottomModal> createState() =>
@@ -125,7 +125,6 @@ class _VoiceRecordingBottomModalState extends State<VoiceRecordingBottomModal>
             bloc: widget.voiceBloc,
             builder: (context, state) {
               return Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // Cancel button
                   CircularIconButton(
@@ -133,7 +132,6 @@ class _VoiceRecordingBottomModalState extends State<VoiceRecordingBottomModal>
                     backgroundColor: customColors.cancelButtonBackground,
                     iconColor: Colors.white,
                     onTap: _handleCancel,
-                    isLoading: false,
                   ),
                   const SizedBox(width: 24),
                   // Waveform and timer
@@ -148,7 +146,7 @@ class _VoiceRecordingBottomModalState extends State<VoiceRecordingBottomModal>
                   GestureDetector(
                     onTap: _handleStop,
                     child: Container(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(10),
                       width: 56,
                       height: 56,
                       decoration: BoxDecoration(

@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ErrorInfoEntity {
-  final String title;
-  final String description;
-  final IconData icon;
-  final bool canRetry;
 
   ErrorInfoEntity({
     required this.title,
@@ -12,4 +8,8 @@ class ErrorInfoEntity {
     required this.icon,
     required this.canRetry,
   });
+  final String title;
+  final String description;
+  final IconData icon;
+  final bool canRetry;
 } 

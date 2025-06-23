@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import '../bloc/voice_recording/voice_recording_bloc.dart';
+import 'package:ai_chat_bot/presentation/bloc/voice_recording/voice_recording_bloc.dart';
 
 /// Status text widget that displays recording state information
 class StatusText extends StatelessWidget {
-  final VoiceRecordingState state;
-  final ThemeData theme;
 
   const StatusText({
     super.key,
     required this.state,
     required this.theme,
   });
+  final VoiceRecordingState state;
+  final ThemeData theme;
 
   @override
   Widget build(BuildContext context) {

@@ -2,9 +2,9 @@ import 'package:ai_chat_bot/presentation/bloc/chat/chat_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../widgets/chat_app_bar.dart';
-import 'widget/chat_input_widget.dart';
-import 'widget/chat_message_widget.dart';
+import 'package:ai_chat_bot/presentation/widgets/chat_app_bar.dart';
+import 'package:ai_chat_bot/presentation/pages/chat/widget/chat_input_widget.dart';
+import 'package:ai_chat_bot/presentation/pages/chat/widget/chat_message_widget.dart';
 import 'package:ai_chat_bot/core/dependency_injection/dependency_injection.dart'
     as di;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -52,13 +52,15 @@ class _ChatPageState extends State<ChatPage> {
     _inputFieldFocusNode.unfocus();
 
     final messageText = _messageController.text.trim();
-    if (messageText.isEmpty) return;
+    if (messageText.isEmpty) {
+      return;
+    }
 
     if (_isEditing && _editingMessageId != null) {
       _chatBloc.add(EditAndResendMessageEvent(_editingMessageId!, messageText));
       _cancelEdit();
     } else {
-    _chatBloc.add(SendMessageEvent(messageText));
+      _chatBloc.add(SendMessageEvent(messageText));
     }
     
     _messageController.clear();

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import '../entities/llm_text_response_entity.dart';
-import '../entities/chat_message_entity.dart';
-import '../repositories/llm/llm_repository.dart';
+import 'package:ai_chat_bot/domain/entities/llm_text_response_entity.dart';
+import 'package:ai_chat_bot/domain/entities/chat_message_entity.dart';
+import 'package:ai_chat_bot/domain/repositories/llm/llm_repository.dart';
 
 /// Use case for generating text responses with conversation context
 ///
@@ -17,12 +17,12 @@ import '../repositories/llm/llm_repository.dart';
 ///
 /// Uses [LLMRepository] for language model communication
 class GenerateTextWithContextUseCase {
-  final LLMRepository _llmRepository;
 
   /// Constructor for generate text with context use case
   ///
   /// [_llmRepository] The LLM repository for text generation operations
   GenerateTextWithContextUseCase(this._llmRepository);
+  final LLMRepository _llmRepository;
 
   /// Execute the use case to generate contextual text response
   ///
@@ -53,14 +53,15 @@ class GenerateTextWithContextUseCase {
         : context;
 
     final contextString = recentContext.map((msg) => 
-      "${msg.isUser ? 'User' : 'Assistant'}: ${msg.content}"
+      "${msg.isUser ? 'User' : 'Assistant'}: ${msg.content}",
     ).join('\n');
 
-    return """Previous conversation:
+    return '''
+Previous conversation:
 $contextString
 
 Current user message: $prompt
 
-Please respond considering the conversation context above.""";
+Please respond considering the conversation context above.''';
   }
 } 

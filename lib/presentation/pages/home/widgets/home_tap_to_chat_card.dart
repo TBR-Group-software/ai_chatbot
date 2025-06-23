@@ -64,9 +64,9 @@ class HomeTapToChatCard extends StatelessWidget {
                   ),
 
                   Flexible(
-                    child: Container(
+                    child: DecoratedBox(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           bottomLeft: Radius.circular(8),
                           bottomRight: Radius.circular(8),
                           topRight: Radius.circular(8),
@@ -74,7 +74,7 @@ class HomeTapToChatCard extends StatelessWidget {
                         color: customColors?.almond2,
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8),
                         child: Text(
                           'Ask me any questions you have. I can answer all questions and talk to you',
                           style: theme.textTheme.bodyMedium?.copyWith(

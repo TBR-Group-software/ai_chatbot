@@ -27,13 +27,9 @@ void main() {
         final mockGeminiResponses = [
           const GeminiTextResponse(
             output: 'Flutter is a',
-            isComplete: false,
-            finishReason: null,
           ),
           const GeminiTextResponse(
             output: ' powerful UI',
-            isComplete: false,
-            finishReason: null,
           ),
           const GeminiTextResponse(
             output: ' toolkit',
@@ -76,8 +72,6 @@ void main() {
         final mockResponsesWithNulls = [
           const GeminiTextResponse(
             output: 'Valid response',
-            isComplete: false,
-            finishReason: null,
           ),
           null, // Null response
           const GeminiTextResponse(
@@ -148,8 +142,6 @@ void main() {
         final emptyResponses = [
           const GeminiTextResponse(
             output: '',
-            isComplete: false,
-            finishReason: null,
           ),
           const GeminiTextResponse(
             output: '',
@@ -186,7 +178,7 @@ void main() {
         final stream = repository.generateResponse(testPrompt);
         
         expect(
-          () => stream.toList(),
+          stream.toList,
           throwsA(isA<Exception>()),
         );
 
@@ -199,8 +191,6 @@ void main() {
             .thenAnswer((_) async* {
               yield const GeminiTextResponse(
                 output: 'First response',
-                isComplete: false,
-                finishReason: null,
               );
               
               yield* Stream.error(Exception('Temporary error'));
@@ -210,7 +200,7 @@ void main() {
         final stream = repository.generateResponse(testPrompt);
         
         expect(
-          () => stream.toList(),
+          stream.toList,
           throwsA(isA<Exception>()),
         );
 
@@ -284,7 +274,7 @@ void main() {
       test('should handle special characters and unicode in responses', () async {
         // Arrange
         const specialText = 'Hello 🌍! This is a test with émojis and ñon-ASCII characters: 你好';
-        final specialResponse = GeminiTextResponse(
+        const specialResponse = GeminiTextResponse(
           output: specialText,
           isComplete: true,
           finishReason: 'STOP',
@@ -332,9 +322,7 @@ void main() {
       test('should handle null output in GeminiTextResponse', () async {
         // Arrange
         const geminiResponse = GeminiTextResponse(
-          output: null,
-          isComplete: false,
-          finishReason: null,
+          
         );
 
         when(() => mockGeminiRemoteDataSource.streamGenerateContent(any()))
@@ -358,15 +346,15 @@ void main() {
       test('should handle complete conversation flow', () async {
         // Arrange - Simulate a complete AI response generation
         final conversationFlow = [
-          const GeminiTextResponse(output: 'I', isComplete: false),
-          const GeminiTextResponse(output: ' understand', isComplete: false),
-          const GeminiTextResponse(output: ' your', isComplete: false),
-          const GeminiTextResponse(output: ' question', isComplete: false),
-          const GeminiTextResponse(output: '.', isComplete: false),
-          const GeminiTextResponse(output: ' Let', isComplete: false),
-          const GeminiTextResponse(output: ' me', isComplete: false),
-          const GeminiTextResponse(output: ' help', isComplete: false),
-          const GeminiTextResponse(output: ' you', isComplete: false),
+          const GeminiTextResponse(output: 'I'),
+          const GeminiTextResponse(output: ' understand'),
+          const GeminiTextResponse(output: ' your'),
+          const GeminiTextResponse(output: ' question'),
+          const GeminiTextResponse(output: '.'),
+          const GeminiTextResponse(output: ' Let'),
+          const GeminiTextResponse(output: ' me'),
+          const GeminiTextResponse(output: ' help'),
+          const GeminiTextResponse(output: ' you'),
           const GeminiTextResponse(output: '.', isComplete: true, finishReason: 'STOP'),
         ];
 

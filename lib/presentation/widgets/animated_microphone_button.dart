@@ -1,6 +1,7 @@
+import 'package:ai_chat_bot/presentation/widgets/voice_recording_button.dart' show VoiceRecordingButton;
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-import '../bloc/voice_recording/voice_recording_bloc.dart';
+import 'package:ai_chat_bot/core/theme/app_theme.dart';
+import 'package:ai_chat_bot/presentation/bloc/voice_recording/voice_recording_bloc.dart';
 
 /// Enumeration defining the visual states of the recording button.
 ///
@@ -94,6 +95,28 @@ enum RecordingButtonState {
 /// * [CustomColors] for theme integration
 /// * [RecordingButtonState] for visual state enumeration
 class AnimatedMicrophoneButton extends StatelessWidget {
+
+  /// Creates an animated microphone button widget.
+  ///
+  /// All parameters are required to ensure proper functionality and
+  /// animation behavior. The widget relies on external animation
+  /// controllers and state management for its operation.
+  ///
+  /// [state] Current voice recording state for visual determination
+  /// [pulseAnimation] Animation for pulsing effect during recording
+  /// [scaleAnimation] Animation for press feedback
+  /// [onTap] Callback for primary button interaction
+  /// [onLongPressStart] Callback for long press start
+  /// [onLongPressEnd] Callback for long press end
+  const AnimatedMicrophoneButton({
+    super.key,
+    required this.state,
+    required this.pulseAnimation,
+    required this.scaleAnimation,
+    required this.onTap,
+    required this.onLongPressStart,
+    required this.onLongPressEnd,
+  });
   /// The current voice recording state from the BLoC.
   ///
   /// This state object contains all the information needed to determine
@@ -159,28 +182,6 @@ class AnimatedMicrophoneButton extends StatelessWidget {
   /// the long press. It's called when the long press gesture is released.
   final VoidCallback onLongPressEnd;
 
-  /// Creates an animated microphone button widget.
-  ///
-  /// All parameters are required to ensure proper functionality and
-  /// animation behavior. The widget relies on external animation
-  /// controllers and state management for its operation.
-  ///
-  /// [state] Current voice recording state for visual determination
-  /// [pulseAnimation] Animation for pulsing effect during recording
-  /// [scaleAnimation] Animation for press feedback
-  /// [onTap] Callback for primary button interaction
-  /// [onLongPressStart] Callback for long press start
-  /// [onLongPressEnd] Callback for long press end
-  const AnimatedMicrophoneButton({
-    super.key,
-    required this.state,
-    required this.pulseAnimation,
-    required this.scaleAnimation,
-    required this.onTap,
-    required this.onLongPressStart,
-    required this.onLongPressEnd,
-  });
-
   /// Determines the current visual state of the button based on recording state.
   ///
   /// This computed property maps the complex [VoiceRecordingState] to a
@@ -192,8 +193,12 @@ class AnimatedMicrophoneButton extends StatelessWidget {
   /// * Active recording → [RecordingButtonState.recording]
   /// * All other states → [RecordingButtonState.idle]
   RecordingButtonState get _buttonState {
-    if (state.isProcessing) return RecordingButtonState.processing;
-    if (state.isRecording) return RecordingButtonState.recording;
+    if (state.isProcessing) {
+      return RecordingButtonState.processing;
+    }
+    if (state.isRecording) {
+      return RecordingButtonState.recording;
+    }
     return RecordingButtonState.idle;
   }
 

@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:math';
 
-import '../datasources/local/hive_storage/hive_storage_local_datasource.dart';
-import '../models/hive_storage/hive_memory_item.dart';
-import '../../domain/entities/memory_item_entity.dart';
-import '../../domain/repositories/memory/memory_repository.dart';
+import 'package:ai_chat_bot/data/datasources/local/hive_storage/hive_storage_local_datasource.dart';
+import 'package:ai_chat_bot/data/models/hive_storage/hive_memory_item.dart';
+import 'package:ai_chat_bot/domain/entities/memory_item_entity.dart';
+import 'package:ai_chat_bot/domain/repositories/memory/memory_repository.dart';
 
 /// Concrete implementation of [MemoryRepository]
 ///
@@ -18,13 +18,13 @@ import '../../domain/repositories/memory/memory_repository.dart';
 /// - Jaccard similarity algorithms for content matching
 /// - Recency-based scoring boosts
 class ImplMemoryRepository implements MemoryRepository {
-  final HiveStorageLocalDataSource _hiveStorageLocalDataSource;
-  final StreamController<List<MemoryItemEntity>> _memoryStreamController = StreamController<List<MemoryItemEntity>>.broadcast();
 
   /// Constructor for memory repository implementation
   ///
   /// [_hiveStorageLocalDataSource] The local data source for memory persistence
   ImplMemoryRepository(this._hiveStorageLocalDataSource);
+  final HiveStorageLocalDataSource _hiveStorageLocalDataSource;
+  final StreamController<List<MemoryItemEntity>> _memoryStreamController = StreamController<List<MemoryItemEntity>>.broadcast();
 
   @override
   Future<List<MemoryItemEntity>> getAllMemoryItems() async {
@@ -139,7 +139,7 @@ class ImplMemoryRepository implements MemoryRepository {
     final daysSinceUpdate = DateTime.now().difference(item.updatedAt).inDays;
     final recencyBonus = max(0, (30 - daysSinceUpdate) / 30 * 0.1); // Up to 10% bonus for items updated within 30 days
 
-    return min(1.0, combinedScore + recencyBonus);
+    return min(1, combinedScore + recencyBonus);
   }
 
   /// Extract meaningful words from text, removing common stop words
@@ -170,7 +170,9 @@ class ImplMemoryRepository implements MemoryRepository {
   /// Uses intersection over union formula: |A ∩ B| / |A ∪ B|
   /// Returns similarity score between 0.0 and 1.0
   double _calculateJaccardSimilarity(List<String> set1, List<String> set2) {
-    if (set1.isEmpty && set2.isEmpty) return 0.0;
+    if (set1.isEmpty && set2.isEmpty) {
+      return 0;
+    }
     
     final intersection = set1.toSet().intersection(set2.toSet()).length;
     final union = set1.toSet().union(set2.toSet()).length;
@@ -189,9 +191,11 @@ class ImplMemoryRepository implements MemoryRepository {
   /// 
   /// Returns normalized similarity score
   double _calculateTagSimilarity(List<String> queryWords, List<String> tags) {
-    if (tags.isEmpty) return 0.0;
+    if (tags.isEmpty) {
+      return 0;
+    }
     
-    double score = 0.0;
+    double score = 0;
     for (final tag in tags) {
       for (final word in queryWords) {
         if (tag.contains(word) || word.contains(tag)) {
@@ -200,7 +204,7 @@ class ImplMemoryRepository implements MemoryRepository {
       }
     }
     
-    return min(1.0, score / queryWords.length);
+    return min(1, score / queryWords.length);
   }
 
   /// Notify listeners about memory updates
@@ -219,4 +223,4 @@ class ImplMemoryRepository implements MemoryRepository {
   void dispose() {
     _memoryStreamController.close();
   }
-} 
+}

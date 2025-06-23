@@ -54,6 +54,96 @@ part of 'voice_recording_bloc.dart';
 /// * [VoiceRecordingEvent] for available actions
 /// * [VoiceRecordingEntity] for domain layer data structure
 class VoiceRecordingState {
+
+  /// Creates a new voice recording state.
+  ///
+  /// All parameters are required to ensure complete state representation.
+  /// Use the factory constructors [initial] and [completed] for common
+  /// state configurations, or [copyWith] for incremental updates.
+  ///
+  /// Parameters:
+  /// * [isInitializing] - Whether the system is currently initializing
+  /// * [isRecording] - Whether recording is currently active
+  /// * [isListening] - Whether speech recognition is actively listening
+  /// * [isStopping] - Whether stop operation is in progress
+  /// * [isCancelling] - Whether cancellation is in progress
+  /// * [soundLevel] - Current audio input level (0.0 to 1.0)
+  /// * [recognizedText] - Current recognized text from speech-to-text
+  /// * [recordingDuration] - Duration of current recording session
+  /// * [error] - Optional error message for user feedback
+  /// * [isCompleted] - Whether recording has been completed successfully
+  const VoiceRecordingState({
+    required this.isInitializing,
+    required this.isRecording,
+    required this.isListening,
+    required this.isStopping,
+    required this.isCancelling,
+    required this.soundLevel,
+    required this.recognizedText,
+    required this.recordingDuration,
+    this.error,
+    required this.isCompleted,
+  });
+
+  /// Creates the initial voice recording state.
+  ///
+  /// This factory constructor provides the default state when no recording
+  /// is active. All operational flags are false, audio data is at zero/empty,
+  /// and no errors are present.
+  ///
+  /// This state represents a clean slate where the user can initiate
+  /// a new recording session.
+  ///
+  /// Returns a [VoiceRecordingState] configured for initial use:
+  /// * All operation flags set to false
+  /// * Audio data reset to default values
+  /// * No error messages
+  /// * Ready for new recording session
+  factory VoiceRecordingState.initial() {
+    return const VoiceRecordingState(
+      isInitializing: false,
+      isRecording: false,
+      isListening: false,
+      isStopping: false,
+      isCancelling: false,
+      soundLevel: 0,
+      recognizedText: '',
+      recordingDuration: Duration.zero,
+      isCompleted: false,
+    );
+  }
+
+  /// Creates a completed recording state with final text.
+  ///
+  /// This factory constructor creates a state representing a successfully
+  /// completed recording session. The [finalText] parameter contains the
+  /// final recognized text from the entire recording session.
+  ///
+  /// The completed state has all operational flags set to false and
+  /// audio data reset, but retains the final recognized text and
+  /// sets the completion flag to true.
+  ///
+  /// [finalText] The final recognized text from the completed recording
+  ///
+  /// Returns a [VoiceRecordingState] representing successful completion:
+  /// * All operation flags set to false
+  /// * [isCompleted] set to true
+  /// * [recognizedText] contains the final text
+  /// * Audio data reset to default values
+  /// * No error messages
+  factory VoiceRecordingState.completed(String finalText) {
+    return VoiceRecordingState(
+      isInitializing: false,
+      isRecording: false,
+      isListening: false,
+      isStopping: false,
+      isCancelling: false,
+      soundLevel: 0,
+      recognizedText: finalText,
+      recordingDuration: Duration.zero,
+      isCompleted: true,
+    );
+  }
   /// Whether the recording system is currently initializing.
   ///
   /// This flag is true during the initial setup phase when the BLoC
@@ -133,98 +223,6 @@ class VoiceRecordingState {
   /// and final text has been captured. It's used to trigger UI
   /// transitions and handle the completed recording result.
   final bool isCompleted;
-
-  /// Creates a new voice recording state.
-  ///
-  /// All parameters are required to ensure complete state representation.
-  /// Use the factory constructors [initial] and [completed] for common
-  /// state configurations, or [copyWith] for incremental updates.
-  ///
-  /// Parameters:
-  /// * [isInitializing] - Whether the system is currently initializing
-  /// * [isRecording] - Whether recording is currently active
-  /// * [isListening] - Whether speech recognition is actively listening
-  /// * [isStopping] - Whether stop operation is in progress
-  /// * [isCancelling] - Whether cancellation is in progress
-  /// * [soundLevel] - Current audio input level (0.0 to 1.0)
-  /// * [recognizedText] - Current recognized text from speech-to-text
-  /// * [recordingDuration] - Duration of current recording session
-  /// * [error] - Optional error message for user feedback
-  /// * [isCompleted] - Whether recording has been completed successfully
-  const VoiceRecordingState({
-    required this.isInitializing,
-    required this.isRecording,
-    required this.isListening,
-    required this.isStopping,
-    required this.isCancelling,
-    required this.soundLevel,
-    required this.recognizedText,
-    required this.recordingDuration,
-    this.error,
-    required this.isCompleted,
-  });
-
-  /// Creates the initial voice recording state.
-  ///
-  /// This factory constructor provides the default state when no recording
-  /// is active. All operational flags are false, audio data is at zero/empty,
-  /// and no errors are present.
-  ///
-  /// This state represents a clean slate where the user can initiate
-  /// a new recording session.
-  ///
-  /// Returns a [VoiceRecordingState] configured for initial use:
-  /// * All operation flags set to false
-  /// * Audio data reset to default values
-  /// * No error messages
-  /// * Ready for new recording session
-  factory VoiceRecordingState.initial() {
-    return const VoiceRecordingState(
-      isInitializing: false,
-      isRecording: false,
-      isListening: false,
-      isStopping: false,
-      isCancelling: false,
-      soundLevel: 0.0,
-      recognizedText: '',
-      recordingDuration: Duration.zero,
-      error: null,
-      isCompleted: false,
-    );
-  }
-
-  /// Creates a completed recording state with final text.
-  ///
-  /// This factory constructor creates a state representing a successfully
-  /// completed recording session. The [finalText] parameter contains the
-  /// final recognized text from the entire recording session.
-  ///
-  /// The completed state has all operational flags set to false and
-  /// audio data reset, but retains the final recognized text and
-  /// sets the completion flag to true.
-  ///
-  /// [finalText] The final recognized text from the completed recording
-  ///
-  /// Returns a [VoiceRecordingState] representing successful completion:
-  /// * All operation flags set to false
-  /// * [isCompleted] set to true
-  /// * [recognizedText] contains the final text
-  /// * Audio data reset to default values
-  /// * No error messages
-  factory VoiceRecordingState.completed(String finalText) {
-    return VoiceRecordingState(
-      isInitializing: false,
-      isRecording: false,
-      isListening: false,
-      isStopping: false,
-      isCancelling: false,
-      soundLevel: 0.0,
-      recognizedText: finalText,
-      recordingDuration: Duration.zero,
-      error: null,
-      isCompleted: true,
-    );
-  }
 
   /// Creates a copy of this state with modified properties.
   ///

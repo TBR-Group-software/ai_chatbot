@@ -1,5 +1,5 @@
-import '../entities/chat_session_entity.dart';
-import '../repositories/chat_history/chat_history_repository.dart';
+import 'package:ai_chat_bot/domain/entities/chat_session_entity.dart';
+import 'package:ai_chat_bot/domain/repositories/chat_history/chat_history_repository.dart';
 
 /// Use case for saving chat sessions to persistent storage
 ///
@@ -8,12 +8,12 @@ import '../repositories/chat_history/chat_history_repository.dart';
 ///
 /// Uses [ChatHistoryRepository] for chat session persistence operations
 class SaveChatSessionUseCase {
-  final ChatHistoryRepository _repository;
 
   /// Constructor for save chat session use case
   ///
   /// [_repository] The chat history repository for persistence operations
   SaveChatSessionUseCase(this._repository);
+  final ChatHistoryRepository _repository;
 
   /// Execute the use case to save a chat session
   ///

@@ -64,7 +64,17 @@ void main() {
           return homeBloc;
         },
         act: (bloc) => bloc.add(LoadRecentHistoryEvent()),
-        skip: 2, // Skip the state emissions and just verify the use case calls
+        expect: () => [
+          predicate<HomeState>((state) => 
+            state.isLoading && 
+            state.recentSessions.length <= 5
+          ),
+          predicate<HomeState>((state) => 
+            !state.isLoading && 
+            state.recentSessions.length <= 5 &&
+            state.error == null
+          ),
+        ],
         verify: (_) {
           verify(() => mockGetChatSessionsUseCase.call()).called(1);
         },
@@ -79,7 +89,16 @@ void main() {
           return homeBloc;
         },
         act: (bloc) => bloc.add(LoadRecentHistoryEvent()),
-        skip: 2, // Skip the state emissions and just verify the use case calls
+        expect: () => [
+          predicate<HomeState>((state) => 
+            state.isLoading
+          ),
+          predicate<HomeState>((state) => 
+            !state.isLoading && 
+            state.error != null &&
+            state.error!.contains('Failed to load chat sessions')
+          ),
+        ],
         verify: (_) {
           verify(() => mockGetChatSessionsUseCase.call()).called(1);
         },
@@ -101,7 +120,16 @@ void main() {
           return homeBloc;
         },
         act: (bloc) => bloc.add(LoadRecentHistoryEvent()),
-        skip: 2, // Skip the state emissions and just verify the use case calls
+        expect: () => [
+          predicate<HomeState>((state) => 
+            state.isLoading
+          ),
+          predicate<HomeState>((state) => 
+            !state.isLoading && 
+            state.recentSessions.length == 5 && 
+            state.error == null
+          ),
+        ],
         verify: (_) {
           verify(() => mockGetChatSessionsUseCase.call()).called(1);
         },
@@ -123,7 +151,7 @@ void main() {
           error: 'Previous error',
         ),
         act: (bloc) => bloc.add(RefreshRecentHistoryEvent()),
-        skip: 1, // Skip the state emission and just verify the use case calls
+        wait: const Duration(milliseconds: 100),
         verify: (_) {
           verify(() => mockGetChatSessionsUseCase.call()).called(1);
         },
@@ -138,7 +166,7 @@ void main() {
           return homeBloc;
         },
         act: (bloc) => bloc.add(RefreshRecentHistoryEvent()),
-        skip: 1, // Skip the state emission and just verify the use case calls
+        wait: const Duration(milliseconds: 100),
         verify: (_) {
           verify(() => mockGetChatSessionsUseCase.call()).called(1);
         },
@@ -157,10 +185,16 @@ void main() {
         seed: () => HomeState(
           isLoading: true,
           recentSessions: [],
-          error: null,
         ),
         act: (bloc) => bloc.add(DataUpdatedEvent(updatedSessions)),
-        skip: 1, // Skip the state emission
+        expect: () => [
+          predicate<HomeState>((state) => 
+            !state.isLoading &&
+            state.recentSessions.length == 2 &&
+            state.recentSessions.any((s) => s.id == 'new-1') &&
+            state.recentSessions.any((s) => s.id == 'new-2')
+          ),
+        ],
       );
 
       blocTest<HomeBloc, HomeState>(
@@ -171,7 +205,7 @@ void main() {
             TestHelpers.generateMockChatSession(
               id: 'old-session',
               title: 'Old Session',
-              updatedAt: DateTime(2024, 1, 1),
+              updatedAt: DateTime(2024),
             ),
             TestHelpers.generateMockChatSession(
               id: 'new-session',
@@ -186,7 +220,15 @@ void main() {
           ];
           bloc.add(DataUpdatedEvent(sessionsWithDifferentDates));
         },
-        skip: 1, // Skip the state emission
+        expect: () => [
+          predicate<HomeState>((state) => 
+            !state.isLoading && 
+            state.recentSessions.length == 3 &&
+            state.recentSessions[0].id == 'new-session' &&
+            state.recentSessions[1].id == 'medium-session' &&
+            state.recentSessions[2].id == 'old-session'
+          ),
+        ],
       );
 
       blocTest<HomeBloc, HomeState>(
@@ -202,14 +244,24 @@ void main() {
           );
           bloc.add(DataUpdatedEvent(manySessions));
         },
-        skip: 1, // Skip the state emission
+        expect: () => [
+          predicate<HomeState>((state) => 
+            !state.isLoading && 
+            state.recentSessions.length == 5
+          ),
+        ],
       );
 
       blocTest<HomeBloc, HomeState>(
         'should handle data update processing error',
         build: () => homeBloc,
         act: (bloc) => bloc.add(DataUpdatedEvent([])),
-        skip: 1, // Skip the state emission
+        expect: () => [
+          predicate<HomeState>((state) => 
+            !state.isLoading &&
+            state.recentSessions.isEmpty
+          ),
+        ],
       );
     });
 

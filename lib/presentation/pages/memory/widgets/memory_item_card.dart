@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../../../domain/entities/memory_item_entity.dart';
-import '../../../widgets/date_time_display.dart';
-import '../../../widgets/custom_popup_menu_item.dart';
-import 'edit_memory_dialog.dart';
+import 'package:ai_chat_bot/domain/entities/memory_item_entity.dart';
+import 'package:ai_chat_bot/presentation/widgets/date_time_display.dart';
+import 'package:ai_chat_bot/presentation/widgets/custom_popup_menu_item.dart';
+import 'package:ai_chat_bot/presentation/pages/memory/widgets/edit_memory_dialog.dart';
 import 'package:ai_chat_bot/core/theme/app_theme.dart';
 
 class MemoryItemCard extends StatelessWidget {
-  final MemoryItemEntity item;
-  final Function(MemoryItemEntity) onEdit;
-  final VoidCallback onDelete;
 
   const MemoryItemCard({
     super.key,
@@ -16,6 +13,9 @@ class MemoryItemCard extends StatelessWidget {
     required this.onEdit,
     required this.onDelete,
   });
+  final MemoryItemEntity item;
+  final Function(MemoryItemEntity) onEdit;
+  final VoidCallback onDelete;
 
   void _showEditDialog(BuildContext context) {
     showDialog(
@@ -58,10 +58,8 @@ class MemoryItemCard extends StatelessWidget {
                       switch (value) {
                         case 'edit':
                           _showEditDialog(context);
-                          break;
                         case 'delete':
                           onDelete();
-                          break;
                       }
                     },
                     itemBuilder: (context) => <PopupMenuItem<String>>[

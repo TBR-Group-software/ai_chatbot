@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ai_chat_bot/core/theme/app_theme.dart';
-import '../../../widgets/voice_recording_bottom_modal.dart';
-import '../../../bloc/voice_recording/voice_recording_bloc.dart';
+import 'package:ai_chat_bot/presentation/widgets/voice_recording_bottom_modal.dart';
+import 'package:ai_chat_bot/presentation/bloc/voice_recording/voice_recording_bloc.dart';
 import 'package:ai_chat_bot/core/dependency_injection/dependency_injection.dart'
     as di;
 
@@ -101,6 +101,28 @@ import 'package:ai_chat_bot/core/dependency_injection/dependency_injection.dart'
 /// * [VoiceRecordingBloc] for voice recording state management
 /// * [_VoiceLongPressButton] for voice input handling
 class ChatInputWidget extends StatefulWidget {
+
+  /// Creates a chat input widget.
+  ///
+  /// The [controller], [onSend], and [focusNode] parameters are required
+  /// for basic functionality. The editing-related parameters are optional
+  /// and enable advanced message editing capabilities.
+  ///
+  /// [controller] Text editing controller for input management
+  /// [onSend] Callback for handling message sending
+  /// [focusNode] Focus node for input field control
+  /// [isEditing] Whether the widget is in editing mode (defaults to false)
+  /// [editingHint] Optional hint text for editing mode
+  /// [onCancelEdit] Optional callback for cancelling edit mode
+  const ChatInputWidget({
+    super.key,
+    required this.controller,
+    required this.onSend,
+    required this.focusNode,
+    this.isEditing = false,
+    this.editingHint,
+    this.onCancelEdit,
+  });
   /// Text editing controller for the input field.
   ///
   /// This controller manages the text content of the input field and should
@@ -155,28 +177,6 @@ class ChatInputWidget extends StatefulWidget {
   /// If null, the close button is not displayed in edit mode.
   final VoidCallback? onCancelEdit;
 
-  /// Creates a chat input widget.
-  ///
-  /// The [controller], [onSend], and [focusNode] parameters are required
-  /// for basic functionality. The editing-related parameters are optional
-  /// and enable advanced message editing capabilities.
-  ///
-  /// [controller] Text editing controller for input management
-  /// [onSend] Callback for handling message sending
-  /// [focusNode] Focus node for input field control
-  /// [isEditing] Whether the widget is in editing mode (defaults to false)
-  /// [editingHint] Optional hint text for editing mode
-  /// [onCancelEdit] Optional callback for cancelling edit mode
-  const ChatInputWidget({
-    super.key,
-    required this.controller,
-    required this.onSend,
-    required this.focusNode,
-    this.isEditing = false,
-    this.editingHint,
-    this.onCancelEdit,
-  });
-
   @override
   ChatInputWidgetState createState() => ChatInputWidgetState();
 }
@@ -222,7 +222,6 @@ class ChatInputWidgetState extends State<ChatInputWidget> {
               border: Border(
                 bottom: BorderSide(
                   color: theme.extension<CustomColors>()!.primaryMuted,
-                  width: 1,
                 ),
               ),
             ),
@@ -342,13 +341,13 @@ class ChatInputWidgetState extends State<ChatInputWidget> {
 }
 
 class _VoiceLongPressButton extends StatefulWidget {
-  final void Function(String text) onRecordingComplete;
-  final VoidCallback onRecordingCancel;
 
   const _VoiceLongPressButton({
     required this.onRecordingComplete,
     required this.onRecordingCancel,
   });
+  final void Function(String text) onRecordingComplete;
+  final VoidCallback onRecordingCancel;
 
   @override
   State<_VoiceLongPressButton> createState() => _VoiceLongPressButtonState();
@@ -384,7 +383,9 @@ class _VoiceLongPressButtonState extends State<_VoiceLongPressButton> {
   }
 
   void _handleLongPressMove(LongPressMoveUpdateDetails details) {
-    if (_startPosition == null) return;
+    if (_startPosition == null) {
+      return;
+    }
     final dy = details.globalPosition.dy - _startPosition!.dy;
     // If user dragged up more than 80 pixels, mark as cancel
     if (dy < -80) {
@@ -455,7 +456,6 @@ class _VoiceLongPressButtonState extends State<_VoiceLongPressButton> {
           color: theme.colorScheme.surface,
           border: Border.all(
             color: theme.extension<CustomColors>()!.onSurfaceSubtle,
-            width: 1,
           ),
         ),
         child: Icon(

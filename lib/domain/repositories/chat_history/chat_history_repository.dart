@@ -1,4 +1,4 @@
-import '../../entities/chat_session_entity.dart';
+import 'package:ai_chat_bot/domain/entities/chat_session_entity.dart';
 
 abstract class ChatHistoryRepository {
   Future<List<ChatSessionEntity>> getAllSessions();

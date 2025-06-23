@@ -31,10 +31,12 @@ class CupertinoMessageDropdown {
     // Ensure the message is visible on screen first, then show dropdown
     _ensureMessageVisible(messageKey, () {
       // Get message position and size after scroll animation completes
-      final RenderBox? messageRenderBox =
+      final messageRenderBox =
           messageKey.currentContext?.findRenderObject() as RenderBox?;
       
-      if (messageRenderBox == null) return;
+      if (messageRenderBox == null) {
+        return;
+      }
       
       // Get position relative to the screen (accounting for scroll)
       final messagePosition = messageRenderBox.localToGlobal(Offset.zero);
@@ -79,7 +81,6 @@ class CupertinoMessageDropdown {
           context,
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
-          alignment: 0.0, // Scroll to the end/bottom of the message
         ).then((_) {
           // Wait a bit more for the scroll to fully complete, then show dropdown
           Future.delayed(const Duration(milliseconds: 50), onComplete);
@@ -122,17 +123,6 @@ class CupertinoMessageDropdown {
 }
 
 class _CupertinoDropdownOverlay extends StatefulWidget {
-  final BuildContext context;
-  final GlobalKey messageKey;
-  final LayerLink layerLink;
-  final Widget messageWidget;
-  final Offset messagePosition;
-  final Size messageSize;
-  final bool isUserMessage;
-  final String messageText;
-  final VoidCallback onCopy;
-  final VoidCallback? onEdit;
-  final VoidCallback onDismiss;
 
   const _CupertinoDropdownOverlay({
     required this.context,
@@ -147,6 +137,17 @@ class _CupertinoDropdownOverlay extends StatefulWidget {
     required this.onEdit,
     required this.onDismiss,
   });
+  final BuildContext context;
+  final GlobalKey messageKey;
+  final LayerLink layerLink;
+  final Widget messageWidget;
+  final Offset messagePosition;
+  final Size messageSize;
+  final bool isUserMessage;
+  final String messageText;
+  final VoidCallback onCopy;
+  final VoidCallback? onEdit;
+  final VoidCallback onDismiss;
 
   @override
   State<_CupertinoDropdownOverlay> createState() =>
@@ -170,11 +171,11 @@ class _CupertinoDropdownOverlayState extends State<_CupertinoDropdownOverlay>
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
     );
 
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
     );
 
@@ -201,7 +202,7 @@ class _CupertinoDropdownOverlayState extends State<_CupertinoDropdownOverlay>
         widget.isUserMessage ? 2 : 1; // Edit + Copy OR Copy only
     const itemHeight = 56.0;
     const paddingVertical = 16.0;
-    _dropdownSize = Size(280.0, (itemHeight * itemCount) + paddingVertical);
+    _dropdownSize = Size(280, (itemHeight * itemCount) + paddingVertical);
 
     // Available space calculations using adjusted message position
     final availableSpaceBelow = screenSize.height -
@@ -253,7 +254,7 @@ class _CupertinoDropdownOverlayState extends State<_CupertinoDropdownOverlay>
     if (_dropdownPosition!.dy + _dropdownSize.height > screenSize.height - padding.bottom - 50) {
       _dropdownPosition = Offset(
         _dropdownPosition!.dx, 
-        screenSize.height - padding.bottom - _dropdownSize.height - 50
+        screenSize.height - padding.bottom - _dropdownSize.height - 50,
       );
     }
 
@@ -385,7 +386,7 @@ class _CupertinoDropdownOverlayState extends State<_CupertinoDropdownOverlay>
                 scale: _scaleAnimation.value,
                 child: Opacity(
                   opacity: _fadeAnimation.value,
-                  child: Container(
+                  child: DecoratedBox(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(14),
                     ),
@@ -407,10 +408,6 @@ class _CupertinoDropdownOverlayState extends State<_CupertinoDropdownOverlay>
 }
 
 class _CupertinoDropdownMenu extends StatelessWidget {
-  final bool isUserMessage;
-  final VoidCallback onCopy;
-  final VoidCallback? onEdit;
-  final VoidCallback onCancel;
 
   const _CupertinoDropdownMenu({
     required this.isUserMessage,
@@ -418,6 +415,10 @@ class _CupertinoDropdownMenu extends StatelessWidget {
     required this.onEdit,
     required this.onCancel,
   });
+  final bool isUserMessage;
+  final VoidCallback onCopy;
+  final VoidCallback? onEdit;
+  final VoidCallback onCancel;
 
   @override
   Widget build(BuildContext context) {
@@ -457,10 +458,6 @@ class _CupertinoDropdownMenu extends StatelessWidget {
 }
 
 class _CupertinoDropdownItem extends StatefulWidget {
-  final IconData icon;
-  final String title;
-  final VoidCallback onTap;
-  final bool isFirst;
 
   const _CupertinoDropdownItem({
     required this.icon,
@@ -468,6 +465,10 @@ class _CupertinoDropdownItem extends StatefulWidget {
     required this.onTap,
     this.isFirst = false,
   });
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+  final bool isFirst;
 
   @override
   State<_CupertinoDropdownItem> createState() => _CupertinoDropdownItemState();

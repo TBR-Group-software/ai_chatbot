@@ -134,18 +134,18 @@ void main() {
         seed: () => ChatState(
           isLoading: false,
           messages: [
-            types.TextMessage(
-              author: const types.User(id: 'bot'),
+            const types.TextMessage(
+              author: types.User(id: 'bot'),
               id: 'bot-response',
               text: 'Previous bot response',
             ),
-            types.TextMessage(
-              author: const types.User(id: 'user'),
+            const types.TextMessage(
+              author: types.User(id: 'user'),
               id: messageId,
               text: 'Original message',
             ),
-            types.TextMessage(
-              author: const types.User(id: 'bot'),
+            const types.TextMessage(
+              author: types.User(id: 'bot'),
               id: 'initial-bot',
               text: 'Hi, can I help you?',
             ),
@@ -197,8 +197,8 @@ void main() {
         seed: () => ChatState(
           isLoading: false,
           messages: [
-            types.TextMessage(
-              author: const types.User(id: 'bot'),
+            const types.TextMessage(
+              author: types.User(id: 'bot'),
               id: 'streaming-bot',
               text: '',
               status: types.Status.sending,
@@ -221,15 +221,14 @@ void main() {
           when(() => mockGenerateTextWithMemoryContextUseCase.call(prompt, any()))
               .thenAnswer((_) => Stream.value(TestHelpers.generateMockLLMResponse(
                 text: ' continued response',
-                isComplete: true,
-              )));
+              ),),);
           return chatBloc;
         },
         seed: () => ChatState(
           isLoading: false,
           messages: [
-            types.TextMessage(
-              author: const types.User(id: 'bot'),
+            const types.TextMessage(
+              author: types.User(id: 'bot'),
               id: 'retry-bot',
               text: '',
             ),
@@ -315,7 +314,6 @@ void main() {
               sessionId: '',
             ),
           ],
-          isNewSession: true,
         ),
         act: (bloc) => bloc.add(SaveChatSessionEvent()),
         skip: 1, // Skip the state emission
@@ -344,7 +342,6 @@ void main() {
               sessionId: '',
             ),
           ],
-          isNewSession: true,
         ),
         act: (bloc) => bloc.add(SaveChatSessionEvent()),
         skip: 1, // Skip the state emission
@@ -375,7 +372,6 @@ void main() {
           isLoading: false,
           messages: [],
           contextMessages: [mockChatMessages.first],
-          isNewSession: true,
         ),
         act: (bloc) => bloc.add(SaveChatSessionEvent()),
         skip: 1, // Skip the state emission
@@ -392,8 +388,8 @@ void main() {
         seed: () => ChatState(
           isLoading: false,
           messages: [
-            types.TextMessage(
-              author: const types.User(id: 'user'),
+            const types.TextMessage(
+              author: types.User(id: 'user'),
               id: 'user-msg',
               text: 'Previous message',
             ),
@@ -422,8 +418,8 @@ void main() {
         seed: () => ChatState(
           isLoading: false,
           messages: [
-            types.TextMessage(
-              author: const types.User(id: 'bot'),
+            const types.TextMessage(
+              author: types.User(id: 'bot'),
               id: 'failed-bot',
               text: 'Partial response',
               status: types.Status.error,
@@ -446,7 +442,6 @@ void main() {
         seed: () => ChatState(
           isLoading: false,
           messages: [],
-          lastFailedPrompt: null,
         ),
         act: (bloc) => bloc.add(RetryLastRequestEvent()),
         expect: () => [],

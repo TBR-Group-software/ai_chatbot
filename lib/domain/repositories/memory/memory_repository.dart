@@ -1,4 +1,4 @@
-import '../../../domain/entities/memory_item_entity.dart';
+import 'package:ai_chat_bot/domain/entities/memory_item_entity.dart';
 
 /// Abstract repository for memory operations
 /// Defines the contract for memory data operations

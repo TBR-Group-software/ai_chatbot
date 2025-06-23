@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:ai_chat_bot/core/theme/app_theme.dart';
 
 class ChatRetryWidget extends StatelessWidget {
-  final String errorMessage;
-  final VoidCallback onRetry;
-  final bool isRetrying;
 
   const ChatRetryWidget({
     super.key,
@@ -13,6 +10,9 @@ class ChatRetryWidget extends StatelessWidget {
     required this.onRetry,
     this.isRetrying = false,
   });
+  final String errorMessage;
+  final VoidCallback onRetry;
+  final bool isRetrying;
 
   @override
   Widget build(BuildContext context) {
@@ -110,4 +110,3 @@ class ChatRetryWidget extends StatelessWidget {
     }
   }
 }
-

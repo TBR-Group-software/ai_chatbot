@@ -1,4 +1,4 @@
-import '../repositories/chat_history/chat_history_repository.dart';
+import 'package:ai_chat_bot/domain/repositories/chat_history/chat_history_repository.dart';
 
 /// Use case for deleting chat sessions from storage
 ///
@@ -7,12 +7,12 @@ import '../repositories/chat_history/chat_history_repository.dart';
 ///
 /// Uses [ChatHistoryRepository] for chat session deletion operations
 class DeleteChatSessionUseCase {
-  final ChatHistoryRepository _repository;
 
   /// Constructor for delete chat session use case
   ///
   /// [_repository] The chat history repository for deletion operations
   DeleteChatSessionUseCase(this._repository);
+  final ChatHistoryRepository _repository;
 
   /// Execute the use case to delete a chat session
   ///

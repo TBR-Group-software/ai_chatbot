@@ -44,6 +44,12 @@ abstract class ChatEvent {}
 /// );
 /// ```
 class GenerateTextEvent extends ChatEvent {
+
+  /// Creates a generate text event.
+  ///
+  /// [prompt] The text prompt for AI response generation
+  /// [isRetry] Whether this is a retry attempt (defaults to false)
+  GenerateTextEvent(this.prompt, {this.isRetry = false});
   /// The text prompt to send to the AI for response generation.
   ///
   /// This should contain the user's message or query that requires
@@ -57,12 +63,6 @@ class GenerateTextEvent extends ChatEvent {
   /// different error handling strategies. Defaults to false for
   /// new generation requests.
   final bool isRetry;
-
-  /// Creates a generate text event.
-  ///
-  /// [prompt] The text prompt for AI response generation
-  /// [isRetry] Whether this is a retry attempt (defaults to false)
-  GenerateTextEvent(this.prompt, {this.isRetry = false});
 }
 
 /// Event to send a new message in the chat.
@@ -88,17 +88,17 @@ class GenerateTextEvent extends ChatEvent {
 /// Empty or whitespace-only messages are ignored to prevent
 /// unnecessary processing and API calls.
 class SendMessageEvent extends ChatEvent {
+
+  /// Creates a send message event.
+  ///
+  /// [messageText] The text content of the message to send
+  SendMessageEvent(this.messageText);
   /// The text content of the message to send.
   ///
   /// This should contain the user's message content. The text will be
   /// validated (empty messages are ignored) and formatted before being
   /// added to the conversation.
   final String messageText;
-
-  /// Creates a send message event.
-  ///
-  /// [messageText] The text content of the message to send
-  SendMessageEvent(this.messageText);
 }
 
 /// Event to edit an existing message and regenerate subsequent responses.
@@ -126,6 +126,12 @@ class SendMessageEvent extends ChatEvent {
 /// );
 /// ```
 class EditAndResendMessageEvent extends ChatEvent {
+
+  /// Creates an edit and resend message event.
+  ///
+  /// [messageId] The unique ID of the message to edit
+  /// [newMessageText] The new text content for the message
+  EditAndResendMessageEvent(this.messageId, this.newMessageText);
   /// The unique identifier of the message to edit.
   ///
   /// This ID should correspond to an existing message in the chat history.
@@ -138,12 +144,6 @@ class EditAndResendMessageEvent extends ChatEvent {
   /// conversation will be regenerated based on this updated text.
   /// Empty messages are ignored.
   final String newMessageText;
-
-  /// Creates an edit and resend message event.
-  ///
-  /// [messageId] The unique ID of the message to edit
-  /// [newMessageText] The new text content for the message
-  EditAndResendMessageEvent(this.messageId, this.newMessageText);
 }
 
 /// Event to load an existing chat session.
@@ -166,16 +166,16 @@ class EditAndResendMessageEvent extends ChatEvent {
 /// );
 /// ```
 class LoadChatSessionEvent extends ChatEvent {
-  /// The unique identifier of the chat session to load.
-  ///
-  /// This should be a valid session ID that exists in storage.
-  /// If the session is not found, an error state will be emitted.
-  final String sessionId;
 
   /// Creates a load chat session event.
   ///
   /// [sessionId] The unique ID of the session to load
   LoadChatSessionEvent(this.sessionId);
+  /// The unique identifier of the chat session to load.
+  ///
+  /// This should be a valid session ID that exists in storage.
+  /// If the session is not found, an error state will be emitted.
+  final String sessionId;
 }
 
 /// Event to save the current chat session to persistent storage.

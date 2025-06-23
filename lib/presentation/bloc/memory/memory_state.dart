@@ -7,11 +7,6 @@ part of 'memory_bloc.dart';
 ///
 /// Used to manage UI state for memory item display and search functionality
 class MemoryState {
-  final bool isLoading;
-  final String? error;
-  final List<MemoryItemEntity> items;
-  final List<MemoryItemEntity> filteredItems;
-  final String searchQuery;
 
   /// Constructor for memory state
   ///
@@ -37,6 +32,11 @@ class MemoryState {
     items: [],
     filteredItems: [],
   );
+  final bool isLoading;
+  final String? error;
+  final List<MemoryItemEntity> items;
+  final List<MemoryItemEntity> filteredItems;
+  final String searchQuery;
 
   /// Create a copy of the current state with optional modifications
   ///

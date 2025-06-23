@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
+import 'package:ai_chat_bot/core/theme/app_theme.dart';
 
 class DateTimeDisplay extends StatelessWidget {
-  final DateTime dateTime;
-  final TextStyle? style;
 
   const DateTimeDisplay({
     super.key,
     required this.dateTime,
     this.style,
   });
+  final DateTime dateTime;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {

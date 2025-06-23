@@ -1,13 +1,6 @@
 /// Domain entity for memory items
 /// Represents a piece of knowledge stored in the memory system
-class MemoryItemEntity {
-  final String id;
-  final String title;
-  final String content;
-  final List<String> tags;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final double? relevanceScore; // For RAG ranking
+class MemoryItemEntity { // For RAG ranking
 
   const MemoryItemEntity({
     required this.id,
@@ -18,6 +11,13 @@ class MemoryItemEntity {
     required this.updatedAt,
     this.relevanceScore,
   });
+  final String id;
+  final String title;
+  final String content;
+  final List<String> tags;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final double? relevanceScore;
 
   MemoryItemEntity copyWith({
     String? id,

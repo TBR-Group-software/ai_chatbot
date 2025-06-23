@@ -37,10 +37,6 @@ class CustomPopupMenuItem extends PopupMenuItem<String> {
 
 /// Internal widget for consistent menu item layout
 class _MenuItemRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color? iconColor;
-  final Color? textColor;
 
   const _MenuItemRow({
     required this.icon,
@@ -48,6 +44,10 @@ class _MenuItemRow extends StatelessWidget {
     this.iconColor,
     this.textColor,
   });
+  final IconData icon;
+  final String label;
+  final Color? iconColor;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {

@@ -2,12 +2,6 @@ import 'package:flutter/material.dart';
 
 /// Reusable circular icon button with loading state support
 class CircularIconButton extends StatelessWidget {
-  final IconData icon;
-  final Color backgroundColor;
-  final Color iconColor;
-  final VoidCallback onTap;
-  final bool isLoading;
-  final double size;
 
   const CircularIconButton({
     super.key,
@@ -18,6 +12,12 @@ class CircularIconButton extends StatelessWidget {
     this.isLoading = false,
     this.size = 56,
   });
+  final IconData icon;
+  final Color backgroundColor;
+  final Color iconColor;
+  final VoidCallback onTap;
+  final bool isLoading;
+  final double size;
 
   @override
   Widget build(BuildContext context) {

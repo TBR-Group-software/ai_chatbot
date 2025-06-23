@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import '../entities/llm_text_response_entity.dart';
-import '../entities/chat_message_entity.dart';
-import '../entities/memory_item_entity.dart';
-import '../repositories/llm/llm_repository.dart';
-import 'get_relevant_memory_for_context_usecase.dart';
+import 'package:ai_chat_bot/domain/entities/llm_text_response_entity.dart';
+import 'package:ai_chat_bot/domain/entities/chat_message_entity.dart';
+import 'package:ai_chat_bot/domain/entities/memory_item_entity.dart';
+import 'package:ai_chat_bot/domain/repositories/llm/llm_repository.dart';
+import 'package:ai_chat_bot/domain/usecases/get_relevant_memory_for_context_usecase.dart';
 
 /// Use case for generating text responses with memory-enhanced context
 ///
@@ -21,8 +21,6 @@ import 'get_relevant_memory_for_context_usecase.dart';
 /// Uses [LLMRepository] for language model communication
 /// and [GetRelevantMemoryForContextUseCase] for memory retrieval
 class GenerateTextWithMemoryContextUseCase {
-  final LLMRepository _llmRepository;
-  final GetRelevantMemoryForContextUseCase _getRelevantMemoryUseCase;
 
   /// Constructor for generate text with memory context use case
   ///
@@ -32,6 +30,8 @@ class GenerateTextWithMemoryContextUseCase {
     this._llmRepository,
     this._getRelevantMemoryUseCase,
   );
+  final LLMRepository _llmRepository;
+  final GetRelevantMemoryForContextUseCase _getRelevantMemoryUseCase;
 
   /// Execute the use case to generate memory-enhanced text response
   ///

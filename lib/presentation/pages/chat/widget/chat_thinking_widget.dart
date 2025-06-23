@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ChatThinkingWidget extends StatefulWidget {
-  final Duration animationDuration;
 
   const ChatThinkingWidget({
     super.key,
     this.animationDuration = const Duration(milliseconds: 500),
   });
+  final Duration animationDuration;
 
   @override
   State<ChatThinkingWidget> createState() => _ChatThinkingWidgetState();
@@ -56,7 +56,7 @@ class _ChatThinkingWidgetState extends State<ChatThinkingWidget>
     if (animationValue >= circleIndex && animationValue < circleIndex + 0.5) {
       return -10.0 * (animationValue - circleIndex);
     }
-    return 0.0;
+    return 0;
   }
 
   @override
@@ -67,10 +67,9 @@ class _ChatThinkingWidgetState extends State<ChatThinkingWidget>
         final animationValue = _animation.value;
 
         return Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: List.generate(3, (index) {
             return Container(
-              margin: EdgeInsets.symmetric(horizontal: 4),
+              margin: const EdgeInsets.symmetric(horizontal: 4),
               transform: Matrix4.translationValues(
                 0,
                 _determineCircleOffset(index, animationValue),

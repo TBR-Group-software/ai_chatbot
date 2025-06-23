@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../domain/usecases/get_chat_sessions_usecase.dart';
-import '../../../domain/repositories/chat_history/chat_history_repository.dart';
-import '../../../domain/entities/chat_session_entity.dart';
+import 'package:ai_chat_bot/domain/usecases/get_chat_sessions_usecase.dart';
+import 'package:ai_chat_bot/domain/repositories/chat_history/chat_history_repository.dart';
+import 'package:ai_chat_bot/domain/entities/chat_session_entity.dart';
 part 'home_event.dart';
 part 'home_state.dart';
 
@@ -20,9 +20,6 @@ part 'home_state.dart';
 /// Uses [GetChatSessionsUseCase] for session retrieval
 /// and [ChatHistoryRepository] for real-time updates
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  final GetChatSessionsUseCase _getChatSessionsUseCase;
-  final ChatHistoryRepository _chatHistoryRepository;
-  late final StreamSubscription _dataSubscription;
 
   /// Constructor for home BLoC
   ///
@@ -38,8 +35,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       sessions,
     ) {
       add(DataUpdatedEvent(sessions));
-    }, onError: (error) {});
+    }, onError: (error) {},);
   }
+  final GetChatSessionsUseCase _getChatSessionsUseCase;
+  final ChatHistoryRepository _chatHistoryRepository;
+  late final StreamSubscription<List<ChatSessionEntity>> _dataSubscription;
 
   /// Handle load recent history event
   ///
@@ -85,7 +85,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         state.copyWith(
           recentSessions: recentSessions,
           isLoading: false,
-          error: null,
         ),
       );
     } catch (error) {
@@ -110,7 +109,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         state.copyWith(
           isLoading: false,
           recentSessions: recentSessions,
-          error: null,
         ),
       );
     } catch (error) {

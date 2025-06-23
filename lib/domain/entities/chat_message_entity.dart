@@ -1,9 +1,4 @@
 class ChatMessageEntity {
-  final String id;
-  final String content;
-  final bool isUser;
-  final DateTime timestamp;
-  final String sessionId;
 
   const ChatMessageEntity({
     required this.id,
@@ -12,6 +7,11 @@ class ChatMessageEntity {
     required this.timestamp,
     required this.sessionId,
   });
+  final String id;
+  final String content;
+  final bool isUser;
+  final DateTime timestamp;
+  final String sessionId;
 
   ChatMessageEntity copyWith({
     String? id,

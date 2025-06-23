@@ -1,5 +1,5 @@
-import '../entities/voice_recording_entity.dart';
-import '../repositories/voice_recording_repository.dart';
+import 'package:ai_chat_bot/domain/entities/voice_recording_entity.dart';
+import 'package:ai_chat_bot/domain/repositories/voice_recording_repository.dart';
 
 /// Use case for starting voice recording
 ///
@@ -14,12 +14,12 @@ import '../repositories/voice_recording_repository.dart';
 ///
 /// Uses [VoiceRecordingRepository] for recording operations
 class StartVoiceRecordingUseCase {
-  final VoiceRecordingRepository _repository;
 
   /// Constructor for start voice recording use case
   ///
   /// [_repository] The voice recording repository for recording operations
   const StartVoiceRecordingUseCase(this._repository);
+  final VoiceRecordingRepository _repository;
 
   /// Execute the use case to start voice recording
   ///

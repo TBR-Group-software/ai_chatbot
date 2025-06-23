@@ -13,7 +13,7 @@ class TestHelpers {
         title: 'Flutter Bloc Pattern',
         content: 'Bloc pattern is a design pattern for state management in Flutter applications.',
         tags: ['flutter', 'bloc', 'state-management'],
-        createdAt: DateTime(2024, 1, 1, 10, 0),
+        createdAt: DateTime(2024, 1, 1, 10),
         updatedAt: DateTime(2024, 1, 2, 14, 30),
         relevanceScore: 0.9,
       ),
@@ -67,7 +67,7 @@ class TestHelpers {
         id: 'msg-1',
         content: 'Hello, how can I help you with Flutter?',
         isUser: true,
-        timestamp: DateTime(2024, 1, 1, 10, 0),
+        timestamp: DateTime(2024, 1, 1, 10),
         sessionId: sessionId,
       ),
       ChatMessageEntity(
@@ -93,21 +93,21 @@ class TestHelpers {
       ChatSessionEntity(
         id: 'session-1',
         title: 'Flutter Development Discussion',
-        createdAt: DateTime(2024, 1, 1, 10, 0),
+        createdAt: DateTime(2024, 1, 1, 10),
         updatedAt: DateTime(2024, 1, 1, 10, 30),
         messages: generateMockChatMessages('session-1'),
       ),
       ChatSessionEntity(
         id: 'session-2',
         title: 'State Management Patterns',
-        createdAt: DateTime(2024, 1, 2, 14, 0),
+        createdAt: DateTime(2024, 1, 2, 14),
         updatedAt: DateTime(2024, 1, 2, 14, 45),
         messages: generateMockChatMessages('session-2'),
       ),
       ChatSessionEntity(
         id: 'session-3',
         title: 'Testing Strategies',
-        createdAt: DateTime(2024, 1, 3, 9, 0),
+        createdAt: DateTime(2024, 1, 3, 9),
         updatedAt: DateTime(2024, 1, 3, 9, 20),
         messages: generateMockChatMessages('session-3'),
       ),
@@ -151,7 +151,7 @@ class TestHelpers {
     int chunkSize = 10,
     Duration delay = const Duration(milliseconds: 100),
   }) async* {
-    for (int i = 0; i < fullText.length; i += chunkSize) {
+    for (var i = 0; i < fullText.length; i += chunkSize) {
       await Future.delayed(delay);
       final chunk = fullText.substring(i, (i + chunkSize).clamp(0, fullText.length));
       final isComplete = i + chunkSize >= fullText.length;

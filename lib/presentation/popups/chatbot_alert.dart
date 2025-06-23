@@ -1,18 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ChatbotAlert extends StatelessWidget {
-  final String title;
-  final String content;
-  final String confirmText;
-  final String cancelText;
-  final VoidCallback onConfirm;
-  final VoidCallback? onCancel;
-  final Color? confirmButtonColor;
-  final Color? cancelButtonColor;
-  final IconData? icon;
-  final Color? iconColor;
-  final bool isDismissible;
-  final bool isDestructive;
 
   const ChatbotAlert({
     super.key,
@@ -41,7 +29,6 @@ class ChatbotAlert extends StatelessWidget {
       title: title,
       content: 'Are you sure you want to delete "$itemName"? This action cannot be undone.',
       confirmText: 'Delete',
-      cancelText: 'Cancel',
       onConfirm: onConfirm,
       onCancel: onCancel,
       icon: Icons.warning_amber_rounded,
@@ -85,6 +72,18 @@ class ChatbotAlert extends StatelessWidget {
       icon: Icons.info_outline,
     );
   }
+  final String title;
+  final String content;
+  final String confirmText;
+  final String cancelText;
+  final VoidCallback onConfirm;
+  final VoidCallback? onCancel;
+  final Color? confirmButtonColor;
+  final Color? cancelButtonColor;
+  final IconData? icon;
+  final Color? iconColor;
+  final bool isDismissible;
+  final bool isDestructive;
 
   @override
   Widget build(BuildContext context) {

@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:ai_chat_bot/domain/entities/memory_item_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../domain/usecases/get_memory_items_usecase.dart';
-import '../../../domain/usecases/save_memory_item_usecase.dart';
-import '../../../domain/usecases/delete_memory_item_usecase.dart';
-import '../../../domain/usecases/search_memory_items_usecase.dart';
-import '../../../domain/repositories/memory/memory_repository.dart';
+import 'package:ai_chat_bot/domain/usecases/get_memory_items_usecase.dart';
+import 'package:ai_chat_bot/domain/usecases/save_memory_item_usecase.dart';
+import 'package:ai_chat_bot/domain/usecases/delete_memory_item_usecase.dart';
+import 'package:ai_chat_bot/domain/usecases/search_memory_items_usecase.dart';
+import 'package:ai_chat_bot/domain/repositories/memory/memory_repository.dart';
 
 part 'memory_event.dart';
 part 'memory_state.dart';
@@ -29,12 +29,6 @@ part 'memory_state.dart';
 /// - [SearchMemoryItemsUseCase] for search operations
 /// - [MemoryRepository] for real-time updates
 class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
-  final GetMemoryItemsUseCase _getMemoryItemsUseCase;
-  final SaveMemoryItemUseCase _saveMemoryItemUseCase;
-  final DeleteMemoryItemUseCase _deleteMemoryItemUseCase;
-  final SearchMemoryItemsUseCase _searchMemoryItemsUseCase;
-  final MemoryRepository _memoryRepository;
-  late final StreamSubscription _dataSubscription;
 
   /// Constructor for memory BLoC
   ///
@@ -61,8 +55,14 @@ class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
       items,
     ) {
       add(DataUpdatedEvent(items));
-    }, onError: (error) {});
+    }, onError: (error) {},);
   }
+  final GetMemoryItemsUseCase _getMemoryItemsUseCase;
+  final SaveMemoryItemUseCase _saveMemoryItemUseCase;
+  final DeleteMemoryItemUseCase _deleteMemoryItemUseCase;
+  final SearchMemoryItemsUseCase _searchMemoryItemsUseCase;
+  final MemoryRepository _memoryRepository;
+  late final StreamSubscription<List<MemoryItemEntity>> _dataSubscription;
 
   /// Handle load memory event
   ///
@@ -211,7 +211,6 @@ class MemoryBloc extends Bloc<MemoryEvent, MemoryState> {
           items: items,
           filteredItems: filteredItems,
           isLoading: false,
-          error: null,
         ),
       );
     } catch (error) {

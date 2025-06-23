@@ -1,5 +1,5 @@
 import 'dart:async';
-import '../../../models/gemini/gemini_text_response.dart';
+import 'package:ai_chat_bot/data/models/gemini/gemini_text_response.dart';
 
 /// Abstract data source for Gemini remote operations
 ///

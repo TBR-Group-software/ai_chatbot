@@ -1,4 +1,4 @@
-import '../entities/voice_recording_entity.dart';
+import 'package:ai_chat_bot/domain/entities/voice_recording_entity.dart';
 
 /// Repository interface for voice recording operations
 abstract class VoiceRecordingRepository {

@@ -3,9 +3,6 @@ import 'package:ai_chat_bot/data/models/gemini/gemini_text_response.dart';
 /// Domain entity for LLM text response
 /// Represents the business logic view of text generation responses
 class LLMTextResponseEntity {
-  final String text;
-  final bool isComplete;
-  final String? finishReason;
 
   const LLMTextResponseEntity({
     required this.text,
@@ -33,6 +30,9 @@ class LLMTextResponseEntity {
   factory LLMTextResponseEntity.empty() {
     return const LLMTextResponseEntity(text: '', isComplete: false);
   }
+  final String text;
+  final bool isComplete;
+  final String? finishReason;
 
   @override
   String toString() {

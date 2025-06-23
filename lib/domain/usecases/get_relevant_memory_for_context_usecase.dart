@@ -1,5 +1,5 @@
-import '../entities/memory_item_entity.dart';
-import '../repositories/memory/memory_repository.dart';
+import 'package:ai_chat_bot/domain/entities/memory_item_entity.dart';
+import 'package:ai_chat_bot/domain/repositories/memory/memory_repository.dart';
 
 /// Use case for retrieving contextually relevant memory items
 ///
@@ -8,12 +8,12 @@ import '../repositories/memory/memory_repository.dart';
 ///
 /// Uses [MemoryRepository] for intelligent memory retrieval operations
 class GetRelevantMemoryForContextUseCase {
-  final MemoryRepository _memoryRepository;
 
   /// Constructor for get relevant memory use case
   ///
   /// [_memoryRepository] The memory repository for contextual retrieval operations
   GetRelevantMemoryForContextUseCase(this._memoryRepository);
+  final MemoryRepository _memoryRepository;
 
   /// Execute the use case to get relevant memory items
   ///

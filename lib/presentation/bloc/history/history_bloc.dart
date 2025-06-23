@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:ai_chat_bot/domain/entities/chat_session_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../domain/usecases/get_chat_sessions_usecase.dart';
-import '../../../domain/usecases/delete_chat_session_usecase.dart';
-import '../../../domain/repositories/chat_history/chat_history_repository.dart';
+import 'package:ai_chat_bot/domain/usecases/get_chat_sessions_usecase.dart';
+import 'package:ai_chat_bot/domain/usecases/delete_chat_session_usecase.dart';
+import 'package:ai_chat_bot/domain/repositories/chat_history/chat_history_repository.dart';
 part 'history_event.dart';
 part 'history_state.dart';
 
@@ -78,10 +78,6 @@ part 'history_state.dart';
 /// * [DeleteChatSessionUseCase] for session removal
 /// * [ChatHistoryRepository] for real-time updates
 class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
-  final GetChatSessionsUseCase _getChatSessionsUseCase;
-  final DeleteChatSessionUseCase _deleteChatSessionUseCase;
-  final ChatHistoryRepository _chatHistoryRepository;
-  late final StreamSubscription _dataSubscription;
 
   /// Creates a new [HistoryBloc] with required dependencies.
   ///
@@ -108,8 +104,12 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       sessions,
     ) {
       add(DataUpdatedEvent(sessions));
-    }, onError: (error) {});
+    }, onError: (error) {},);
   }
+  final GetChatSessionsUseCase _getChatSessionsUseCase;
+  final DeleteChatSessionUseCase _deleteChatSessionUseCase;
+  final ChatHistoryRepository _chatHistoryRepository;
+  late final StreamSubscription<List<ChatSessionEntity>> _dataSubscription;
 
   /// Handles loading the complete chat session history.
   ///
@@ -299,7 +299,6 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
           sessions: sessions,
           filteredSessions: filteredSessions,
           isLoading: false,
-          error: null,
         ),
       );
     } catch (error) {

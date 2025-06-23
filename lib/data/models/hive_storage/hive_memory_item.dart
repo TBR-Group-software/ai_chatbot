@@ -1,27 +1,10 @@
 import 'package:hive_ce/hive.dart';
-import '../../../domain/entities/memory_item_entity.dart';
+import 'package:ai_chat_bot/domain/entities/memory_item_entity.dart';
 
 part 'hive_memory_item.g.dart';
 
 @HiveType(typeId: 2)
 class HiveMemoryItem extends HiveObject {
-  @HiveField(0)
-  String id;
-
-  @HiveField(1)
-  String title;
-
-  @HiveField(2)
-  String content;
-
-  @HiveField(3)
-  List<String> tags;
-
-  @HiveField(4)
-  DateTime createdAt;
-
-  @HiveField(5)
-  DateTime updatedAt;
 
   HiveMemoryItem({
     required this.id,
@@ -42,6 +25,23 @@ class HiveMemoryItem extends HiveObject {
       updatedAt: memory.updatedAt,
     );
   }
+  @HiveField(0)
+  String id;
+
+  @HiveField(1)
+  String title;
+
+  @HiveField(2)
+  String content;
+
+  @HiveField(3)
+  List<String> tags;
+
+  @HiveField(4)
+  DateTime createdAt;
+
+  @HiveField(5)
+  DateTime updatedAt;
 
   MemoryItemEntity toDomain() {
     return MemoryItemEntity(
