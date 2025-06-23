@@ -7,7 +7,7 @@
 
 <div align = "center">
 
-**Chatty** is a sophisticated, clean-architecture Flutter-based AI chatbot designed to be a versatile and powerful conversational AI interface. 
+**Chatty** is a open-source, clean-architecture Flutter-based AI chatbot designed to be a powerful conversational AI interface and compatible with any AI model. 
 
 </div>
 
