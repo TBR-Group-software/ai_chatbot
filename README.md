@@ -14,11 +14,11 @@
 
 
 <div align="center">
-<img src="demo_images/edit_gif.gif" alt="EditDemo" width="250"/>
-<img src="demo_images/history_gif.gif" alt="HistoryDemo" width="250"/>
-<img src="demo_images/memory_gif.gif" alt="MemoryDemo" width="250"/>
-<img src="demo_images/text_message_gif.gif" alt="TextMessageDemo" width="250"/>
-<img src="demo_images/voice_gif.gif" alt="VoiceRecognitionDemo" width="250"/>
+<img src="demo_images/1.gif" alt="EditDemo" width="250"/>
+<img src="demo_images/2.gif" alt="HistoryDemo" width="250"/>
+<img src="demo_images/3.gif" alt="MemoryDemo" width="250"/>
+<img src="demo_images/4.gif" alt="TextMessageDemo" width="250"/>
+<img src="demo_images/5.gif" alt="VoiceRecognitionDemo" width="250"/>
 </div>
 
 
