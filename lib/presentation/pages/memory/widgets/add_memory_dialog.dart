@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ai_chat_bot/core/theme/app_theme.dart';
 import 'package:ai_chat_bot/domain/entities/memory_item_entity.dart';
+import 'package:ai_chat_bot/l10n/l10n.dart';
 
 class AddMemoryDialog extends StatefulWidget {
 
@@ -67,7 +68,7 @@ class _AddMemoryDialogState extends State<AddMemoryDialog> {
     final theme = Theme.of(context);
 
     return AlertDialog(
-      title: const Text('Add Memory'),
+      title: Text(context.l10n.addMemoryTitle),
       content: SizedBox(
         width: double.maxFinite,
         child: Form(
@@ -77,13 +78,13 @@ class _AddMemoryDialogState extends State<AddMemoryDialog> {
             children: [
               TextFormField(
                 controller: _titleController,
-                decoration: const InputDecoration(
-                  labelText: 'Title',
-                  hintText: 'Enter a descriptive title',
+                decoration: InputDecoration(
+                  labelText: context.l10n.titleLabel,
+                  hintText: context.l10n.titleHint,
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Please enter a title';
+                    return context.l10n.pleaseEnterTitle;
                   }
                   return null;
                 },
@@ -91,14 +92,14 @@ class _AddMemoryDialogState extends State<AddMemoryDialog> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _contentController,
-                decoration: const InputDecoration(
-                  labelText: 'Content',
-                  hintText: 'Enter the knowledge content',
+                decoration: InputDecoration(
+                  labelText: context.l10n.contentLabel,
+                  hintText: context.l10n.contentHint,
                 ),
                 maxLines: 4,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Please enter content';
+                    return context.l10n.pleaseEnterContent;
                   }
                   return null;
                 },
@@ -109,9 +110,9 @@ class _AddMemoryDialogState extends State<AddMemoryDialog> {
                   Expanded(
                     child: TextFormField(
                       controller: _tagController,
-                      decoration: const InputDecoration(
-                        labelText: 'Tags',
-                        hintText: 'Add a tag',
+                      decoration: InputDecoration(
+                        labelText: context.l10n.tagsLabel,
+                        hintText: context.l10n.tagsHint,
                       ),
                       onFieldSubmitted: (_) => _addTag(),
                     ),
@@ -144,11 +145,11 @@ class _AddMemoryDialogState extends State<AddMemoryDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.cancel),
         ),
         ElevatedButton(
           onPressed: _save,
-          child: const Text('Save'),
+          child: Text(context.l10n.save),
         ),
       ],
     );

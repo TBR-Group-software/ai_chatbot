@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ai_chat_bot/core/theme/app_theme.dart';
+import 'package:ai_chat_bot/l10n/l10n.dart';
 
 class CustomPopupMenuItem extends PopupMenuItem<String> {
   CustomPopupMenuItem._({
@@ -20,19 +21,24 @@ class CustomPopupMenuItem extends PopupMenuItem<String> {
        );
 
   /// Factory constructor for delete action with red styling
-  CustomPopupMenuItem.delete({Key? key})
+  CustomPopupMenuItem.delete(BuildContext context, {Key? key})
     : this._(
         key: key,
         value: 'delete',
         icon: Icons.delete,
-        label: 'Delete',
+        label: context.l10n.delete,
         iconColor: Colors.red,
         textColor: Colors.red,
       );
 
   /// Factory constructor for edit action
-  CustomPopupMenuItem.edit({Key? key})
-    : this._(key: key, value: 'edit', icon: Icons.edit, label: 'Edit');
+  CustomPopupMenuItem.edit(BuildContext context, {Key? key})
+    : this._(
+        key: key,
+        value: 'edit',
+        icon: Icons.edit,
+        label: context.l10n.edit,
+      );
 }
 
 /// Internal widget for consistent menu item layout

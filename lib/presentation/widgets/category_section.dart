@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ai_chat_bot/presentation/widgets/category_card.dart';
+import 'package:ai_chat_bot/l10n/l10n.dart';
 
 class CategorySection extends StatelessWidget {
   const CategorySection({
@@ -22,11 +23,11 @@ class CategorySection extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Populare Category', style: theme.textTheme.titleLarge),
+              Text(context.l10n.popularCategory, style: theme.textTheme.titleLarge),
               TextButton(
                 onPressed: onSeeAll,
                 child: Text(
-                  'See All',
+                  context.l10n.seeAll,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.primary,
                   ),

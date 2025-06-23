@@ -63,8 +63,8 @@ class MemoryItemCard extends StatelessWidget {
                       }
                     },
                     itemBuilder: (context) => <PopupMenuItem<String>>[
-                       CustomPopupMenuItem.edit(),
-                       CustomPopupMenuItem.delete(),
+                       CustomPopupMenuItem.edit(context),
+                       CustomPopupMenuItem.delete(context),
                     ],
                   ),
                 ],

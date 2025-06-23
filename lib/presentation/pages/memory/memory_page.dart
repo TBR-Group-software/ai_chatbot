@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ai_chat_bot/presentation/pages/memory/widgets/memory_item_card.dart';
 import 'package:ai_chat_bot/presentation/pages/memory/widgets/add_memory_dialog.dart';
 import 'package:ai_chat_bot/core/theme/app_theme.dart';
+import 'package:ai_chat_bot/l10n/l10n.dart';
 
 @RoutePage()
 class MemoryPage extends StatefulWidget {
@@ -83,7 +84,7 @@ class _MemoryPageState extends State<MemoryPage>
       child: Scaffold(
         backgroundColor: theme.scaffoldBackgroundColor,
         appBar: AppBar(
-          title: const Text('Memory'),
+          title: Text(context.l10n.memoryTitle),
           backgroundColor: theme.scaffoldBackgroundColor,
           elevation: 0,
         ),
@@ -103,7 +104,7 @@ class _MemoryPageState extends State<MemoryPage>
                   child: TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      hintText: 'Search memory...',
+                      hintText: context.l10n.searchMemoryHint,
                       prefixIcon: const Icon(Icons.search),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -136,7 +137,7 @@ class _MemoryPageState extends State<MemoryPage>
                               ),
                               const SizedBox(height: 16),
                               Text(
-                                'Error loading memory',
+                                context.l10n.errorLoadingMemory,
                                 style: theme.textTheme.headlineSmall,
                               ),
                               const SizedBox(height: 8),
@@ -149,7 +150,7 @@ class _MemoryPageState extends State<MemoryPage>
                               ElevatedButton(
                                 onPressed:
                                     () => _memoryBloc.add(LoadMemoryEvent()),
-                                child: const Text('Retry'),
+                                child: Text(context.l10n.retry),
                               ),
                             ],
                           ),
@@ -169,15 +170,15 @@ class _MemoryPageState extends State<MemoryPage>
                               const SizedBox(height: 16),
                               Text(
                                 state.searchQuery.isNotEmpty
-                                    ? 'No memory items found'
-                                    : 'No memory items yet',
+                                    ? context.l10n.noMemoryItemsFound
+                                    : context.l10n.noMemoryItemsYet,
                                 style: theme.textTheme.headlineSmall,
                               ),
                               const SizedBox(height: 8),
                               Text(
                                 state.searchQuery.isNotEmpty
-                                    ? 'Try a different search term'
-                                    : 'Add knowledge to enhance AI responses',
+                                    ? context.l10n.tryDifferentSearchTerm
+                                    : context.l10n.addKnowledgePrompt,
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                   color: theme.extension<CustomColors>()!.onSurfaceMuted,
                                 ),

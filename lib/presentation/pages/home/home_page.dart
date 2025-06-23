@@ -10,6 +10,7 @@ import 'package:ai_chat_bot/core/theme/app_theme.dart';
 import 'package:ai_chat_bot/core/router/app_router.gr.dart';
 import 'package:ai_chat_bot/core/dependency_injection/dependency_injection.dart'
     as di;
+import 'package:ai_chat_bot/l10n/l10n.dart';
 
 /// The main home page of the AI Chatbot application.
 ///
@@ -261,31 +262,29 @@ class _HomePageState extends State<HomePage>
                   child: CategorySection(
                     items: <CategoryItemData>[
                       CategoryItemData(
-                        title: 'Story',
-                        description: 'Generate a story from a given subject.',
+                        title: context.l10n.storyTitle,
+                        description: context.l10n.storyDescription,
                         icon: Icons.book,
                         iconColor: customColors?.aquamarine ?? Colors.white,
                         onTap: () {},
                       ),
                       CategoryItemData(
-                        title: 'Lyrics',
-                        description:
-                            'Generate lyrics of a song for any music genre.',
+                        title: context.l10n.lyricsTitle,
+                        description: context.l10n.lyricsDescription,
                         icon: Icons.music_note,
                         iconColor: customColors?.lightBlue ?? Colors.white,
                         onTap: () {},
                       ),
                       CategoryItemData(
-                        title: 'Write code',
-                        description:
-                            'Write applications in various programming languages.',
+                        title: context.l10n.writeCodeTitle,
+                        description: context.l10n.writeCodeDescription,
                         icon: Icons.code,
                         iconColor: customColors?.lightGray ?? Colors.white,
                         onTap: () {},
                       ),
                       CategoryItemData(
-                        title: 'Recipe',
-                        description: 'Get recipes for any food dishes.',
+                        title: context.l10n.recipeTitle,
+                        description: context.l10n.recipeDescription,
                         icon: Icons.restaurant_menu,
                         iconColor: customColors?.orange ?? Colors.white,
                         onTap: () {},

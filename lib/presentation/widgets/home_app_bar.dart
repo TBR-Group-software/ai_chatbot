@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ai_chat_bot/l10n/l10n.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({
@@ -18,7 +19,7 @@ class HomeAppBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'Chatty',
+            context.l10n.chatty,
             style: theme.textTheme.displayLarge,
           ),
           Container(

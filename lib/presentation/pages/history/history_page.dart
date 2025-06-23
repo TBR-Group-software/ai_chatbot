@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ai_chat_bot/presentation/pages/history/widgets/history_chat_session_card.dart';
+import 'package:ai_chat_bot/l10n/l10n.dart';
 
 @RoutePage()
 class HistoryPage extends StatefulWidget {
@@ -68,7 +69,7 @@ class _HistoryPageState extends State<HistoryPage>
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Chat History'),
+        title: Text(context.l10n.chatHistoryTitle),
         backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
       ),
@@ -83,7 +84,7 @@ class _HistoryPageState extends State<HistoryPage>
                 child: TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
-                    hintText: 'Search conversations...',
+                    hintText: context.l10n.searchConversationsHint,
                     prefixIcon: const Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -116,7 +117,7 @@ class _HistoryPageState extends State<HistoryPage>
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              'Error loading history',
+                              context.l10n.errorLoadingHistory,
                               style: theme.textTheme.headlineSmall,
                             ),
                             const SizedBox(height: 8),
@@ -129,7 +130,7 @@ class _HistoryPageState extends State<HistoryPage>
                             ElevatedButton(
                               onPressed:
                                   () => _historyBloc.add(LoadHistoryEvent()),
-                              child: const Text('Retry'),
+                              child: Text(context.l10n.retry),
                             ),
                           ],
                         ),
@@ -149,15 +150,15 @@ class _HistoryPageState extends State<HistoryPage>
                             const SizedBox(height: 16),
                             Text(
                               state.searchQuery.isNotEmpty
-                                  ? 'No conversations found'
-                                  : 'No chat history yet',
+                                  ? context.l10n.noConversationsFound
+                                  : context.l10n.noChatHistoryYet,
                               style: theme.textTheme.headlineSmall,
                             ),
                             const SizedBox(height: 8),
                             Text(
                               state.searchQuery.isNotEmpty
-                                  ? 'Try a different search term'
-                                  : 'Start a conversation to see it here',
+                                  ? context.l10n.tryDifferentSearchTerm
+                                  : context.l10n.startConversationPrompt,
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color: theme.extension<CustomColors>()!.onSurfaceMuted,
                               ),
@@ -186,7 +187,7 @@ class _HistoryPageState extends State<HistoryPage>
                             onDelete:
                                 () async => ChatbotAlert.showDeleteConfirmation(
                                   context: context,
-                                  title: 'Delete Conversation',
+                                  title: context.l10n.deleteConversationTitle,
                                   itemName: session.title,
                                   onConfirm:
                                       () => _historyBloc.add(

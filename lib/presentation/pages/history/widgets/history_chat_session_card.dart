@@ -42,7 +42,7 @@ class HistoryChatSessionCard extends StatelessWidget {
           child: Icon(Icons.chat, color: theme.colorScheme.primary),
         ),
         trailing: PopupMenuButton(
-          itemBuilder: (context) => [CustomPopupMenuItem.delete()],
+          itemBuilder: (context) => [CustomPopupMenuItem.delete(context)],
           onSelected: (value) {
             if (value == 'delete') {
               onDelete();
@@ -66,7 +66,7 @@ class HistoryChatSessionCard extends StatelessWidget {
     try {
       final updatedAt = session.updatedAt;
       return updatedAt;
-        } catch (e) {
+    } catch (e) {
       return DateTime.now();
     }
   }

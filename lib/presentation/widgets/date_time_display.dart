@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ai_chat_bot/core/theme/app_theme.dart';
+import 'package:ai_chat_bot/l10n/l10n.dart';
 
 class DateTimeDisplay extends StatelessWidget {
 
@@ -24,7 +25,7 @@ class DateTimeDisplay extends StatelessWidget {
         ),
         const SizedBox(width: 4),
         Text(
-          _formatDate(dateTime),
+          _formatDate(context, dateTime),
           style: style ?? theme.textTheme.bodySmall?.copyWith(
             color: theme.extension<CustomColors>()!.onSurfaceDim,
           ),
@@ -33,18 +34,18 @@ class DateTimeDisplay extends StatelessWidget {
     );
   }
 
-  String _formatDate(DateTime date) {
+  String _formatDate(BuildContext context, DateTime date) {
     final now = DateTime.now();
     final difference = now.difference(date);
 
     if (difference.inDays > 0) {
-      return '${difference.inDays} day${difference.inDays == 1 ? '' : 's'} ago';
+      return context.l10n.timeAgoDays(difference.inDays);
     } else if (difference.inHours > 0) {
-      return '${difference.inHours} hour${difference.inHours == 1 ? '' : 's'} ago';
+      return context.l10n.timeAgoHours(difference.inHours);
     } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes} minute${difference.inMinutes == 1 ? '' : 's'} ago';
+      return context.l10n.timeAgoMinutes(difference.inMinutes);
     } else {
-      return 'Just now';
+      return context.l10n.justNow;
     }
   }
 } 

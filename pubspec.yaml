@@ -28,6 +28,8 @@ dependencies:
   path_provider: ^2.1.1
   permission_handler: ^12.0.0+1
   speech_to_text: ^7.0.0
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -47,6 +49,7 @@ flutter_launcher_icons:
 
 flutter:
   uses-material-design: true
+  generate: true
 
   assets:
     - .env
