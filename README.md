@@ -26,14 +26,16 @@
 
 ## Table of Contents
 
-- [Key Features](#-key-features)
-- [Project Structure](#-project-structure)
-- [Code Samples](#-code-samples)
-- [Built With](#️-built-with)
-- [Getting Started](#-getting-started)
-- [Testing](#-testing)
-- [Contributing](#-contributing)
-- [License](#-license)
+- [Key Features](#key-features)
+- [Project Structure](#project-structure)
+- [Code Samples](#code-samples)
+- [Built With](#built-with)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [Testing](#testing)
+- [Contributing](#contributing)
+- [License](#license)
+
 
 ---
 
@@ -523,6 +525,6 @@ Developed by [TBR Group](https://github.com/TBR-Group-software).
 
 <div align="center">
     
-[Back to top](#-ai-chat-bot)
+[Back to top](#ai-chat-bot)
 
 </div>
