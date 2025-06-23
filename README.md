@@ -515,16 +515,10 @@ flutter test --coverage
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
 
 
 Developed by [TBR Group](https://github.com/TBR-Group-software).
-
-<div align="center">
-    
-[Back to top](#ai-chat-bot)
-
-</div>
