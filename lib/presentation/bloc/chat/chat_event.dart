@@ -8,15 +8,6 @@ part of 'chat_bloc.dart';
 ///
 /// All events are immutable and designed for efficient state management
 /// in the BLoC architecture pattern.
-///
-/// See also:
-/// * [SendMessageEvent] for sending new messages
-/// * [EditAndResendMessageEvent] for editing existing messages
-/// * [GenerateTextEvent] for AI text generation
-/// * [LoadChatSessionEvent] for loading chat sessions
-/// * [SaveChatSessionEvent] for persisting chat data
-/// * [CreateNewSessionEvent] for starting new conversations
-/// * [RetryLastRequestEvent] for retrying failed requests
 abstract class ChatEvent {}
 
 /// Event to generate AI text responses.
@@ -24,12 +15,6 @@ abstract class ChatEvent {}
 /// This event triggers the AI text generation process using the provided
 /// prompt and current conversation context. It supports both initial
 /// generation and retry scenarios for failed requests.
-///
-/// The generation process includes:
-/// * Memory-enhanced context retrieval
-/// * Conversation history integration
-/// * Streaming response handling
-/// * Error recovery mechanisms
 ///
 /// Example usage:
 /// ```dart
@@ -71,12 +56,6 @@ class GenerateTextEvent extends ChatEvent {
 /// interface, updating conversation context, and triggering AI response
 /// generation. It represents the primary user interaction in the chat.
 ///
-/// The process includes:
-/// * Message validation and formatting
-/// * UI update with user message
-/// * Context management for conversation history
-/// * Automatic AI response generation
-///
 /// Example usage:
 /// ```dart
 /// // Send user message
@@ -107,13 +86,6 @@ class SendMessageEvent extends ChatEvent {
 /// automatically regenerate all subsequent conversation content.
 /// This is useful for exploring different conversation paths or
 /// correcting mistakes in previous messages.
-///
-/// The editing process:
-/// * Locates the specified message in the chat history
-/// * Updates the message content with new text
-/// * Removes all subsequent messages (including bot responses)
-/// * Regenerates the conversation from the edited point
-/// * Updates conversation context appropriately
 ///
 /// Example usage:
 /// ```dart
@@ -151,13 +123,6 @@ class EditAndResendMessageEvent extends ChatEvent {
 /// This event retrieves a previously saved chat session and restores
 /// its complete state including messages, context, and metadata.
 /// Used when users want to continue previous conversations.
-///
-/// The loading process:
-/// * Retrieves session data from storage
-/// * Restores message history and UI state
-/// * Rebuilds conversation context
-/// * Updates session metadata
-///
 /// Example usage:
 /// ```dart
 /// // Load a specific chat session
@@ -183,13 +148,7 @@ class LoadChatSessionEvent extends ChatEvent {
 /// This event persists the current conversation state including all
 /// messages, metadata, and context. Typically triggered automatically
 /// after significant conversation updates or manually by user action.
-///
-/// The saving process:
-/// * Captures current conversation state
-/// * Generates session metadata (title, timestamps)
-/// * Persists data to local storage
-/// * Updates session tracking
-///
+/// 
 /// Example usage:
 /// ```dart
 /// // Manually save current session
@@ -209,12 +168,6 @@ class SaveChatSessionEvent extends ChatEvent {
 /// previous messages and context while maintaining system state.
 /// Used when users want to start a completely new conversation.
 ///
-/// The new session process:
-/// * Clears current messages and context
-/// * Resets to initial welcome state
-/// * Generates new session ID
-/// * Preserves app-level settings
-///
 /// Example usage:
 /// ```dart
 /// // Start a new conversation
@@ -230,12 +183,6 @@ class CreateNewSessionEvent extends ChatEvent {
 /// This event attempts to regenerate the AI response for the most recent
 /// failed request, using any cached partial response and the original
 /// prompt. Useful for handling temporary network issues or API errors.
-///
-/// The retry process:
-/// * Uses cached partial response if available
-/// * Retries with the same original prompt
-/// * Applies enhanced error handling
-/// * Preserves conversation context
 ///
 /// Example usage:
 /// ```dart

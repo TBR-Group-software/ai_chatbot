@@ -94,12 +94,6 @@ import 'package:ai_chat_bot/core/dependency_injection/dependency_injection.dart'
 ///   },
 /// )
 /// ```
-///
-///
-/// See also:
-/// * [VoiceRecordingBottomModal] for voice recording interface
-/// * [VoiceRecordingBloc] for voice recording state management
-/// * [_VoiceLongPressButton] for voice input handling
 class ChatInputWidget extends StatefulWidget {
 
   /// Creates a chat input widget.

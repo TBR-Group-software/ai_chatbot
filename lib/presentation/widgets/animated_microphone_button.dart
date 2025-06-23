@@ -1,4 +1,3 @@
-import 'package:ai_chat_bot/presentation/widgets/voice_recording_button.dart' show VoiceRecordingButton;
 import 'package:flutter/material.dart';
 import 'package:ai_chat_bot/core/theme/app_theme.dart';
 import 'package:ai_chat_bot/presentation/bloc/voice_recording/voice_recording_bloc.dart';
@@ -29,26 +28,6 @@ enum RecordingButtonState {
 /// This widget serves as the visual representation component of the voice recording
 /// system, handling complex animations, theming, and state-based styling. It
 /// transforms recording states into intuitive visual cues that guide user interaction.
-///
-/// The widget implements advanced visual features:
-/// * **State-Based Styling**: Different colors, icons, and effects for each recording state
-/// * **Smooth Animations**: Pulse effects during recording and scale feedback on press
-/// * **Theme Integration**: Full support for custom color schemes and system themes
-/// * **Accessibility Support**: Proper gesture detection and visual feedback
-/// * **Performance Optimized**: Efficient rendering with minimal rebuilds
-///
-/// Visual design features:
-/// * **Dynamic Icons**: Icons change based on recording state (mic/stop/hourglass)
-/// * **Color Transitions**: Smooth color changes reflecting current state
-/// * **Shadow Effects**: Enhanced shadows during recording with pulsing animation
-/// * **Scale Feedback**: Tactile scale animation for press interactions
-/// * **Circular Design**: Modern circular button with consistent 48x48 sizing
-///
-/// Animation system:
-/// * **Pulse Animation**: Creates breathing effect during recording
-/// * **Scale Animation**: Provides tactile feedback on press
-/// * **Shadow Pulsing**: Dynamic shadow effects synchronized with pulse
-/// * **Smooth Transitions**: All state changes are visually smooth
 ///
 /// Example usage:
 /// ```dart
@@ -88,12 +67,6 @@ enum RecordingButtonState {
 /// * Minimizes widget tree rebuilds through strategic state management
 /// * Optimized shadow calculations for smooth animation performance
 /// * Efficient color and style calculations with caching
-///
-/// See also:
-/// * [VoiceRecordingButton] for the parent widget with full recording logic
-/// * [VoiceRecordingState] for state management
-/// * [CustomColors] for theme integration
-/// * [RecordingButtonState] for visual state enumeration
 class AnimatedMicrophoneButton extends StatelessWidget {
 
   /// Creates an animated microphone button widget.

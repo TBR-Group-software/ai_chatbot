@@ -111,12 +111,6 @@ import 'package:ai_chat_bot/presentation/widgets/audio_waveform_painter.dart';
 /// * Minimizes rebuilds through strategic use of AnimatedBuilder
 /// * Optimized waveform calculations for real-time responsiveness
 /// * Memory-efficient color and style management
-///
-/// See also:
-/// * [AudioWaveformPainter] for the custom painting implementation
-/// * [VoiceRecordingState] for state management
-/// * [VoiceRecordingBloc] for recording control
-/// * [CustomColors] for theme integration
 class WaveVisualization extends StatelessWidget {
 
   /// Creates a wave visualization widget.

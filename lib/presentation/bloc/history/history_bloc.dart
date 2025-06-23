@@ -23,12 +23,6 @@ part 'history_state.dart';
 /// * **Error Handling**: Robust error management with user-friendly feedback
 /// * **Memory Efficiency**: Smart filtering to minimize memory usage
 ///
-/// Architecture integration:
-/// * Coordinates with domain layer use cases for business logic
-/// * Maintains reactive connection to data repository
-/// * Provides clean separation between display and filtered session lists
-/// * Integrates seamlessly with Flutter navigation and UI components
-///
 /// Example usage:
 /// ```dart
 /// // Basic history display setup
@@ -70,13 +64,6 @@ part 'history_state.dart';
 /// * Smart filtering reduces UI rendering overhead
 /// * Memory-conscious session management for large history
 /// * Debounced search to prevent excessive filtering
-///
-/// See also:
-/// * [HistoryState] for complete state representation
-/// * [HistoryEvent] for available user actions
-/// * [GetChatSessionsUseCase] for session loading
-/// * [DeleteChatSessionUseCase] for session removal
-/// * [ChatHistoryRepository] for real-time updates
 class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
 
   /// Creates a new [HistoryBloc] with required dependencies.
@@ -117,13 +104,6 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   /// sessions and prepares them for display. Sessions are automatically
   /// sorted by update date to show the most recent conversations first.
   ///
-  /// The loading process includes:
-  /// 1. Setting loading state for UI feedback
-  /// 2. Fetching all sessions from the repository
-  /// 3. Sorting sessions by update date (newest first)
-  /// 4. Initializing both main and filtered session lists
-  /// 5. Handling any loading errors gracefully
-  ///
   /// Both the main sessions list and filtered sessions list are populated
   /// with the same data initially, enabling seamless search functionality
   /// without requiring separate loading operations.
@@ -161,12 +141,6 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   /// This method permanently removes a chat session from both the storage
   /// and the current UI state. The deletion is optimistic, immediately
   /// updating the UI while the backend operation completes.
-  ///
-  /// The deletion process:
-  /// 1. Calls the delete use case to remove from storage
-  /// 2. Updates the main sessions list by filtering out deleted session
-  /// 3. Updates the filtered sessions list to maintain search consistency
-  /// 4. Handles any deletion errors and provides user feedback
   ///
   /// Both the main and filtered session lists are updated to ensure
   /// consistency across the interface regardless of current search state.
@@ -209,13 +183,6 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   /// This method implements comprehensive search functionality across
   /// session titles and message content, providing users with powerful
   /// discovery capabilities for their chat history.
-  ///
-  /// The search process includes:
-  /// 1. Normalizing the search query to lowercase for case-insensitive matching
-  /// 2. Clearing filters when query is empty (shows all sessions)
-  /// 3. Filtering sessions by title content matching
-  /// 4. Deep searching within message content for comprehensive results
-  /// 5. Updating the filtered sessions list and search query state
   ///
   /// Search capabilities:
   /// * **Title Search**: Matches session titles for quick identification

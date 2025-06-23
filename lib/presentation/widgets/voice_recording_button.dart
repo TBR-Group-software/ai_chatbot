@@ -64,12 +64,6 @@ import 'package:ai_chat_bot/presentation/widgets/animated_microphone_button.dart
 /// * **Pulse Animation**: 800ms duration with ease-in-out curve during recording
 /// * **Scale Animation**: 150ms duration for press feedback
 /// * **Automatic Control**: Animations start/stop based on recording state
-///
-/// See also:
-/// * [AnimatedMicrophoneButton] for the visual button implementation
-/// * [VoiceRecordingBloc] for state management
-/// * [VoiceRecordingState] for available states
-/// * [VoiceRecordingEvent] for recording operations
 class VoiceRecordingButton extends StatefulWidget {
 
   /// Creates a voice recording button widget.

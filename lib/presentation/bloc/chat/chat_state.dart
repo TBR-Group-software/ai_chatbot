@@ -7,53 +7,6 @@ part of 'chat_bloc.dart';
 /// It provides comprehensive state management for complex chat interactions
 /// with AI integration and conversation persistence.
 ///
-/// The state supports advanced features like:
-/// * Real-time streaming AI responses
-/// * Message editing and conversation branching
-/// * Session persistence and restoration
-/// * Error recovery with partial response caching
-/// * Context-aware conversation management
-/// * Integration with external chat UI libraries
-///
-/// Key state components:
-/// * UI messages compatible with flutter_chat_types
-/// * Domain-layer context messages for AI processing
-/// * Session management and persistence tracking
-/// * Error handling and retry mechanisms
-/// * Loading states for various operations
-///
-/// Example usage in widgets:
-/// ```dart
-/// BlocBuilder<ChatBloc, ChatState>(
-///   builder: (context, state) {
-///     if (state.isLoading) {
-///       return ChatLoadingIndicator();
-///     }
-///     
-///     if (state.error != null) {
-///       return ChatErrorWidget(
-///         error: state.error!,
-///         onRetry: () => context.read<ChatBloc>()
-///           .add(RetryLastRequestEvent()),
-///       );
-///     }
-///     
-///     return ChatInterface(
-///       messages: state.messages,
-///       onSendMessage: (text) => context.read<ChatBloc>()
-///         .add(SendMessageEvent(text)),
-///       onEditMessage: (id, text) => context.read<ChatBloc>()
-///         .add(EditAndResendMessageEvent(id, text)),
-///     );
-///   },
-/// )
-/// ```
-///
-/// See also:
-/// * [ChatBloc] for state management logic
-/// * [ChatEvent] for available actions
-/// * [types.Message] from flutter_chat_types for UI message format
-/// * [ChatMessageEntity] for domain layer message representation
 class ChatState {
 
   /// Creates a new chat state instance.
@@ -91,13 +44,6 @@ class ChatState {
   /// This factory constructor provides the default state for new
   /// chat sessions. Includes a welcome message from the AI and
   /// sets up the basic structure for conversation.
-  ///
-  /// The initial state features:
-  /// * Welcome message from the AI bot
-  /// * No loading or error states
-  /// * Empty conversation context
-  /// * New session flag enabled
-  /// * Ready for user interaction
   ///
   /// Returns a [ChatState] configured for starting new conversations.
   factory ChatState.initial() => ChatState(
@@ -192,55 +138,6 @@ class ChatState {
   final String? partialResponse;
 
   /// Creates a copy of this state with modified properties.
-  ///
-  /// This method enables immutable updates to the chat state by creating
-  /// a new instance with specified properties changed. Only provided
-  /// parameters will be updated; all others retain their current values.
-  ///
-  /// This is the primary method for updating state in the BLoC pattern,
-  /// ensuring immutability and predictable state transitions throughout
-  /// complex chat operations.
-  ///
-  /// Example usage:
-  /// ```dart
-  /// // Update loading state
-  /// emit(state.copyWith(isLoading: true));
-  ///
-  /// // Add new message and clear error
-  /// emit(state.copyWith(
-  ///   messages: updatedMessages,
-  ///   error: null,
-  ///   isLoading: false,
-  /// ));
-  ///
-  /// // Update session information
-  /// emit(state.copyWith(
-  ///   currentSessionId: sessionId,
-  ///   sessionTitle: title,
-  ///   isNewSession: false,
-  /// ));
-  ///
-  /// // Cache failed request for retry
-  /// emit(state.copyWith(
-  ///   lastFailedPrompt: userPrompt,
-  ///   partialResponse: partialText,
-  ///   error: errorMessage,
-  /// ));
-  /// ```
-  ///
-  /// Parameters (all optional):
-  /// * [generatedContent] - New AI response entity
-  /// * [isLoading] - New loading status
-  /// * [error] - New error message (can be null to clear)
-  /// * [messages] - New UI messages list
-  /// * [currentSessionId] - New session identifier
-  /// * [sessionTitle] - New session title
-  /// * [isNewSession] - New session status
-  /// * [contextMessages] - New context messages list
-  /// * [lastFailedPrompt] - New cached failed prompt
-  /// * [partialResponse] - New cached partial response
-  ///
-  /// Returns a new [ChatState] with specified properties updated.
   ChatState copyWith({
     LLMTextResponseEntity? generatedContent,
     bool? isLoading,

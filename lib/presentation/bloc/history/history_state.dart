@@ -6,65 +6,6 @@ part of 'history_bloc.dart';
 /// interface including session lists, search functionality, loading states,
 /// and error handling. It provides comprehensive state management for
 /// displaying and interacting with chat session history.
-///
-/// The state supports advanced features like:
-/// * **Dual Session Lists**: Maintains both complete and filtered session lists
-/// * **Real-time Search**: Live filtering across session titles and content
-/// * **Loading Management**: Tracks loading states for smooth UX
-/// * **Error Handling**: Provides user-friendly error messages
-/// * **Search State Persistence**: Remembers active search queries
-/// * **Optimized Rendering**: Efficient list management for large histories
-///
-/// Key state components:
-/// * Complete session list for data consistency
-/// * Filtered session list for display optimization
-/// * Search query state for UI synchronization
-/// * Loading and error states for user feedback
-///
-/// Example usage in widgets:
-/// ```dart
-/// BlocBuilder<HistoryBloc, HistoryState>(
-///   builder: (context, state) {
-///     if (state.isLoading) {
-///       return const Center(
-///         child: CircularProgressIndicator(),
-///       );
-///     }
-///     
-///     if (state.error != null) {
-///       return ErrorWidget(
-///         message: state.error!,
-///         onRetry: () => context.read<HistoryBloc>()
-///           .add(LoadHistoryEvent()),
-///       );
-///     }
-///     
-///     if (state.filteredSessions.isEmpty) {
-///       return EmptyHistoryWidget(
-///         hasSearchQuery: state.searchQuery.isNotEmpty,
-///         onClearSearch: () => context.read<HistoryBloc>()
-///           .add(SearchSessionsEvent('')),
-///       );
-///     }
-///     
-///     return ListView.builder(
-///       itemCount: state.filteredSessions.length,
-///       itemBuilder: (context, index) {
-///         final session = state.filteredSessions[index];
-///         return SessionListTile(
-///           session: session,
-///           searchQuery: state.searchQuery,
-///         );
-///       },
-///     );
-///   },
-/// )
-/// ```
-///
-/// See also:
-/// * [HistoryBloc] for state management logic
-/// * [HistoryEvent] for available actions
-/// * [ChatSessionEntity] for session data structure
 class HistoryState {
 
   /// Creates a new history state instance.
@@ -111,11 +52,6 @@ class HistoryState {
   /// sorted by update date with the most recent conversations first.
   /// It serves as the source of truth for all session data and remains
   /// unchanged during search operations.
-  ///
-  /// Used internally for:
-  /// * Maintaining data consistency during filtering
-  /// * Restoring full list when search is cleared
-  /// * Providing complete context for operations
   final List<ChatSessionEntity> sessions;
 
   /// The filtered list of sessions for display purposes.
@@ -123,11 +59,6 @@ class HistoryState {
   /// This list contains sessions that match the current search criteria.
   /// When no search is active, it mirrors the [sessions] list. During
   /// search operations, it contains only sessions matching the query.
-  ///
-  /// This is the primary list used by UI components for rendering:
-  /// * ListView builders use this for item count and data
-  /// * Search results are immediately reflected in this list
-  /// * Empty states are determined by this list's length
   final List<ChatSessionEntity> filteredSessions;
 
   /// Whether a history loading operation is currently in progress.
@@ -168,48 +99,6 @@ class HistoryState {
   final String searchQuery;
 
   /// Creates a copy of this state with modified properties.
-  ///
-  /// This method enables immutable updates to the history state by creating
-  /// a new instance with specified properties changed. Only provided
-  /// parameters will be updated; all others retain their current values.
-  ///
-  /// This is the primary method for updating state in the BLoC pattern,
-  /// ensuring immutability and predictable state transitions throughout
-  /// history management operations.
-  ///
-  /// Example usage:
-  /// ```dart
-  /// // Update loading state
-  /// emit(state.copyWith(isLoading: true));
-  ///
-  /// // Update sessions and clear errors
-  /// emit(state.copyWith(
-  ///   sessions: loadedSessions,
-  ///   filteredSessions: loadedSessions,
-  ///   isLoading: false,
-  ///   error: null,
-  /// ));
-  ///
-  /// // Update search results
-  /// emit(state.copyWith(
-  ///   filteredSessions: searchResults,
-  ///   searchQuery: userQuery,
-  /// ));
-  ///
-  /// // Handle errors
-  /// emit(state.copyWith(
-  ///   isLoading: false,
-  ///   error: 'Failed to load history',
-  /// ));
-  /// ```
-  ///
-  /// Parameters (all optional):
-  /// * [sessions] - New complete sessions list
-  /// * [filteredSessions] - New filtered sessions list
-  /// * [isLoading] - New loading status
-  /// * [error] - New error message (can be null to clear)
-  /// * [searchQuery] - New search query string
-  ///
   /// Returns a new [HistoryState] with specified properties updated.
   HistoryState copyWith({
     List<ChatSessionEntity>? sessions,

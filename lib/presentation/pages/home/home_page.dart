@@ -65,13 +65,6 @@ import 'package:ai_chat_bot/l10n/l10n.dart';
 /// * **Efficient Refresh**: Smart refresh logic prevents unnecessary API calls
 /// * **Memory Management**: Proper disposal of BLoC and observers
 /// * **Lazy Loading**: Components load data only when needed
-///
-/// See also:
-/// * [HomeBloc] for state management
-/// * [HomeTapToChatCard] for the main chat entry point
-/// * [HomeHistorySection] for recent conversations display
-/// * [CategorySection] for feature categories
-/// * [HomeAppBar] for the custom app bar
 @RoutePage()
 class HomePage extends StatefulWidget {
   /// Creates the main home page widget.

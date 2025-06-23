@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart' show TabsRouter;
 import 'package:flutter/material.dart';
 
 /// A beautifully designed custom bottom navigation bar with smooth animations and modern styling.
@@ -77,11 +76,6 @@ import 'package:flutter/material.dart';
 /// * **Index 0**: Home - Main dashboard and quick access
 /// * **Index 1**: Memory - AI memory management and storage
 /// * **Index 2**: History - Chat history and conversation management
-///
-/// See also:
-/// * [_NavBarItem] for individual navigation item implementation
-/// * Material Design bottom navigation guidelines
-/// * [TabsRouter] for route-based navigation integration
 class CustomBottomNavBar extends StatelessWidget {
 
   /// Creates a custom bottom navigation bar widget.

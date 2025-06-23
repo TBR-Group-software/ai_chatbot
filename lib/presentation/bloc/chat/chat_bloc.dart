@@ -75,12 +75,6 @@ part 'chat_state.dart';
 /// * Smart context management prevents memory bloat
 /// * Auto-saving minimizes data loss risk
 ///
-/// See also:
-/// * [ChatState] for complete state representation
-/// * [ChatEvent] for available user actions
-/// * [GenerateTextWithMemoryContextUseCase] for AI integration
-/// * [SaveChatSessionUseCase] for persistence
-/// * [types.Message] from flutter_chat_types for UI compatibility
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   /// Creates a new [ChatBloc] with required dependencies.
@@ -519,14 +513,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   /// automatically after complete AI responses or manually through
   /// user actions.
   ///
-  /// The saving process:
-  /// 1. Validates that saveable content exists
-  /// 2. Generates or reuses session ID for identification
-  /// 3. Creates or updates session title from conversation content
-  /// 4. Constructs complete session entity with metadata
-  /// 5. Persists to storage via use case
-  /// 6. Updates local state with session information
-  ///
   /// Auto-generated titles are derived from the first user message,
   /// truncated appropriately for display purposes.
   ///
@@ -564,17 +550,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   /// Handles creating a new chat session with fresh state.
   ///
-  /// Resets the chat interface to its initial state, clearing all messages,
-  /// context, and session information. This provides users with a clean
-  /// slate for starting new conversations.
-  ///
-  /// The reset includes:
-  /// * All messages cleared except welcome message
-  /// * Conversation context reset
-  /// * Session metadata cleared
-  /// * Error states cleared
-  /// * Loading states reset
-  ///
   /// [event] The new session event (contains no additional parameters)
   /// [emit] State emitter for updating the chat interface
   ///
@@ -589,16 +564,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   /// Creates an appropriate title for the chat session based on the first
   /// user message in the conversation. Titles are truncated to maintain
   /// reasonable display length in session lists and navigation.
-  ///
-  /// Title generation logic:
-  /// * Uses the first user message as the base
-  /// * Truncates to 30 characters with ellipsis if needed
-  /// * Falls back to "New Chat" if no suitable content exists
-  /// * Handles empty messages gracefully
-  ///
+  /// 
   /// [messages] The conversation context messages to analyze
   ///
   /// Returns a human-readable title string suitable for UI display.
+  /// 
   String _generateSessionTitle(List<ChatMessageEntity> messages) {
     final firstUserMessage = messages.firstWhere(
       (msg) => msg.isUser,

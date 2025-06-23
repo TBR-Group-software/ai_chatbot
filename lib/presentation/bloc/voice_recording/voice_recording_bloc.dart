@@ -55,13 +55,6 @@ part 'voice_recording_state.dart';
 ///   ),
 /// );
 /// ```
-///
-/// See also:
-/// * [VoiceRecordingState] for available state properties
-/// * [VoiceRecordingEvent] for available events
-/// * [StartVoiceRecordingUseCase] for recording initialization
-/// * [StopVoiceRecordingUseCase] for recording termination
-/// * [CancelVoiceRecordingUseCase] for recording cancellation
 class VoiceRecordingBloc extends Bloc<VoiceRecordingEvent, VoiceRecordingState> {
 
   /// Creates a new [VoiceRecordingBloc] instance.

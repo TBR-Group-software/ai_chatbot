@@ -8,11 +8,6 @@ part of 'voice_recording_bloc.dart';
 ///
 /// All events are immutable and should be created using const constructors
 /// for optimal performance and memory usage.
-///
-/// See also:
-/// * [StartVoiceRecordingEvent] for initiating recording
-/// * [StopVoiceRecordingEvent] for ending recording
-/// * [CancelVoiceRecordingEvent] for canceling recording
 abstract class VoiceRecordingEvent {
   const VoiceRecordingEvent();
 }
