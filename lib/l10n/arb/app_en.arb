@@ -1,0 +1,78 @@
+{
+  "appTitle": "AI Chat Bot",
+  "chatty": "Chatty",
+  "tapToChat": "Tap to chat",
+  "tapToChatDescription": "Ask me any questions you have. I can answer all questions and talk to you",
+  "popularCategory": "Popular Category",
+  "seeAll": "See All",
+  "storyTitle": "Story",
+  "storyDescription": "Generate a story from a given subject.",
+  "lyricsTitle": "Lyrics",
+  "lyricsDescription": "Generate lyrics of a song for any music genre.",
+  "writeCodeTitle": "Write code",
+  "writeCodeDescription": "Write applications in various programming languages.",
+  "recipeTitle": "Recipe",
+  "recipeDescription": "Get recipes for any food dishes.",
+  "chatHistoryTitle": "Chat History",
+  "searchConversationsHint": "Search conversations...",
+  "errorLoadingHistory": "Error loading history",
+  "retry": "Retry",
+  "noConversationsFound": "No conversations found",
+  "noChatHistoryYet": "No chat history yet",
+  "tryDifferentSearchTerm": "Try a different search term",
+  "startConversationPrompt": "Start a conversation to see it here",
+  "deleteConversationTitle": "Delete Conversation",
+  "memoryTitle": "Memory",
+  "searchMemoryHint": "Search memory...",
+  "errorLoadingMemory": "Error loading memory",
+  "noMemoryItemsFound": "No memory items found",
+  "noMemoryItemsYet": "No memory items yet",
+  "addKnowledgePrompt": "Add knowledge to enhance AI responses",
+  "addMemoryTitle": "Add Memory",
+  "titleLabel": "Title",
+  "titleHint": "Enter a descriptive title",
+  "pleaseEnterTitle": "Please enter a title",
+  "contentLabel": "Content",
+  "contentHint": "Enter the knowledge content",
+  "pleaseEnterContent": "Please enter content",
+  "tagsLabel": "Tags",
+  "tagsHint": "Add a tag",
+  "cancel": "Cancel",
+  "save": "Save",
+  "delete": "Delete",
+  "edit": "Edit",
+  "confirm": "Confirm",
+  "ok": "OK",
+  "areYouSureDelete": "Are you sure you want to delete \"{itemName}\"? This action cannot be undone.",
+  "noMessages": "No messages",
+  "timeAgoDays": "{count, plural, =1{1 day ago} other{{count} days ago}}",
+  "timeAgoHours": "{count, plural, =1{1 hour ago} other{{count} hours ago}}",
+  "timeAgoMinutes": "{count, plural, =1{1 minute ago} other{{count} minutes ago}}",
+  "justNow": "Just now",
+  "@timeAgoDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@timeAgoHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@timeAgoMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@areYouSureDelete": {
+    "placeholders": {
+      "itemName": {}
+    }
+  }
+} 

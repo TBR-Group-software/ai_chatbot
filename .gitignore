@@ -7,10 +7,12 @@
 .atom/
 .build/
 .buildlog/
+.cursor/
 .history
 .svn/
 .swiftpm/
 migrate_working_dir/
+.env
 
 # IntelliJ related
 *.iml
